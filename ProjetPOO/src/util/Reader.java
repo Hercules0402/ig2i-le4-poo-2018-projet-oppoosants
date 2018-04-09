@@ -10,37 +10,37 @@ import java.util.Scanner;
  */
 public class Reader {
 
-	/**
-	 * Représente un fichier instance à lire.
-	 */
-	private File instanceFile;
+    /**
+     * Représente un fichier instance à lire.
+     */
+    private File instanceFile;
 
-	/**
-	 * Constructeur par données.
-	 * @param filename TODO
-	 * @throws java.lang.Exception
-	 */
-	public Reader(String filename) throws Exception {
-		if (filename == null) {
-			System.err.println("Une erreur a été rencontrée : Impossible d'ouvrir le fichier ...");
-			throw new Exception();
-		}
-		this.instanceFile = new File(filename + ".txt");
+    /**
+     * Constructeur par données.
+     * @param filename TODO
+     * @throws java.lang.Exception
+     */
+    public Reader(String filename) throws Exception {
+        if (filename == null) {
+            System.err.println("Une erreur a été rencontrée : Impossible d'ouvrir le fichier ...");
+            throw new Exception();
+        }
+        this.instanceFile = new File(filename + ".txt");
         System.out.println("Fichier trouvé.");
-		
-	}
-	
-	/**
-	 * Permet de récupérer les différents paramètres de type int comme NbLocations.
-	 * @param scan TODO
-	 * @return int
-	 */
-	private int readNextInt(Scanner scan) {
-		while (scan.hasNext("//.*")) {
-			scan.nextLine();
-		}
-		return Integer.parseInt(scan.next());
-	}
+        
+    }
+    
+    /**
+     * Permet de récupérer les différents paramètres de type int comme NbLocations.
+     * @param scan TODO
+     * @return int
+     */
+    private int readNextInt(Scanner scan) {
+        while (scan.hasNext("//.*")) {
+            scan.nextLine();
+        }
+        return Integer.parseInt(scan.next());
+    }
     
     public int getNbLocations() throws FileNotFoundException {
         return readNextInt(new Scanner(this.instanceFile));
