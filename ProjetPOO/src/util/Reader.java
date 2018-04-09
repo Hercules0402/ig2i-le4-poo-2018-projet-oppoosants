@@ -2,6 +2,8 @@ package util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -13,8 +15,10 @@ public class Reader {
     private Integer nbProducts;
     private Integer nbBoxesTrolley;
     private Integer nbDimensionsCapacity;
-    private Integer[] capaBox;
+    private List<Integer> capaBox;
     private Boolean mixedOrders;
+    private List<String> products;
+    private Integer nbOrders;
 
     /**
      * Constructeur par données.
@@ -28,6 +32,9 @@ public class Reader {
         }
         this.instanceFile = new File(filename + ".txt");
         System.out.println("Fichier trouvé.");
+        
+        capaBox = new ArrayList();
+        products = new ArrayList();
         readAll();
     }
 
@@ -51,12 +58,17 @@ public class Reader {
         nbBoxesTrolley = Integer.parseInt(readNextString(scan).trim());
         nbDimensionsCapacity = Integer.parseInt(readNextString(scan).trim());
         
-        capaBox = new Integer[nbDimensionsCapacity];
-        String s[] = readNextString(scan).split("\\s");
-        for(int i=0; i<s.length; i++)
-            capaBox[i] = Integer.parseInt(s[i].trim());
+        for(String s : readNextString(scan).split("\\s"))
+            capaBox.add(Integer.parseInt(s.trim()));
       
         mixedOrders = readNextString(scan).equals("1");
+        
+        String ligne = null;
+        while (!(ligne = scan.nextLine()).isEmpty()) {
+            if(!ligne.startsWith("//")) products.add(ligne);
+        }
+
+        nbOrders = Integer.parseInt(readNextString(scan).trim());
     }
 
     @Override
@@ -67,6 +79,9 @@ public class Reader {
                 + ", nbBoxesTrolley=" + nbBoxesTrolley 
                 + ", nbDimensionsCapacity=" + nbDimensionsCapacity 
                 + ", capaBox=" + capaBox 
-                + ", mixedOrders=" + mixedOrders + '}';
+                + ", mixedOrders=" + mixedOrders 
+                + ", products=" + products
+                + ", nbOrders=" + nbOrders
+                + '}';
     }
 }
