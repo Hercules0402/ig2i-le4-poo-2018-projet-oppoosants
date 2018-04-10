@@ -19,6 +19,13 @@ public class Reader {
     private Boolean mixedOrders;
     private List<String> products;
     private Integer nbOrders;
+    private List<String> orders;
+    private Integer nbVerticesIntersections;
+    private Integer departingDepot;
+    private Integer arrivalDepot;
+    private List<String> arcs;
+    private List<String> distances;
+    private List<String> locations;
 
     /**
      * Constructeur par données.
@@ -35,6 +42,10 @@ public class Reader {
         
         capaBox = new ArrayList();
         products = new ArrayList();
+        orders = new ArrayList();
+        arcs = new ArrayList();
+        distances = new ArrayList();
+        locations = new ArrayList();
         readAll();
     }
 
@@ -69,19 +80,47 @@ public class Reader {
         }
 
         nbOrders = Integer.parseInt(readNextString(scan).trim());
+        
+        while (!(ligne = scan.nextLine()).isEmpty()) {
+            if(!ligne.startsWith("//")) orders.add(ligne);
+        }
+        
+        nbVerticesIntersections = Integer.parseInt(readNextString(scan).trim());
+        departingDepot = Integer.parseInt(readNextString(scan).trim());
+        arrivalDepot = Integer.parseInt(readNextString(scan).trim());
+        
+        while (!(ligne = scan.nextLine()).isEmpty()) {
+            if(!ligne.startsWith("//")) arcs.add(ligne);
+        }
+        
+        while (!(ligne = scan.nextLine()).isEmpty()) {
+            if(!ligne.startsWith("//")) distances.add(ligne);
+        }
+        
+        while (scan.hasNext() && !(ligne = scan.nextLine()).isEmpty()) {
+            if(!ligne.startsWith("//")) locations.add(ligne);
+        }
     }
 
     @Override
     public String toString() {
-        return "Reader{" + "instanceFile=" + instanceFile 
-                + ", nbLocations=" + nbLocations 
-                + ", nbProducts=" + nbProducts 
-                + ", nbBoxesTrolley=" + nbBoxesTrolley 
-                + ", nbDimensionsCapacity=" + nbDimensionsCapacity 
-                + ", capaBox=" + capaBox 
-                + ", mixedOrders=" + mixedOrders 
-                + ", products=" + products
-                + ", nbOrders=" + nbOrders
+        return "Reader{" 
+                + "\tinstanceFile=" + instanceFile + ",\n"
+                + "\tnbLocations=" + nbLocations + ",\n"
+                + "\tnbProducts=" + nbProducts + ",\n"
+                + "\tnbBoxesTrolley=" + nbBoxesTrolley + ",\n"
+                + "\tnbDimensionsCapacity=" + nbDimensionsCapacity + ",\n"
+                + "\tcapaBox=" + capaBox + ",\n"
+                + "\tmixedOrders=" + mixedOrders + ",\n"
+                + "\tproducts=" + products + ",\n"
+                + "\tnbOrders=" + nbOrders + ",\n"
+                + "\torders=" + orders + ",\n"
+                + "\tnbVerticesIntersections=" + nbVerticesIntersections + ",\n"
+                + "\tdepartingDepot=" + departingDepot + ",\n"
+                + "\tarrivalDepot=" + arrivalDepot + ",\n"
+                + "\tarcs=" + arcs + ",\n"
+                + "\tdistances=" + distances + ",\n"
+                + "\tlocations=" + locations + "\n"
                 + '}';
     }
 }
