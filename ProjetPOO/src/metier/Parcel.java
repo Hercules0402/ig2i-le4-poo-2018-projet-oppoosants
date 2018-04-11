@@ -16,19 +16,22 @@ public class Parcel {
     private HashMap products;
     private double weightMax;
     private double volumeMax;
+    private Order order;
 
-    public Parcel(int idParcel, double weightMax, double volumeMax) {
+    public Parcel(int idParcel, double weightMax, double volumeMax, Order order) {
         this.idParcel = idParcel;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
         products = new HashMap<Product, Integer>();
+        this.order = order;
     }
 
-    public Parcel(int idParcel, HashMap products, double weightMax, double volumeMax) {
+    public Parcel(int idParcel, HashMap products, double weightMax, double volumeMax, Order order) {
         this.idParcel = idParcel;
         this.products = products;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
+        this.order = order;
     }
 
     public int getIdParcel() {
@@ -38,6 +41,10 @@ public class Parcel {
     public HashMap getProducts() {
         return products;
     }
+
+    public Order getOrder() {
+        return order;
+    }    
     
     public void setProducts(HashMap products) {
         this.products = products;
