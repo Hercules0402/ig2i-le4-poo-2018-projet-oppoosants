@@ -1,5 +1,6 @@
 package metier;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -8,7 +9,7 @@ import java.util.HashMap;
  */
 public class Order {
     private int nbProduct;
-    private int idOrder;
+    private final int idOrder;
     private HashMap products;
 
     /**
@@ -17,7 +18,7 @@ public class Order {
      */
     public Order(int idOrder) {
         this.idOrder = idOrder;
-        products = new HashMap<Integer, Integer>();
+        products = new HashMap<Product, Integer>();
         nbProduct = 0;
     }
 
@@ -75,36 +76,36 @@ public class Order {
     /**
      * addProduct
      * Ajoute un produit dans le hashmap. S'il est déjà présent, le nombre de produits du produit que l'on souhaitait ajouter est ajouté au nombre de produits déjà présent
-     * @param idProduct l'identifiant du produit ajouté
+     * @param product le produit ajouté
      * @param qt sa quantité
      */
-    public void addProduct(int idProduct, int qt) {
-        if (!this.products.containsKey(idProduct)) {
-            this.products.put(idProduct, qt);
+    public void addProduct(Product product, int qt) {
+        if (!this.products.containsKey(product)) {
+            this.products.put(product, qt);
         }
         else {
-            int oldQt = (int) this.products.get(idProduct);
-            this.products.put(idProduct, oldQt + qt);
+            int oldQt = (int) this.products.get(product);
+            this.products.put(product, oldQt + qt);
         }
     }
     
     /**
      * isItemInOrder
-     * @param idProduct l'id du produit à rechercher
+     * @param product le produit à rechercher
      * @return true si le produit est présent dans la commande, false sinon
      */
-    public boolean isItemInOrder(int idProduct) {
-        return this.products.containsKey(idProduct);
+    public boolean isItemInOrder(Product product) {
+        return this.products.containsKey(product);
     }
     
     /**
      * removeProduct
      * Supprime un produit du hashmap
-     * @param idProduct l'id du produit à supprimer
+     * @param product le produit à supprimer
      */
-    public void removeProduct(int idProduct) {
-        if (this.products.containsKey(idProduct)) {
-            this.products.remove(idProduct);
+    public void removeProduct(Product product) {
+        if (this.products.containsKey(product)) {
+            this.products.remove(product);
         }
     }
 
