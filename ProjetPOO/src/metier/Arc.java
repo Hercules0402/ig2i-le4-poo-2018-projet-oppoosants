@@ -1,14 +1,14 @@
 package metier;
 
 public class Arc {
-    private final int arcId;
+    private final Integer id;
     private Location locationStart;
     private Location locationEnd;
     private Integer distance;
     private boolean isShortest;
 
     public Arc() {
-       this.arcId = -1; 
+       this.id = -1; 
     }
     
     public Arc(Location locationStart, Location locationEnd, Integer distance, boolean isShortest) {
@@ -19,8 +19,8 @@ public class Arc {
         this.isShortest = isShortest;
     }
 
-    public int getArcId() {
-        return arcId;
+    public Integer getId() {
+        return id;
     }
 
     public Location getLocationStart() {

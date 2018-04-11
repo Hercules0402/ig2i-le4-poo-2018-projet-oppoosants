@@ -5,13 +5,12 @@ import java.util.Set;
 
 /**
  * Définition de la classe Chariot.
- * @author Sébastien
  */
 public class Trolley {
     
     // Attributs
-    private int id;
-    private static int nbColisMax;
+    private Integer id;
+    private static Integer nbColisMax;
     private Set<Parcel> parcels;
     
     // Constructeurs
@@ -26,7 +25,7 @@ public class Trolley {
         this.nbColisMax = nbColisMax;
     }
     
-    public Trolley(int id, int nbColisMax, Set<Parcel> parcels) {
+    public Trolley(Integer id, Integer nbColisMax, Set<Parcel> parcels) {
         this();
         this.id = id;
         this.nbColisMax = nbColisMax;

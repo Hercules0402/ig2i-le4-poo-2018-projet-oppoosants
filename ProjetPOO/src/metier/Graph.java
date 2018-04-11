@@ -2,7 +2,6 @@ package metier;
 
 /**
  * Représente le graphe sous-jacent à la zone de pickeing.
- * @author Sébastien CORNUEL
  */
 public class Graph {
     /**
@@ -91,5 +90,4 @@ public class Graph {
                 + nbProducts + ", nbVerticesIntersections="
                 + nbVerticesIntersections + '}';
     }
-
 }

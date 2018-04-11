@@ -40,7 +40,7 @@ public class Writer {
                 writer.write("\n//IdTournes NbColis\n" + t.getId() + " " + Trolley.getNbColisMax() + "\n");
                 writer.write("//IdColis IdCommandeInColis NbProducts IdProd1 QtyProd1 IdProd2 QtyProd2 ...");
                 for (Parcel p : t.getParcels()) {
-                    String s = "\n" + p.getIdParcel() + " " + p.getOrder().getIdOrder()
+                    String s = "\n" + p.getId() + " " + p.getOrder().getId()
                                 + " " + p.getProducts().size();
                     
                     Set cles = p.getProducts().keySet();
@@ -79,9 +79,6 @@ public class Writer {
                 + "\tnbTournees=" + nbTrolleys + ",\n"
                 + "\ttournees=" + trolleys + ",\n"
                 + '}';
-        
         return retour;
     }
-    
-    
 }

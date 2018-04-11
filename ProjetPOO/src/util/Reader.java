@@ -38,6 +38,7 @@ public class Reader {
      * @throws java.lang.Exception
      */
     public Reader(String filename) throws Exception {
+        Long time = System.currentTimeMillis();
         if (filename == null) {
             System.err.println("Une erreur a été rencontrée : Impossible d'ouvrir le fichier ...");
             throw new Exception();
@@ -46,6 +47,7 @@ public class Reader {
         System.out.println("Fichier trouvé.");
 
         readAll();
+        System.out.println("EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
     }
 
     /**

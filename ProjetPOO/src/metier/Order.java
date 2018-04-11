@@ -6,38 +6,38 @@ import java.util.HashMap;
  * Class Order
  */
 public class Order {
-    private Integer idOrder;
+    private Integer id;
     private Integer m;
     private Integer nbProducts;
     private HashMap<Product, Integer> products;
 
     /**
      * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
-     * @param idOrder
+     * @param id
      */
-    public Order(Integer idOrder) {
-        this.idOrder = idOrder;
+    public Order(Integer id) {
+        this.id = id;
         products = new HashMap();
     }
 
     /**
      * Constructeur par id et produits de la commande Order
-     * @param idOrder
+     * @param id
      * @param products
      */
-    public Order(Integer idOrder, Integer m, Integer nbProducts, HashMap products) {
-        this.idOrder = idOrder;
+    public Order(Integer id, Integer m, Integer nbProducts, HashMap products) {
+        this.id = id;
         this.m = m;
         this.nbProducts = nbProducts;
         this.products = products;
     }
 
     /**
-     * getIdOrder
+     * getId
      * @return l'identifiant de la commande
      */
-    public int getIdOrder() {
-        return idOrder;
+    public int getId() {
+        return id;
     }
 
     /**
@@ -94,6 +94,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" + "idOrder=" + idOrder + ", m=" + m + ", nbProducts=" + nbProducts + ", products=" + products + '}';
+        return "Order{" + "id=" + id+ ", m=" + m + ", nbProducts=" + nbProducts + ", products=" + products + '}';
     }
 }

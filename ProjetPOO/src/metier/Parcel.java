@@ -1,41 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package metier;
 
 import java.util.HashMap;
 
-/**
- *
- * @author nicol
- */
 public class Parcel {
-    private final int idParcel;
-    private HashMap products;
+    private final Integer id;
+    private HashMap<Product, Integer> products;
     private double weightMax;
     private double volumeMax;
     private Order order;
 
-    public Parcel(int idParcel, double weightMax, double volumeMax, Order order) {
-        this.idParcel = idParcel;
+    public Parcel(Integer id, double weightMax, double volumeMax, Order order) {
+        this.id= id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
-        products = new HashMap<Product, Integer>();
+        products = new HashMap();
         this.order = order;
     }
 
-    public Parcel(int idParcel, HashMap products, double weightMax, double volumeMax, Order order) {
-        this.idParcel = idParcel;
+    public Parcel(Integer id, HashMap products, double weightMax, double volumeMax, Order order) {
+        this.id = id;
         this.products = products;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
         this.order = order;
     }
 
-    public int getIdParcel() {
-        return idParcel;
+    public int getId() {
+        return id;
     }
 
     public HashMap getProducts() {
@@ -60,8 +51,6 @@ public class Parcel {
 
     @Override
     public String toString() {
-        return "Parcel{" + "idParcel=" + idParcel + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + '}';
+        return "Parcel{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + '}';
     }
-    
-    
 }

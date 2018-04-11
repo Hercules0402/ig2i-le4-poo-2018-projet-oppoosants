@@ -2,10 +2,8 @@ package metier;
 
 /**
  * Classe définissant une location.
- * @author Sébastien
  */
 public class Location {
-    
     //Attributs
     
     private Integer id;
@@ -67,6 +65,5 @@ public class Location {
     public String toString() {
         return "metier.Location[ identifiant=" + this.id + ", abscisse=" + this.abscisse
                 + ", ordonnee=" + this.ordonnee + ", nom=" + this.name + " ]";
-    }
-    
+    }  
 }
