@@ -37,7 +37,7 @@ public class Reader {
             System.err.println("Une erreur a été rencontrée : Impossible d'ouvrir le fichier ...");
             throw new Exception();
         }
-        this.instanceFile = new File(filename + ".txt");
+        this.instanceFile = new File(filename);
         System.out.println("Fichier trouvé.");
         
         capaBox = new ArrayList();
@@ -46,6 +46,7 @@ public class Reader {
         arcs = new ArrayList();
         distances = new ArrayList();
         locations = new ArrayList();
+        
         readAll();
     }
 
