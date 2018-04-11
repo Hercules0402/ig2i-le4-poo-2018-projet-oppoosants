@@ -80,7 +80,6 @@ public class Reader {
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_products.add(ligne);
         }
-        products = createProducts(s_products);
 
         nbOrders = Integer.parseInt(readNextString(scan).trim());
         
@@ -88,7 +87,6 @@ public class Reader {
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_orders.add(ligne);
         }
-        orders = createOrders(s_orders);
         
         nbVerticesIntersections = Integer.parseInt(readNextString(scan).trim());
         departingDepot = Integer.parseInt(readNextString(scan).trim());
@@ -109,10 +107,11 @@ public class Reader {
         while (scan.hasNext() && !(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_locations.add(ligne);
         }
+        
         locations = createLocations(s_locations);
-        
+        products = createProducts(s_products);
+        orders = createOrders(s_orders);
         arcs = createArcs(s_arcs, false);
-        
         distances = createArcs(s_distances, true);
     }
     
@@ -120,7 +119,8 @@ public class Reader {
         List<Product> list = new ArrayList();
         for(String s : s_products){
             String ss[] = s.split("\\s");
-            Product p = new Product(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]), Integer.parseInt(ss[3]));
+            Location loc = locations.get(Integer.parseInt(ss[1]));
+            Product p = new Product(Integer.parseInt(ss[0]), loc, Integer.parseInt(ss[2]), Integer.parseInt(ss[3]));
             list.add(p);
         }
         return list;

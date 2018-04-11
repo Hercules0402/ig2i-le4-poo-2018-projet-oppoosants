@@ -11,7 +11,7 @@ public class Product {
     /**
      * Localisation du produit.
      */
-    Integer loc;
+    Location loc;
     
     /**
      * Poids unitaire du produit.
@@ -23,7 +23,7 @@ public class Product {
      */
     Integer volume;
 
-    public Product(Integer id, Integer loc, Integer weight, Integer volume) {
+    public Product(Integer id, Location loc, Integer weight, Integer volume) {
         this.id = id;
         this.loc = loc;
         this.weight = weight;
@@ -34,7 +34,7 @@ public class Product {
         return id;
     }
 
-    public Integer getLoc() {
+    public Location getLoc() {
         return loc;
     }
 
@@ -87,6 +87,4 @@ public class Product {
         }
         return true;
     }
-    
-    
 }

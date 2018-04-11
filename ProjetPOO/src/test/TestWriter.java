@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import metier.Location;
 import metier.Order;
 import metier.Parcel;
 import metier.Product;
@@ -17,16 +18,17 @@ public class TestWriter {
         Order or1 = new Order(1, 5, 15, null);
         Order or2 = new Order(2, 5, 15, null);
         
-        Product pr1 = new Product(78, 0, 5, 5);
-        Product pr2 = new Product(45, 0, 5, 5);
-        Product pr3 = new Product(12, 0, 5, 5);
-        Product pr4 = new Product(3, 0, 5, 5);
-        Product pr5 = new Product(95, 0, 5, 5);
-        Product pr6 = new Product(67, 0, 5, 5);
-        Product pr7 = new Product(39, 0, 5, 5);
-        Product pr8 = new Product(84, 0, 5, 5);
-        Product pr9 = new Product(28, 0, 5, 5);
-        Product pr10 = new Product(55, 0, 5, 5);
+        Location l = new Location(1, 200, 200, "Default");
+        Product pr1 = new Product(78, l, 5, 5);
+        Product pr2 = new Product(45, l, 5, 5);
+        Product pr3 = new Product(12, l, 5, 5);
+        Product pr4 = new Product(3, l, 5, 5);
+        Product pr5 = new Product(95, l, 5, 5);
+        Product pr6 = new Product(67, l, 5, 5);
+        Product pr7 = new Product(39, l, 5, 5);
+        Product pr8 = new Product(84, l, 5, 5);
+        Product pr9 = new Product(28, l, 5, 5);
+        Product pr10 = new Product(55, l, 5, 5);
         
         HashMap<Product,Integer> products1 = new HashMap<>();
         HashMap<Product,Integer> products2 = new HashMap<>(); 
