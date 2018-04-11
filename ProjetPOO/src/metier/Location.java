@@ -9,21 +9,21 @@ public class Location {
     //Attributs
     
     private Integer id;
-    private double abscisse;
-    private double ordonnee;
+    private Integer abscisse;
+    private Integer ordonnee;
     private String name;
     
     //Constructeurs
 
     public Location() {
-        this.id = -1;
-        this.abscisse = 0.0;
-        this.ordonnee = 0.0;
+        this.abscisse = 0;
+        this.ordonnee = 0;
         this.name = "Nouvelle Location";
     }
 
-    public Location(double abscisse, double ordonnee, String name) {
+    public Location(Integer id, Integer abscisse, Integer ordonnee, String name) {
         this();
+        this.id = id;
         this.abscisse = abscisse;
         this.ordonnee = ordonnee;
         this.name = name;
@@ -35,7 +35,7 @@ public class Location {
         return abscisse;
     }
 
-    public void setAbscisse(double abscisse) {
+    public void setAbscisse(Integer abscisse) {
         this.abscisse = abscisse;
     }
 
@@ -43,7 +43,7 @@ public class Location {
         return ordonnee;
     }
 
-    public void setOrdonnee(double ordonnee) {
+    public void setOrdonnee(Integer ordonnee) {
         this.ordonnee = ordonnee;
     }
 

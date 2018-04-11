@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import metier.Arc;
+import metier.Location;
+import metier.Order;
+import metier.Product;
 
 /**
  * Permet de lire des fichiers instances.
@@ -17,15 +21,15 @@ public class Reader {
     private Integer nbDimensionsCapacity;
     private List<Integer> capaBox;
     private Boolean mixedOrders;
-    private List<String> products;
+    private List<Product> products;
     private Integer nbOrders;
-    private List<String> orders;
+    private List<Order> orders;
     private Integer nbVerticesIntersections;
     private Integer departingDepot;
     private Integer arrivalDepot;
-    private List<String> arcs;
-    private List<String> distances;
-    private List<String> locations;
+    private List<Arc> arcs;
+    private List<Arc> distances;
+    private List<Location> locations;
 
     /**
      * Constructeur par données.
@@ -39,13 +43,6 @@ public class Reader {
         }
         this.instanceFile = new File(filename);
         System.out.println("Fichier trouvé.");
-        
-        capaBox = new ArrayList();
-        products = new ArrayList();
-        orders = new ArrayList();
-        arcs = new ArrayList();
-        distances = new ArrayList();
-        locations = new ArrayList();
         
         readAll();
     }
@@ -70,6 +67,7 @@ public class Reader {
         nbBoxesTrolley = Integer.parseInt(readNextString(scan).trim());
         nbDimensionsCapacity = Integer.parseInt(readNextString(scan).trim());
         
+        capaBox = new ArrayList();
         for(String s : readNextString(scan).split("\\s"))
             capaBox.add(Integer.parseInt(s.trim()));
       
@@ -77,32 +75,75 @@ public class Reader {
         
         scan.nextLine();
         String ligne = null;
+        List<String> s_products = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
-            if(!ligne.startsWith("//")) products.add(ligne);
+            if(!ligne.startsWith("//")) s_products.add(ligne);
         }
+        products = createProducts(s_products);
 
         nbOrders = Integer.parseInt(readNextString(scan).trim());
         
+        List<String> s_orders = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
-            if(!ligne.startsWith("//")) orders.add(ligne);
+            if(!ligne.startsWith("//")) s_orders.add(ligne);
         }
+        orders = createOrders(s_orders);
         
         nbVerticesIntersections = Integer.parseInt(readNextString(scan).trim());
         departingDepot = Integer.parseInt(readNextString(scan).trim());
         arrivalDepot = Integer.parseInt(readNextString(scan).trim());
         
         scan.nextLine();
+        List<String> s_arcs = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
-            if(!ligne.startsWith("//")) arcs.add(ligne);
+            if(!ligne.startsWith("//")) s_arcs.add(ligne);
         }
+        arcs = createArcs(s_arcs, false);
         
+        List<String> s_distances = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
-            if(!ligne.startsWith("//")) distances.add(ligne);
+            if(!ligne.startsWith("//")) s_distances.add(ligne);
         }
+        distances = createArcs(s_distances, true);
         
+        List<String> s_locations = new ArrayList();
         while (scan.hasNext() && !(ligne = scan.nextLine().trim()).isEmpty()) {
-            if(!ligne.startsWith("//")) locations.add(ligne);
+            if(!ligne.startsWith("//")) s_locations.add(ligne);
         }
+        locations = createLocations(s_locations);
+    }
+    
+    public static List<Product> createProducts(List<String> s_products){
+        List<Product> list = new ArrayList();
+        for(String s : s_products){
+            String ss[] = s.split("\\s");
+            Product p = new Product(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]), Integer.parseInt(ss[3]));
+            list.add(p);
+        }
+        return list;
+    }
+    
+    public static List<Order> createOrders(List<String> s_orders){
+        List<Order> list = new ArrayList();
+        list = null;
+        return list;
+    }
+    
+    public static List<Arc> createArcs(List<String> s_arcs, boolean isShortestPath){
+        List<Arc> list = new ArrayList();
+        list = null;
+        return list;
+    }
+    
+    public static List<Location> createLocations(List<String> s_locations){
+        List<Location> list = new ArrayList();
+        for(String s : s_locations){
+            String ss[] = s.split("\\s");
+            Location l = new Location(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]), ss[3].substring(1, ss[3].length()-1));
+            list.add(l);
+            System.out.println(l.getName());
+        }
+        return list;
     }
 
     @Override

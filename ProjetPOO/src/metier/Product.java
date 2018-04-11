@@ -9,19 +9,19 @@ public class Product {
     /**
      * Localisation du produit.
      */
-    Location loc;
+    Integer loc;
     
     /**
      * Poids unitaire du produit.
      */
-    Double weight;
+    Integer weight;
     
     /**
      * Volume unitaire du produit.
      */
-    Double volume;
+    Integer volume;
 
-    public Product(Integer id, Location loc, Double weight, Double volume) {
+    public Product(Integer id, Integer loc, Integer weight, Integer volume) {
         this.id = id;
         this.loc = loc;
         this.weight = weight;
@@ -32,15 +32,15 @@ public class Product {
         return id;
     }
 
-    public Location getLoc() {
+    public Integer getLoc() {
         return loc;
     }
 
-    public Double getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
-    public Double getVolume() {
+    public Integer getVolume() {
         return volume;
     }
 
