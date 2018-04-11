@@ -135,11 +135,7 @@ public class Reader {
             Integer nb = Integer.parseInt(ss[2]);
             HashMap<Product, Integer> map = new HashMap();
             for(int i=3; i<(3+nb*2); i+=2){
-                Product prod = null;
-                for(Product p : products) { 
-                    if(p.getId().equals(Integer.parseInt(ss[i])))
-                        prod = p;
-                }
+                Product prod = products.get(Integer.parseInt(ss[i])-1);
                 Integer quantite = Integer.parseInt(ss[i+1]);
                 map.put(prod, quantite);
             }
@@ -153,17 +149,8 @@ public class Reader {
         List<Arc> list = new ArrayList();
         for(String s : s_arcs){
             String ss[] = s.split("\\s");
-            
-            Location start = null;
-            Location end = null;
-            for(Location l : locations) { 
-                if(l.getId().equals(Integer.parseInt(ss[0]))) { 
-                    start = l;
-                }
-                if(l.getId().equals(Integer.parseInt(ss[1]))) { 
-                    end = l;
-                }
-            }
+            Location start = locations.get(Integer.parseInt(ss[0]));
+            Location end = locations.get(Integer.parseInt(ss[1]));
             Arc a = new Arc(start, end, Integer.parseInt(ss[2]), isShortestPath);
             list.add(a);
         }

@@ -57,6 +57,6 @@ public class Arc {
 
     @Override
     public String toString() {
-        return "Arc{distance=" + distance + ", isShortest=" + isShortest + '}';
+        return "Arc{" + "locationStart=" + locationStart.getName() + ", locationEnd=" + locationEnd.getName() + ", distance=" + distance + ", isShortest=" + isShortest + '}';
     }
 }
