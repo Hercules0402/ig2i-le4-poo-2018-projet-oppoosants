@@ -98,19 +98,21 @@ public class Reader {
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_arcs.add(ligne);
         }
-        arcs = createArcs(s_arcs, false);
         
         List<String> s_distances = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_distances.add(ligne);
         }
-        distances = createArcs(s_distances, true);
         
         List<String> s_locations = new ArrayList();
         while (scan.hasNext() && !(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_locations.add(ligne);
         }
         locations = createLocations(s_locations);
+        
+        arcs = createArcs(s_arcs, false);
+        
+        distances = createArcs(s_distances, true);
     }
     
     public static List<Product> createProducts(List<String> s_products){
@@ -129,9 +131,24 @@ public class Reader {
         return list;
     }
     
-    public static List<Arc> createArcs(List<String> s_arcs, boolean isShortestPath){
+    public List<Arc> createArcs(List<String> s_arcs, boolean isShortestPath){
         List<Arc> list = new ArrayList();
-        list = null;
+        for(String s : s_arcs){
+            String ss[] = s.split("\\s");
+            
+            Location start = null;
+            Location end = null;
+            for(Location l : locations) { 
+                if(l.getId().equals(Integer.parseInt(ss[0]))) { 
+                    start = l;
+                }
+                if(l.getId().equals(Integer.parseInt(ss[1]))) { 
+                    end = l;
+                }
+            }
+            Arc a = new Arc(start, end, Integer.parseInt(ss[2]), isShortestPath);
+            list.add(a);
+        }
         return list;
     }
     
@@ -141,7 +158,6 @@ public class Reader {
             String ss[] = s.split("\\s");
             Location l = new Location(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]), ss[3].substring(1, ss[3].length()-1));
             list.add(l);
-            System.out.println(l.getName());
         }
         return list;
     }
