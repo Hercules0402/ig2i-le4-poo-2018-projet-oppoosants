@@ -14,8 +14,8 @@ import util.Writer;
 
 public class TestWriter {
     public static void main(String[] args) throws Exception {      
-        Order or1 = new Order(1, null);
-        Order or2 = new Order(2, null);
+        Order or1 = new Order(1, 5, 15, null);
+        Order or2 = new Order(2, 5, 15, null);
         
         Product pr1 = new Product(78, 0, 5, 5);
         Product pr2 = new Product(45, 0, 5, 5);
