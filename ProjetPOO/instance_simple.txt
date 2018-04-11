@@ -30,7 +30,7 @@
 2 
 //Idx M NbProdInOrder ProdIdx1 Qty1 ProdIdx2 Qty2 ... 
 1 8 3 1 1 3 1 4 1
-2 4 2 2 1 5 1
+2 4 2 2 1 5 2
  
 //Graph (Products are vertices indexed from 1 to NbProducts) 
 //NbVerticesIntersections 

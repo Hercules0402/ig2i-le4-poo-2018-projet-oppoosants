@@ -3,6 +3,7 @@ package util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import metier.Arc;
@@ -30,7 +31,7 @@ public class Reader {
     private List<Arc> arcs;
     private List<Arc> distances;
     private List<Location> locations;
-
+    
     /**
      * Constructeur par données.
      * @param filename TODO
@@ -43,7 +44,7 @@ public class Reader {
         }
         this.instanceFile = new File(filename);
         System.out.println("Fichier trouvé.");
-        
+
         readAll();
     }
 
@@ -115,7 +116,7 @@ public class Reader {
         distances = createArcs(s_distances, true);
     }
     
-    public static List<Product> createProducts(List<String> s_products){
+    public List<Product> createProducts(List<String> s_products){
         List<Product> list = new ArrayList();
         for(String s : s_products){
             String ss[] = s.split("\\s");
@@ -125,9 +126,26 @@ public class Reader {
         return list;
     }
     
-    public static List<Order> createOrders(List<String> s_orders){
+    public List<Order> createOrders(List<String> s_orders){
         List<Order> list = new ArrayList();
-        list = null;
+        for(String s : s_orders){
+            String ss[] = s.split("\\s");
+            Integer id = Integer.parseInt(ss[0]);
+            Integer m = Integer.parseInt(ss[1]);
+            Integer nb = Integer.parseInt(ss[2]);
+            HashMap<Product, Integer> map = new HashMap();
+            for(int i=3; i<(3+nb*2); i+=2){
+                Product prod = null;
+                for(Product p : products) { 
+                    if(p.getId().equals(Integer.parseInt(ss[i])))
+                        prod = p;
+                }
+                Integer quantite = Integer.parseInt(ss[i+1]);
+                map.put(prod, quantite);
+            }
+            Order o = new Order(id, m, nb, map);
+            list.add(o);
+        }
         return list;
     }
     
@@ -152,7 +170,7 @@ public class Reader {
         return list;
     }
     
-    public static List<Location> createLocations(List<String> s_locations){
+    public List<Location> createLocations(List<String> s_locations){
         List<Location> list = new ArrayList();
         for(String s : s_locations){
             String ss[] = s.split("\\s");

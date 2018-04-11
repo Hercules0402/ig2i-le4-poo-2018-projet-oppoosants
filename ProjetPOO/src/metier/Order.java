@@ -1,23 +1,23 @@
 package metier;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Class Order
- * @author nicol
  */
 public class Order {
-    private final int idOrder;
-    private HashMap products;
+    private Integer idOrder;
+    private Integer m;
+    private Integer nbProducts;
+    private HashMap<Product, Integer> products;
 
     /**
      * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
      * @param idOrder
      */
-    public Order(int idOrder) {
+    public Order(Integer idOrder) {
         this.idOrder = idOrder;
-        products = new HashMap<Product, Integer>();
+        products = new HashMap();
     }
 
     /**
@@ -25,8 +25,10 @@ public class Order {
      * @param idOrder
      * @param products
      */
-    public Order(int idOrder, HashMap products) {
+    public Order(Integer idOrder, Integer m, Integer nbProducts, HashMap products) {
         this.idOrder = idOrder;
+        this.m = m;
+        this.nbProducts = nbProducts;
         this.products = products;
     }
 
@@ -92,9 +94,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" + "idOrder=" + idOrder + ", products=" + products + '}';
+        return "Order{" + "idOrder=" + idOrder + ", m=" + m + ", nbProducts=" + nbProducts + ", products=" + products + '}';
     }
-
-    
-    
 }
