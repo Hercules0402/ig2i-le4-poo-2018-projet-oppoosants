@@ -74,14 +74,15 @@ public class Reader {
       
         mixedOrders = readNextString(scan).equals("1");
         
+        scan.nextLine();
         String ligne = null;
-        while (!(ligne = scan.nextLine()).isEmpty()) {
+        while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) products.add(ligne);
         }
 
         nbOrders = Integer.parseInt(readNextString(scan).trim());
         
-        while (!(ligne = scan.nextLine()).isEmpty()) {
+        while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) orders.add(ligne);
         }
         
@@ -89,15 +90,16 @@ public class Reader {
         departingDepot = Integer.parseInt(readNextString(scan).trim());
         arrivalDepot = Integer.parseInt(readNextString(scan).trim());
         
-        while (!(ligne = scan.nextLine()).isEmpty()) {
+        scan.nextLine();
+        while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) arcs.add(ligne);
         }
         
-        while (!(ligne = scan.nextLine()).isEmpty()) {
+        while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) distances.add(ligne);
         }
         
-        while (scan.hasNext() && !(ligne = scan.nextLine()).isEmpty()) {
+        while (scan.hasNext() && !(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) locations.add(ligne);
         }
     }
