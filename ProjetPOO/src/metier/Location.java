@@ -30,6 +30,9 @@ public class Location {
     }
 
     //Accesseurs
+    public Integer getId() {
+        return id;
+    }
     
     public double getAbscisse() {
         return abscisse;

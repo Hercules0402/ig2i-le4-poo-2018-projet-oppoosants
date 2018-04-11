@@ -1,20 +1,20 @@
 package metier;
 
-/**
- *
- * @author nicol
- */
 public class Arc {
     private final int arcId;
-    private Location location_a;
-    private Location location_b;
-    private double distance;
+    private Location locationStart;
+    private Location locationEnd;
+    private Integer distance;
     private boolean isShortest;
 
-    public Arc(int arcId, Location location_a, Location location_b, double distance, boolean isShortest) {
-        this.arcId = arcId;
-        this.location_a = location_a;
-        this.location_b = location_b;
+    public Arc() {
+       this.arcId = -1; 
+    }
+    
+    public Arc(Location locationStart, Location locationEnd, Integer distance, boolean isShortest) {
+        this();
+        this.locationStart = locationStart;
+        this.locationEnd = locationEnd;
         this.distance = distance;
         this.isShortest = isShortest;
     }
@@ -23,12 +23,12 @@ public class Arc {
         return arcId;
     }
 
-    public Location getLocation_a() {
-        return location_a;
+    public Location getLocationStart() {
+        return locationStart;
     }
 
-    public Location getLocation_b() {
-        return location_b;
+    public Location getLocationEnd() {
+        return locationEnd;
     }
 
     public double getDistance() {
@@ -39,21 +39,24 @@ public class Arc {
         return isShortest;
     }
 
-    public void setLocation_a(Location location_a) {
-        this.location_a = location_a;
+    public void setLocationStart(Location locationStart) {
+        this.locationStart = locationStart;
     }
 
-    public void setLocation_b(Location location_b) {
-        this.location_b = location_b;
+    public void setLocationEnd(Location locationEnd) {
+        this.locationEnd = locationEnd;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 
     public void setIsShortest(boolean isShortest) {
         this.isShortest = isShortest;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Arc{distance=" + distance + ", isShortest=" + isShortest + '}';
+    }
 }
