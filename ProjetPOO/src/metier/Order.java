@@ -8,7 +8,6 @@ import java.util.HashMap;
  * @author nicol
  */
 public class Order {
-    private int nbProduct;
     private final int idOrder;
     private HashMap products;
 
@@ -19,7 +18,6 @@ public class Order {
     public Order(int idOrder) {
         this.idOrder = idOrder;
         products = new HashMap<Product, Integer>();
-        nbProduct = 0;
     }
 
     /**
@@ -30,15 +28,6 @@ public class Order {
     public Order(int idOrder, HashMap products) {
         this.idOrder = idOrder;
         this.products = products;
-        this.nbProduct = this.products.size();
-    }
-
-    /**
-     * getNbProduct
-     * @return le nombre de produits dans la commande
-     */
-    public int getNbProduct() {
-        return nbProduct;
     }
 
     /**
@@ -55,14 +44,6 @@ public class Order {
      */
     public HashMap getProducts() {
         return products;
-    }
-
-    /**
-     * setNbProduct
-     * @param nbProduct le nombre de produits
-     */
-    public void setNbProduct(int nbProduct) {
-        this.nbProduct = nbProduct;
     }
 
     /**
@@ -111,8 +92,9 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" + "nbProduct=" + nbProduct + ", idOrder=" + idOrder + ", products=" + products + '}';
+        return "Order{" + "idOrder=" + idOrder + ", products=" + products + '}';
     }
+
     
     
 }
