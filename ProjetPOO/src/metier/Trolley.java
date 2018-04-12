@@ -48,7 +48,9 @@ public class Trolley {
 
     public Set<Parcel> getParcels() {
         return parcels;
-    }   
+    }
+    
+    
     
     // Méthodes
     

@@ -5,19 +5,23 @@ import java.util.HashMap;
 public class Parcel {
     private final Integer id;
     private HashMap<Product, Integer> products;
-    private double weightMax;
-    private double volumeMax;
+    private static int weightMax;
+    private static int volumeMax;
+    private int weight;
+    private int volume;
     private Order order;
 
-    public Parcel(Integer id, double weightMax, double volumeMax, Order order) {
+    public Parcel(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
         this.id= id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
+        this.volume = volume;
+        this.weight = weight;
         products = new HashMap();
         this.order = order;
     }
 
-    public Parcel(Integer id, HashMap products, double weightMax, double volumeMax, Order order) {
+    public Parcel(Integer id, HashMap products, int weightMax, int volumeMax, Order order) {
         this.id = id;
         this.products = products;
         this.volumeMax = volumeMax;
@@ -41,13 +45,31 @@ public class Parcel {
         this.products = products;
     }
 
-    public void setWeightMax(double weightMax) {
+    public void setWeightMax(int weightMax) {
         this.weightMax = weightMax;
     }
 
-    public void setVolumeMax(double volumeMax) {
+    public void setVolumeMax(int volumeMax) {
         this.volumeMax = volumeMax;
     }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
+    
+    
 
     @Override
     public String toString() {
