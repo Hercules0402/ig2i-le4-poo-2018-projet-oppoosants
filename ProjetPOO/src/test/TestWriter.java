@@ -1,6 +1,7 @@
 package test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,6 +65,5 @@ public class TestWriter {
         trolleys.add(new Trolley(2, 2, parcels2));
         
         Writer w = new Writer("instance_0116_131940_Z2.txt",trolleys);
-        System.out.println(w);
     }
 }

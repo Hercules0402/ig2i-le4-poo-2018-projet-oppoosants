@@ -1,6 +1,7 @@
 package metier;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Parcel {
     private final Integer id;
@@ -68,8 +69,33 @@ public class Parcel {
     public void setVolume(int volume) {
         this.volume = volume;
     }
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Parcel other = (Parcel) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+        
 
     @Override
     public String toString() {
