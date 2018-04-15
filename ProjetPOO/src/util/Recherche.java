@@ -1,8 +1,10 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import metier.Arc;
 import metier.Order;
 import metier.Parcel;
@@ -41,7 +43,7 @@ public class Recherche {
         this.volumeMax_parcel = 0;
     }
 
-    public Recherche(ArrayList<Order> orderList, ArrayList<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
+    public Recherche(ArrayList<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
         this();
         this.orderList = orderList;
         this.productList = productList;
@@ -57,6 +59,10 @@ public class Recherche {
         // Création d'un chariot pour la première tournée
         Trolley trolley = new Trolley(nbColisMax);
         int nbParcel = 0;
+        ArrayList<ArrayList<Trolley>> solutions = new ArrayList();
+        ArrayList<Trolley> solution = new ArrayList();
+        int qt;
+        Product p;
         
         for(Order order : orderList ){
 
@@ -67,15 +73,20 @@ public class Recherche {
             Iterator it = order.getProducts().entrySet().iterator();
             
             while (it.hasNext()) {
-                
+                Map.Entry pair = (Map.Entry) it.next();
+                p = (Product) pair.getKey();
+                qt = (int) pair.getValue();
                 nbParcel = trolley.getParcels().size();
                 
                 // Vérifier qu'il y a de la place dans le chariot
                 if (nbParcel < trolley.getNbColisMax()) {
                     // Vérifier que le colis n'est pas plein ou surchargé
-                    
+                    if (parcel.getVolume() + p.getVolume() < this.volumeMax_parcel && parcel.getWeight() + p.getWeight() < this.weightMax_parcel) {
+                        parcel.addProduct(p, qt);
+                    }
                 }
                 
+                it.remove();
                 // Mettre à jour le coût
             }
         }

@@ -42,6 +42,19 @@ public class Parcel {
         return order;
     }    
     
+    public void addProduct(Product p, int qt) {
+        if(products.containsKey(p)) {
+            int oldQt = products.get(p);
+            products.put(p, qt + oldQt);
+        }
+        else {
+            products.put(p, qt);
+        }
+        
+        this.weight += p.getWeight() * qt;
+        this.volume += p.getVolume() * qt;
+    }
+    
     public void setProducts(HashMap products) {
         this.products = products;
     }
