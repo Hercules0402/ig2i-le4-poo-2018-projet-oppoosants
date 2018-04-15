@@ -43,7 +43,7 @@ public class Recherche {
         this.volumeMax_parcel = 0;
     }
 
-    public Recherche(ArrayList<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
+    public Recherche(ArrayList<Order> orderList, ArrayList<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
         this();
         this.orderList = orderList;
         this.productList = productList;
