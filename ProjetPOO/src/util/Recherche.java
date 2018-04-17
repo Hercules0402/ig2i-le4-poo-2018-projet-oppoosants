@@ -84,6 +84,13 @@ public class Recherche {
                 if (nbParcel < trolley.getNbColisMax()) {
                     // Vérifier que le colis n'est pas plein ou surchargé
                     if (parcel.getVolume() + (p.getVolume() * qt) < this.volumeMax_parcel && parcel.getWeight() + (p.getWeight() * qt) < this.weightMax_parcel) {
+                        if (p.getId() == 23) {
+                            System.out.println("Trouvé");
+                            System.out.println(order.getId());
+                            System.out.println(parcel.getId());
+                            System.out.println(p);
+                            System.out.println(qt);
+                        }
                         parcel.addProduct(p, qt);
                     }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
                     else {
