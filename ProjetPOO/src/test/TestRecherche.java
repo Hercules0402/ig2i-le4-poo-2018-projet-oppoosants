@@ -19,7 +19,7 @@ public class TestRecherche {
         //public Recherche(ArrayList<Order> orderList, ArrayList<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel)
         Reader r = new Reader("instance_simple.txt");
         Recherche sol = new Recherche(r.getOrders(),r.getProducts(),r.getNbBoxesTrolley(),(int) r.getCapaBox().get(0), (int) r.getCapaBox().get(1));
-        ArrayList<ArrayList<Trolley>> solutions = new ArrayList();
+        ArrayList<Trolley> solutions = new ArrayList();
         solutions = sol.lookup();
         System.out.println(solutions);
     }

@@ -55,22 +55,21 @@ public class Recherche {
     // Méthodes
     
     
-    public ArrayList<ArrayList<Trolley>> lookup(){
+    public ArrayList<Trolley> lookup(){
         int nbParcel = 0;
         ArrayList<ArrayList<Trolley>> solutions = new ArrayList();
+        // Création d'un chariot pour la première tournée
+        Trolley trolley = new Trolley(0, nbColisMax);
         int qt;
         Product p;
         int idTrolley = 0;
-        
+        ArrayList<Trolley> solution = new ArrayList();
         
         for(Order order : orderList ){
-            // Création d'un chariot pour la première tournée
-            Trolley trolley = new Trolley(0, nbColisMax);
         
             // Création du premier colis vide pour la commande
             Parcel parcel = new Parcel(0, weightMax_parcel, volumeMax_parcel, order, 0, 0);
             
-            ArrayList<Trolley> solution = new ArrayList();
             
             // Variable d'itération des produits de la commande
             Iterator it = order.getProducts().entrySet().iterator();
@@ -100,19 +99,13 @@ public class Recherche {
                 
                 // Mettre à jour le coût
             }
-            
-            
-            if (nbParcel > trolley.getNbColisMax()) {
-                solution.add(trolley);
-                trolley = new Trolley(0, nbColisMax);
-            }
-            
+
             trolley.addParcel(parcel);
-            solution.add(trolley);
-            solutions.add(solution);
+            
         }
-        
-        return solutions;
+       
+        solution.add(trolley);
+        return solution;
     }
     
     
