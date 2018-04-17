@@ -73,7 +73,7 @@ public class Writer {
     private void writeSolutions() throws Exception  {
         PrintWriter pw = new PrintWriter(new FileWriter(instanceFile));
         if (pw != null) {
-            pw.println(this.getContentSolution());
+            pw.print(this.getContentSolution());
             pw.close();
         }
         else {

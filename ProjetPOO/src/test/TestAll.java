@@ -9,7 +9,7 @@ import util.Writer;
 
 public class TestAll {
     public static void main(String[] args) throws Exception {
-        String fileName = "instance_200000.txt";
+        String fileName = "instance_simple.txt";
         
         /*Reader*/
         Reader r = new Reader(fileName); 
