@@ -30,7 +30,7 @@ public class Writer {
             System.err.println("Une erreur a été rencontrée : Aucun nom de fichier fourni...");
             throw new Exception();
         }
-        filename = filename.substring(0, filename.lastIndexOf(".") - 1) + "_sol"
+        filename = filename.substring(0, filename.lastIndexOf(".")) + "_sol"
                 + filename.substring(filename.lastIndexOf("."));
         this.instanceFile = new File(filename);
         this.nbTrolleys = trolleys.size();
