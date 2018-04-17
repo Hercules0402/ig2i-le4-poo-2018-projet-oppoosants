@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import metier.Parcel;
+import metier.Box;
 import metier.Product;
 import metier.Trolley;
 
@@ -48,9 +48,9 @@ public class Writer {
         String solution = "//NbTournees\n" + nbTrolleys;
         for (Trolley t : trolleys){
             solution += "\n//IdTournes NbColis\n" + t.getId() + " " 
-                    + t.getParcels().size() + "\n//IdColis IdCommandeInColis"
+                    + t.getBoxes().size() + "\n//IdColis IdCommandeInColis"
                     + " NbProducts IdProd1 QtyProd1 IdProd2 QtyProd2 ...";
-            for (Parcel p : t.getParcels()) {
+            for (Box p : t.getBoxes()) {
                 solution += "\n" + p.getId() + " " + p.getOrder().getId()
                                 + " " + p.getProducts().size();
                     

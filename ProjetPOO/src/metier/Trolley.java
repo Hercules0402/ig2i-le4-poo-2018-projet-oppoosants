@@ -11,13 +11,13 @@ public class Trolley {
     // Attributs
     private Integer id;
     private static Integer nbColisMax;
-    private List<Parcel> parcels;
+    private List<Box> boxes;
     
     // Constructeurs
 
     public Trolley() {
         this.nbColisMax = 0;
-        this.parcels = new ArrayList<>();
+        this.boxes = new ArrayList<>();
     }
 
     public Trolley(int nbColisMax) {
@@ -25,11 +25,11 @@ public class Trolley {
         this.nbColisMax = nbColisMax;
     }
     
-    public Trolley(Integer id, Integer nbColisMax, List<Parcel> parcels) {
+    public Trolley(Integer id, Integer nbColisMax, List<Box> boxes) {
         this();
         this.id = id;
         this.nbColisMax = nbColisMax;
-        this.parcels = parcels;
+        this.boxes = boxes;
     }
     
     public Trolley(Integer id, Integer nbColisMax) {
@@ -52,13 +52,13 @@ public class Trolley {
         Trolley.nbColisMax = nbColisMax;
     }
 
-    public List<Parcel> getParcels() {
-        return parcels;
+    public List<Box> getBoxes() {
+        return boxes;
     }
     
-    public boolean addParcel(Parcel p) {   
-        if(this.nbColisMax < parcels.size() + 1) return false;
-        parcels.add(p);
+    public boolean addBox(Box p) {   
+        if(this.nbColisMax < boxes.size() + 1) return false;
+        boxes.add(p);
         return true;
     }
     
@@ -67,7 +67,7 @@ public class Trolley {
 
     @Override
     public String toString() {
-        return "\nTrolley{" + "id=" + id + ", parcels=" + parcels + '}';
+        return "\nTrolley{" + "id=" + id + ", boxes=" + boxes + '}';
     }
     
 }

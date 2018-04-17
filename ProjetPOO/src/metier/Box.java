@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * Classe définissant une parcel.
+ * Classe définissant un colis.
  */
-public class Parcel {
+public class Box {
     private final Integer id;
     private HashMap<Product, Integer> products;
     private static int weightMax;
@@ -15,7 +15,7 @@ public class Parcel {
     private int volume;
     private Order order;
 
-    public Parcel(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
+    public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
         this.id= id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
@@ -25,7 +25,7 @@ public class Parcel {
         this.order = order;
     }
 
-    public Parcel(Integer id, HashMap products, int weightMax, int volumeMax, Order order) {
+    public Box(Integer id, HashMap products, int weightMax, int volumeMax, Order order) {
         this.id = id;
         this.products = products;
         this.volumeMax = volumeMax;
@@ -108,7 +108,7 @@ public class Parcel {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Parcel other = (Parcel) obj;
+        final Box other = (Box) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -119,6 +119,6 @@ public class Parcel {
 
     @Override
     public String toString() {
-        return "Parcel{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
+        return "Box{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
     }
 }
