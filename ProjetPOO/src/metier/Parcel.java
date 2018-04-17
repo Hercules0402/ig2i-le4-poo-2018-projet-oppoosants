@@ -53,6 +53,10 @@ public class Parcel {
         
         this.weight += p.getWeight() * qt;
         this.volume += p.getVolume() * qt;
+        
+        /*if(this.weight > 12000 || this.volume > 92160) {
+            System.out.println("Weight : " + this.weight + " Volume : " + this.volume);
+        }*/
     }
     
     public void setProducts(HashMap products) {
@@ -112,6 +116,6 @@ public class Parcel {
 
     @Override
     public String toString() {
-        return "Parcel{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + '}';
+        return "Parcel{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
     }
 }

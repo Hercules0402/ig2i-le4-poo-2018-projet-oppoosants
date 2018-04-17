@@ -57,24 +57,26 @@ public class Recherche {
     
     public ArrayList<Trolley> lookup(){
         int nbParcel = 0;
-        // Création d'un chariot pour la première tournée
-        Trolley trolley = new Trolley(1, nbColisMax);
         int qt;
         Product p;
         int idTrolley = 1;
         int idParcel = 1;
         ArrayList<Trolley> solution = new ArrayList();
         
+        // Création d'un chariot pour la première tournée
+        Trolley trolley = new Trolley(idTrolley, nbColisMax);
+        
         for(Order order : orderList ){
         
             // Création du premier colis vide pour la commande
             Parcel parcel = new Parcel(idParcel, weightMax_parcel, volumeMax_parcel, order, 0, 0);
             
-            
             // Variable d'itération des produits de la commande
             Iterator it = order.getProducts().entrySet().iterator();
             
+            //Tant qu'il y a des produits à placer dans la recherche de solution
             while (it.hasNext()) {
+                //On récupère la paire produit/qt du HashMap
                 Map.Entry pair = (Map.Entry) it.next();
                 p = (Product) pair.getKey();
                 qt = (int) pair.getValue();
@@ -83,9 +85,9 @@ public class Recherche {
                 // Vérifier qu'il y a de la place dans le chariot
                 if (nbParcel < trolley.getNbColisMax()) {
                     // Vérifier que le colis n'est pas plein ou surchargé
-                    if (parcel.getVolume() + p.getVolume() < this.volumeMax_parcel && parcel.getWeight() + p.getWeight() < this.weightMax_parcel) {
+                    if (parcel.getVolume() + (p.getVolume() * qt) < this.volumeMax_parcel && parcel.getWeight() + (p.getWeight() * qt) < this.weightMax_parcel) {
                         parcel.addProduct(p, qt);
-                    }
+                    }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
                     else {
                         trolley.addParcel(parcel);
                         idParcel++;
@@ -93,7 +95,7 @@ public class Recherche {
                         parcel.addProduct(p, qt);
                     }
                 }
-                else {
+                else {//sinon on met le chariot dans la tournée et on recommence un chariot
                     solution.add(trolley);
                     idTrolley++;
                     trolley = new Trolley(idTrolley, nbColisMax);
