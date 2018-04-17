@@ -32,6 +32,12 @@ public class Trolley {
         this.parcels = parcels;
     }
     
+    public Trolley(Trolley trolley) {
+        this.id = trolley.getId();
+        this.parcels = trolley.getParcels();
+        this.nbColisMax = trolley.getNbColisMax();
+    }
+    
     // Accesseurs
 
     public int getId() {
@@ -58,9 +64,10 @@ public class Trolley {
     
     
     // Méthodes
-    
+
     @Override
     public String toString() {
-        return "metier.Trolley[ identifiant=" + this.id + ", nombre de colis max=" + this.nbColisMax + " ]";
+        return "Trolley{" + "id=" + id + ", parcels=" + parcels + '}';
     }
+    
 }

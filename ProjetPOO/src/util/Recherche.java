@@ -45,7 +45,7 @@ public class Recherche {
 
     public Recherche(List<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
         this();
-        this.orderList = orderList;
+        this.orderList = new ArrayList<>(orderList);
         this.productList = productList;
         this.nbColisMax = nbColisMax;
         this.weightMax_parcel = weightMax_parcel;
@@ -61,6 +61,7 @@ public class Recherche {
         ArrayList<Trolley> solution = new ArrayList();
         int qt;
         Product p;
+        
         
         for(Order order : orderList ){
             // Création d'un chariot pour la première tournée
@@ -95,20 +96,17 @@ public class Recherche {
                     trolley = new Trolley(nbColisMax);
                 }
                 
-                it.remove();
                 // Mettre à jour le coût
             }
             
-            if (nbParcel < trolley.getNbColisMax()) {
-                trolley.addParcel(parcel);
-            }
-            else {
-                trolley = new Trolley(nbColisMax);
-                trolley.addParcel(parcel);
+            
+            if (nbParcel > trolley.getNbColisMax()) {
                 solution.add(trolley);
+                trolley = new Trolley(nbColisMax);
             }
-
-            trolley = new Trolley(nbColisMax);
+            
+            trolley.addParcel(parcel);
+            solution.add(trolley);
             solutions.add(solution);
         }
         

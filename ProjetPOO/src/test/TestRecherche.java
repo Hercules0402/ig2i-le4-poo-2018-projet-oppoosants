@@ -21,7 +21,6 @@ public class TestRecherche {
         Recherche sol = new Recherche(r.getOrders(),r.getProducts(),r.getNbBoxesTrolley(),(int) r.getCapaBox().get(0), (int) r.getCapaBox().get(1));
         ArrayList<ArrayList<Trolley>> solutions = new ArrayList();
         solutions = sol.lookup();
-        System.out.println(r);
         System.out.println(solutions);
     }
 }
