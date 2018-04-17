@@ -37,7 +37,7 @@ public class Writer {
         this.trolleys = trolleys;
         writeSolutions();        
         System.out.println("Fichier créé.");        
-        System.out.println("EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        System.out.println("WRITER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
     }
     
     /**
