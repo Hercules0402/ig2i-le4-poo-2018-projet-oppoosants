@@ -169,6 +169,22 @@ public class Reader {
         return list;
     }
 
+    public Integer getNbBoxesTrolley() {
+        return nbBoxesTrolley;
+    }
+
+    public List<Integer> getCapaBox() {
+        return capaBox;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
     @Override
     public String toString() {
         return "Reader{" 
