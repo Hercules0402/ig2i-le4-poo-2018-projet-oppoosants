@@ -67,7 +67,7 @@ public class Trolley {
 
     @Override
     public String toString() {
-        return "Trolley{" + "id=" + id + ", parcels=" + parcels + '}';
+        return "\nTrolley{" + "id=" + id + ", parcels=" + parcels + '}';
     }
     
 }
