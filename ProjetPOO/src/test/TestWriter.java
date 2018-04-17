@@ -2,12 +2,10 @@ package test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import metier.Location;
 import metier.Order;
-import metier.Parcel;
+import metier.Box;
 import metier.Product;
 import metier.Trolley;
 import util.Writer;
@@ -47,21 +45,21 @@ public class TestWriter {
         products4.put(pr8, 9);
         products4.put(pr10, 8);
         
-        Parcel p1 = new Parcel(1, products1, 5, 5, or1);
-        Parcel p2 = new Parcel(2, products2, 5, 5, or2);
-        Parcel p3 = new Parcel(3, products3, 5, 5, or1);
-        Parcel p4 = new Parcel(4, products4, 5, 5, or2);
+        Box p1 = new Box(1, products1, 5, 5, or1);
+        Box p2 = new Box(2, products2, 5, 5, or2);
+        Box p3 = new Box(3, products3, 5, 5, or1);
+        Box p4 = new Box(4, products4, 5, 5, or2);
         
-        List<Parcel> parcels1 = new ArrayList<>();
-        parcels1.add(p1);
-        parcels1.add(p2);
-        List<Parcel> parcels2 = new ArrayList<>();
-        parcels2.add(p3);
-        parcels2.add(p4);
+        List<Box> boxes1 = new ArrayList<>();
+        boxes1.add(p1);
+        boxes1.add(p2);
+        List<Box> boxes2 = new ArrayList<>();
+        boxes2.add(p3);
+        boxes2.add(p4);
         
         List<Trolley> trolleys = new ArrayList<>();
-        trolleys.add(new Trolley(1, 2, parcels1));
-        trolleys.add(new Trolley(2, 2, parcels2));
+        trolleys.add(new Trolley(1, 2, boxes1));
+        trolleys.add(new Trolley(2, 2, boxes2));
         
         Writer w = new Writer("instance_0116_131940_Z2.txt",trolleys);
     }

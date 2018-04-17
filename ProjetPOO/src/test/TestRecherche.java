@@ -16,7 +16,7 @@ import util.Recherche;
  */
 public class TestRecherche {
     public static void main(String[] args) throws Exception {    
-        //public Recherche(ArrayList<Order> orderList, ArrayList<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel)
+        //public Recherche(ArrayList<Order> orderList, ArrayList<Product> productList, int nbColisMax, int weightMax_box, int volumeMax_box)
         Reader r = new Reader("instance_simple.txt");
         Recherche sol = new Recherche(r.getOrders(),r.getProducts(),r.getNbBoxesTrolley(),(int) r.getCapaBox().get(0), (int) r.getCapaBox().get(1));
         ArrayList<Trolley> solutions = new ArrayList();
