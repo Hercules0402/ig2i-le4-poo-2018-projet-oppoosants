@@ -48,7 +48,7 @@ public class Writer {
         String solution = "//NbTournees\n" + nbTrolleys;
         for (Trolley t : trolleys){
             solution += "\n//IdTournes NbColis\n" + t.getId() + " " 
-                    + Trolley.getNbColisMax() + "\n//IdColis IdCommandeInColis"
+                    + t.getParcels().size() + "\n//IdColis IdCommandeInColis"
                     + " NbProducts IdProd1 QtyProd1 IdProd2 QtyProd2 ...";
             for (Parcel p : t.getParcels()) {
                 solution += "\n" + p.getId() + " " + p.getOrder().getId()
