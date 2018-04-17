@@ -1,7 +1,6 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import metier.Trolley;
 
 /**
  * Classe permettant la recherche d'un itinéraire simple dans la zone de picking.
- * @author Sébastien
  */
 public class Recherche {
     
@@ -57,24 +55,26 @@ public class Recherche {
     
     public ArrayList<Trolley> lookup(){
         int nbBox = 0;
-        // Création d'un chariot pour la première tournée
-        Trolley trolley = new Trolley(1, nbColisMax);
         int qt;
         Product p;
         int idTrolley = 1;
         int idBox = 1;
         ArrayList<Trolley> solution = new ArrayList();
         
+        // Création d'un chariot pour la première tournée
+        Trolley trolley = new Trolley(idTrolley, nbColisMax);
+        
         for(Order order : orderList ){
         
             // Création du premier colis vide pour la commande
             Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
             
-            
             // Variable d'itération des produits de la commande
             Iterator it = order.getProducts().entrySet().iterator();
             
+            //Tant qu'il y a des produits à placer dans la recherche de solution
             while (it.hasNext()) {
+                //On récupère la paire produit/qt du HashMap
                 Map.Entry pair = (Map.Entry) it.next();
                 p = (Product) pair.getKey();
                 qt = (int) pair.getValue();
@@ -83,9 +83,9 @@ public class Recherche {
                 // Vérifier qu'il y a de la place dans le chariot
                 if (nbBox < trolley.getNbColisMax()) {
                     // Vérifier que le colis n'est pas plein ou surchargé
-                    if (box.getVolume() + p.getVolume() < this.volumeMax_box && box.getWeight() + p.getWeight() < this.weightMax_box) {
+                    if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
                         box.addProduct(p, qt);
-                    }
+                    }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
                     else {
                         trolley.addBox(box);
                         idBox++;
@@ -93,7 +93,7 @@ public class Recherche {
                         box.addProduct(p, qt);
                     }
                 }
-                else {
+                else {//sinon on met le chariot dans la tournée et on recommence un chariot
                     solution.add(trolley);
                     idTrolley++;
                     trolley = new Trolley(idTrolley, nbColisMax);

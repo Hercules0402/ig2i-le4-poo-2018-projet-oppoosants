@@ -3,7 +3,7 @@ package metier;
 import java.util.HashMap;
 
 /**
- * Class Order
+ * Classe définissant un order.
  */
 public class Order {
     private Integer id;

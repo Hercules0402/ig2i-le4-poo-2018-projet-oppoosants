@@ -3,6 +3,9 @@ package metier;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * Classe définissant un colis.
+ */
 public class Box {
     private final Integer id;
     private HashMap<Product, Integer> products;
@@ -53,6 +56,10 @@ public class Box {
         
         this.weight += p.getWeight() * qt;
         this.volume += p.getVolume() * qt;
+        
+        /*if(this.weight > 12000 || this.volume > 92160) {
+            System.out.println("Weight : " + this.weight + " Volume : " + this.volume);
+        }*/
     }
     
     public void setProducts(HashMap products) {
@@ -112,6 +119,6 @@ public class Box {
 
     @Override
     public String toString() {
-        return "Box{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + '}';
+        return "Box{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
     }
 }
