@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import metier.Arc;
 import metier.Order;
-import metier.Parcel;
+import metier.Box;
 import metier.Product;
 import metier.Trolley;
 
@@ -23,8 +23,8 @@ public class Recherche {
     private int nbColisMax;
     
     //Critères poid/volume
-    private int weightMax_parcel;
-    private int volumeMax_parcel;
+    private int weightMax_box;
+    private int volumeMax_box;
     
     // Données à déterminer
     private List<Trolley> trolleyList;
@@ -37,28 +37,28 @@ public class Recherche {
         productList = new ArrayList();
         this.cout = 0;
         this.nbColisMax = 0;
-        this.weightMax_parcel = 0;
-        this.volumeMax_parcel = 0;
+        this.weightMax_box = 0;
+        this.volumeMax_box = 0;
     }
 
-    public Recherche(List<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
+    public Recherche(List<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_box, int volumeMax_box) {
         this();
         this.orderList = new ArrayList<>(orderList);
         this.productList = productList;
         this.nbColisMax = nbColisMax;
-        this.weightMax_parcel = weightMax_parcel;
-        this.volumeMax_parcel = volumeMax_parcel;
+        this.weightMax_box = weightMax_box;
+        this.volumeMax_box = volumeMax_box;
     }
     
     // Méthodes
     
     
     public ArrayList<Trolley> lookup(){
-        int nbParcel = 0;
+        int nbBox = 0;
         int qt;
         Product p;
         int idTrolley = 1;
-        int idParcel = 1;
+        int idBox = 1;
         ArrayList<Trolley> solution = new ArrayList();
         
         // Création d'un chariot pour la première tournée
@@ -67,7 +67,7 @@ public class Recherche {
         for(Order order : orderList ){
         
             // Création du premier colis vide pour la commande
-            Parcel parcel = new Parcel(idParcel, weightMax_parcel, volumeMax_parcel, order, 0, 0);
+            Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
             
             // Variable d'itération des produits de la commande
             Iterator it = order.getProducts().entrySet().iterator();
@@ -78,26 +78,20 @@ public class Recherche {
                 Map.Entry pair = (Map.Entry) it.next();
                 p = (Product) pair.getKey();
                 qt = (int) pair.getValue();
-                nbParcel = trolley.getParcels().size();
+                nbBox = trolley.getBoxes().size();
                 
                 // Vérifier qu'il y a de la place dans le chariot
-                if (nbParcel < trolley.getNbColisMax()) {
+                if (nbBox < trolley.getNbColisMax()) {
                     // Vérifier que le colis n'est pas plein ou surchargé
-                    if (parcel.getVolume() + (p.getVolume() * qt) < this.volumeMax_parcel && parcel.getWeight() + (p.getWeight() * qt) < this.weightMax_parcel) {
-                        if (p.getId() == 23) {
-                            System.out.println("Trouvé");
-                            System.out.println(order.getId());
-                            System.out.println(parcel.getId());
-                            System.out.println(p);
-                            System.out.println(qt);
-                        }
-                        parcel.addProduct(p, qt);
+                    if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
+                        System.out.println("PRODUCT "+p);
+                        box.addProduct(p, qt);
                     }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
                     else {
-                        trolley.addParcel(parcel);
-                        idParcel++;
-                        parcel = new Parcel(idParcel, weightMax_parcel, volumeMax_parcel, order, 0, 0);
-                        parcel.addProduct(p, qt);
+                        trolley.addBox(box);
+                        idBox++;
+                        box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
+                        box.addProduct(p, qt);
                     }
                 }
                 else {//sinon on met le chariot dans la tournée et on recommence un chariot
@@ -109,14 +103,11 @@ public class Recherche {
                 // Mettre à jour le coût
             }
 
-            trolley.addParcel(parcel);
-            idParcel++;
+            trolley.addBox(box);
+            idBox++;
         }
        
         solution.add(trolley);
         return solution;
     }
-    
-    
-    
 }
