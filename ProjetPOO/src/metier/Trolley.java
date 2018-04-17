@@ -32,10 +32,10 @@ public class Trolley {
         this.parcels = parcels;
     }
     
-    public Trolley(Trolley trolley) {
-        this.id = trolley.getId();
-        this.parcels = trolley.getParcels();
-        this.nbColisMax = trolley.getNbColisMax();
+    public Trolley(Integer id, Integer nbColisMax) {
+        this();
+        this.id = id;
+        this.nbColisMax = nbColisMax;
     }
     
     // Accesseurs
