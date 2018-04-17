@@ -58,11 +58,11 @@ public class Recherche {
     public ArrayList<Trolley> lookup(){
         int nbParcel = 0;
         // Création d'un chariot pour la première tournée
-        Trolley trolley = new Trolley(0, nbColisMax);
+        Trolley trolley = new Trolley(1, nbColisMax);
         int qt;
         Product p;
-        int idTrolley = 0;
-        int idParcel = 0;
+        int idTrolley = 1;
+        int idParcel = 1;
         ArrayList<Trolley> solution = new ArrayList();
         
         for(Order order : orderList ){
