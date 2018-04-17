@@ -2,9 +2,7 @@ package test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import metier.Location;
 import metier.Order;
 import metier.Parcel;
@@ -12,7 +10,11 @@ import metier.Product;
 import metier.Trolley;
 import util.Writer;
 
+/**
+ * Classe permettant de tester la classe Writer.
+ */
 public class TestWriter {
+    
     public static void main(String[] args) throws Exception {      
         Order or1 = new Order(1, 5, 15, null);
         Order or2 = new Order(2, 5, 15, null);

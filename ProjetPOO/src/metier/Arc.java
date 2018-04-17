@@ -1,5 +1,8 @@
 package metier;
 
+/**
+ * Classe définissant un arc.
+ */
 public class Arc {
     private final Integer id;
     private Location locationStart;

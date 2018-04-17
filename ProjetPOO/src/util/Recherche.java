@@ -1,7 +1,6 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import metier.Trolley;
 
 /**
  * Classe permettant la recherche d'un itinéraire simple dans la zone de picking.
- * @author Sébastien
  */
 public class Recherche {
     

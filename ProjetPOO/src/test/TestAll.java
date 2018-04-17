@@ -1,13 +1,17 @@
 package test;
 
-import java.util.ArrayList;
 import java.util.List;
 import metier.Trolley;
 import util.Reader;
 import util.Recherche;
 import util.Writer;
 
+/**
+ * Classe permettant de créer une solution 1.
+ * Lit le fichier d'instances, génère une solution, et l'écrit dans un fichier texte.
+ */
 public class TestAll {
+    
     public static void main(String[] args) throws Exception {
         String fileName = "instance_simple.txt";
         

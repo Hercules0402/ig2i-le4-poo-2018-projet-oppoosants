@@ -2,6 +2,9 @@ package metier;
 
 import java.util.Objects;
 
+/**
+ * Classe définissant un product.
+ */
 public class Product {
     /**
      * Identifiant du produit.

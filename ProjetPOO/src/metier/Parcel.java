@@ -3,6 +3,9 @@ package metier;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * Classe définissant une parcel.
+ */
 public class Parcel {
     private final Integer id;
     private HashMap<Product, Integer> products;
