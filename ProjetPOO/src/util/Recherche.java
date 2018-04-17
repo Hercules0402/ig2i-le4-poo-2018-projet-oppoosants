@@ -28,8 +28,18 @@ public class Recherche {
     
     // Données à déterminer
     private List<Trolley> trolleyList;
-    private int cout;
+    private double cout;
     
+    // Accesseur
+
+    public double getCout() {
+        return cout;
+    }
+
+    public void setCout(double cout) {
+        this.cout = cout;
+    }
+
     //Constructeurs
     
     public Recherche() {
@@ -56,7 +66,7 @@ public class Recherche {
     public ArrayList<Trolley> lookup(){
         int nbBox = 0;
         int qt;
-        Product p;
+        Product p, p_precedent = null;
         int idTrolley = 1;
         int idBox = 1;
         ArrayList<Trolley> solution = new ArrayList();
@@ -77,6 +87,8 @@ public class Recherche {
                 //On récupère la paire produit/qt du HashMap
                 Map.Entry pair = (Map.Entry) it.next();
                 p = (Product) pair.getKey();
+                if (p_precedent == null)
+                        p_precedent = p;
                 qt = (int) pair.getValue();
                 nbBox = trolley.getBoxes().size();
                 
@@ -98,7 +110,9 @@ public class Recherche {
                     box.addProduct(p, qt);
                 }
                 
-                // Mettre à jour le coût
+                // Mettre à jour le coût (calcul à vol d'oiseau)
+                this.cout += p.getLoc().getDistanceTo(p_precedent.getLoc());
+                p_precedent = p;
             }
 
             trolley.addBox(box);

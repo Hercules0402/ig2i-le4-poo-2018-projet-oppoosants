@@ -1,5 +1,7 @@
 package metier;
 
+import static java.lang.Math.pow;
+
 /**
  * Classe définissant une location.
  */
@@ -54,6 +56,17 @@ public class Location {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    // Méthodes
+    
+    //Calcul de la distance à vol d'oiseau entre 2 locations.
+    //Permet d'avoir un ordre d'idée de la distance à parcourir.
+    public double getDistanceTo(Location loc){
+        return Math.sqrt(
+                  pow((this.abscisse - loc.getAbscisse()), 2) 
+                + pow((this.ordonnee - loc.getOrdonnee()), 2)
+        );
     }
     
     public static void main(String[] args) {
