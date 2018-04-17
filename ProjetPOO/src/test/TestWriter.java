@@ -52,10 +52,10 @@ public class TestWriter {
         Parcel p3 = new Parcel(3, products3, 5, 5, or1);
         Parcel p4 = new Parcel(4, products4, 5, 5, or2);
         
-        Set<Parcel> parcels1 = new HashSet<>();
+        List<Parcel> parcels1 = new ArrayList<>();
         parcels1.add(p1);
         parcels1.add(p2);
-        Set<Parcel> parcels2 = new HashSet<>();
+        List<Parcel> parcels2 = new ArrayList<>();
         parcels2.add(p3);
         parcels2.add(p4);
         

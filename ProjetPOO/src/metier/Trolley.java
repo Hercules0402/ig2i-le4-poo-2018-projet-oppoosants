@@ -1,6 +1,8 @@
 package metier;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,13 +13,13 @@ public class Trolley {
     // Attributs
     private Integer id;
     private static Integer nbColisMax;
-    private Set<Parcel> parcels;
+    private List<Parcel> parcels;
     
     // Constructeurs
 
     public Trolley() {
         this.nbColisMax = 0;
-        this.parcels = new HashSet<>();
+        this.parcels = new ArrayList<>();
     }
 
     public Trolley(int nbColisMax) {
@@ -25,17 +27,17 @@ public class Trolley {
         this.nbColisMax = nbColisMax;
     }
     
-    public Trolley(Integer id, Integer nbColisMax, Set<Parcel> parcels) {
+    public Trolley(Integer id, Integer nbColisMax, List<Parcel> parcels) {
         this();
         this.id = id;
         this.nbColisMax = nbColisMax;
         this.parcels = parcels;
     }
     
-    public Trolley(Trolley trolley) {
-        this.id = trolley.getId();
-        this.parcels = trolley.getParcels();
-        this.nbColisMax = trolley.getNbColisMax();
+    public Trolley(Integer id, Integer nbColisMax) {
+        this();
+        this.id = id;
+        this.nbColisMax = nbColisMax;
     }
     
     // Accesseurs
@@ -52,11 +54,11 @@ public class Trolley {
         Trolley.nbColisMax = nbColisMax;
     }
 
-    public Set<Parcel> getParcels() {
+    public List<Parcel> getParcels() {
         return parcels;
     }
     
-    public boolean addParcel(Parcel p) {
+    public boolean addParcel(Parcel p) {   
         if(this.nbColisMax < parcels.size() + 1) return false;
         parcels.add(p);
         return true;
@@ -67,7 +69,7 @@ public class Trolley {
 
     @Override
     public String toString() {
-        return "Trolley{" + "id=" + id + ", parcels=" + parcels + '}';
+        return "\nTrolley{" + "id=" + id + ", parcels=" + parcels + '}';
     }
     
 }
