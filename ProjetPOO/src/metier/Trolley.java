@@ -50,6 +50,11 @@ public class Trolley {
         return parcels;
     }
     
+    public boolean addParcel(Parcel p) {
+        if(this.nbColisMax < parcels.size() + 1) return false;
+        parcels.add(p);
+        return true;
+    }
     
     
     // Méthodes

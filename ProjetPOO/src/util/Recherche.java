@@ -54,7 +54,7 @@ public class Recherche {
     
     // Méthodes
     
-    public void lookup(){
+    public ArrayList<ArrayList<Trolley>> lookup(){
         
         // Création d'un chariot pour la première tournée
         Trolley trolley = new Trolley(nbColisMax);
@@ -84,12 +84,34 @@ public class Recherche {
                     if (parcel.getVolume() + p.getVolume() < this.volumeMax_parcel && parcel.getWeight() + p.getWeight() < this.weightMax_parcel) {
                         parcel.addProduct(p, qt);
                     }
+                    else {
+                        trolley.addParcel(parcel);
+                        parcel = new Parcel(0, weightMax_parcel, volumeMax_parcel, order, 0, 0);
+                        parcel.addProduct(p, qt);
+                    }
+                }
+                else {
+                    solution.add(trolley);
+                    trolley = new Trolley(nbColisMax);
                 }
                 
                 it.remove();
+                
+                if (nbParcel < trolley.getNbColisMax()) {
+                    trolley.addParcel(parcel);
+                }
+                else {
+                    trolley = new Trolley(nbColisMax);
+                    trolley.addParcel(parcel);
+                    solution.add(trolley);
+                }
+                
+                solutions.add(solution);
                 // Mettre à jour le coût
             }
         }
+        
+        return solutions;
     }
     
     
