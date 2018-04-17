@@ -57,7 +57,6 @@ public class Recherche {
     
     public ArrayList<Trolley> lookup(){
         int nbParcel = 0;
-        ArrayList<ArrayList<Trolley>> solutions = new ArrayList();
         // Création d'un chariot pour la première tournée
         Trolley trolley = new Trolley(0, nbColisMax);
         int qt;
