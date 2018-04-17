@@ -47,7 +47,7 @@ public class Reader {
         System.out.println("Fichier trouvé.");
 
         readAll();
-        System.out.println("EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        System.out.println("READER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
     }
 
     /**
