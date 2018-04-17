@@ -55,9 +55,6 @@ public class Recherche {
     // Méthodes
     
     public ArrayList<ArrayList<Trolley>> lookup(){
-        
-        // Création d'un chariot pour la première tournée
-        Trolley trolley = new Trolley(nbColisMax);
         int nbParcel = 0;
         ArrayList<ArrayList<Trolley>> solutions = new ArrayList();
         ArrayList<Trolley> solution = new ArrayList();
@@ -65,7 +62,9 @@ public class Recherche {
         Product p;
         
         for(Order order : orderList ){
-
+            // Création d'un chariot pour la première tournée
+            Trolley trolley = new Trolley(nbColisMax);
+        
             // Création du premier colis vide pour la commande
             Parcel parcel = new Parcel(0, weightMax_parcel, volumeMax_parcel, order, 0, 0);
             
@@ -96,21 +95,20 @@ public class Recherche {
                 }
                 
                 it.remove();
-                
-                if (nbParcel < trolley.getNbColisMax()) {
-                    trolley.addParcel(parcel);
-                }
-                else {
-                    trolley = new Trolley(nbColisMax);
-                    trolley.addParcel(parcel);
-                    solution.add(trolley);
-                }
-                
-                parcel = new Parcel(0, weightMax_parcel, volumeMax_parcel, order, 0, 0);
-                trolley = new Trolley(nbColisMax);
-                solutions.add(solution);
                 // Mettre à jour le coût
             }
+            
+            if (nbParcel < trolley.getNbColisMax()) {
+                trolley.addParcel(parcel);
+            }
+            else {
+                trolley = new Trolley(nbColisMax);
+                trolley.addParcel(parcel);
+                solution.add(trolley);
+            }
+
+            trolley = new Trolley(nbColisMax);
+            solutions.add(solution);
         }
         
         return solutions;
