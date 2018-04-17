@@ -106,6 +106,8 @@ public class Recherche {
                     solution.add(trolley);
                 }
                 
+                parcel = new Parcel(0, weightMax_parcel, volumeMax_parcel, order, 0, 0);
+                trolley = new Trolley(nbColisMax);
                 solutions.add(solution);
                 // Mettre à jour le coût
             }
