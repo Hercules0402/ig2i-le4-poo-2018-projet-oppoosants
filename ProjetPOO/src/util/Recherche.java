@@ -81,23 +81,21 @@ public class Recherche {
                 nbBox = trolley.getBoxes().size();
                 
                 // Vérifier qu'il y a de la place dans le chariot
-                if (nbBox < trolley.getNbColisMax()) {
-                    // Vérifier que le colis n'est pas plein ou surchargé
-                    if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
-                        System.out.println("PRODUCT "+p);
-                        box.addProduct(p, qt);
-                    }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
-                    else {
-                        trolley.addBox(box);
-                        idBox++;
-                        box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
-                        box.addProduct(p, qt);
-                    }
-                }
-                else {//sinon on met le chariot dans la tournée et on recommence un chariot
+                if (nbBox >= trolley.getNbColisMax()) {  
                     solution.add(trolley);
                     idTrolley++;
                     trolley = new Trolley(idTrolley, nbColisMax);
+                }
+                // Vérifier que le colis n'est pas plein ou surchargé
+                if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
+                    System.out.println("PRODUCT "+p);
+                    box.addProduct(p, qt);
+                }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
+                else {
+                    trolley.addBox(box);
+                    idBox++;
+                    box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
+                    box.addProduct(p, qt);
                 }
                 
                 // Mettre à jour le coût
