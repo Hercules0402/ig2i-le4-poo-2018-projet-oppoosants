@@ -43,7 +43,7 @@ public class Recherche {
         this.volumeMax_parcel = 0;
     }
 
-    public Recherche(ArrayList<Order> orderList, ArrayList<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
+    public Recherche(List<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_parcel, int volumeMax_parcel) {
         this();
         this.orderList = orderList;
         this.productList = productList;
@@ -53,6 +53,7 @@ public class Recherche {
     }
     
     // Méthodes
+    
     
     public ArrayList<ArrayList<Trolley>> lookup(){
         int nbParcel = 0;
