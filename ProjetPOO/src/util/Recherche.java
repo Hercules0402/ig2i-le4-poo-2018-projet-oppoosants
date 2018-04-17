@@ -63,12 +63,13 @@ public class Recherche {
         int qt;
         Product p;
         int idTrolley = 0;
+        int idParcel = 0;
         ArrayList<Trolley> solution = new ArrayList();
         
         for(Order order : orderList ){
         
             // Création du premier colis vide pour la commande
-            Parcel parcel = new Parcel(0, weightMax_parcel, volumeMax_parcel, order, 0, 0);
+            Parcel parcel = new Parcel(idParcel, weightMax_parcel, volumeMax_parcel, order, 0, 0);
             
             
             // Variable d'itération des produits de la commande
@@ -88,20 +89,22 @@ public class Recherche {
                     }
                     else {
                         trolley.addParcel(parcel);
-                        parcel = new Parcel(0, weightMax_parcel, volumeMax_parcel, order, 0, 0);
+                        idParcel++;
+                        parcel = new Parcel(idParcel, weightMax_parcel, volumeMax_parcel, order, 0, 0);
                         parcel.addProduct(p, qt);
                     }
                 }
                 else {
                     solution.add(trolley);
-                    trolley = new Trolley(0, nbColisMax);
+                    idTrolley++;
+                    trolley = new Trolley(idTrolley, nbColisMax);
                 }
                 
                 // Mettre à jour le coût
             }
 
             trolley.addParcel(parcel);
-            
+            idParcel++;
         }
        
         solution.add(trolley);
