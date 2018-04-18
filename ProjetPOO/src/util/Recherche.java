@@ -100,7 +100,7 @@ public class Recherche {
                 }
                 // Vérifier que le colis n'est pas plein ou surchargé
                 if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
-                    System.out.println("PRODUCT "+p);
+                    //System.out.println("PRODUCT "+p);
                     box.addProduct(p, qt);
                 }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
                 else {
