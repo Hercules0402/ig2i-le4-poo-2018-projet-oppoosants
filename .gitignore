@@ -22,3 +22,5 @@ hs_err_pid*
 /ProjetPOO/nbproject/private/
 /ProjetPOO/build/
 /ProjetPOO/dist/
+/ProjetPOO/*.txt
+/ProjetPOO/testInstance
