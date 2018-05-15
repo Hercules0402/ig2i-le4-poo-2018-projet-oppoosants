@@ -5,6 +5,9 @@ import metier.Trolley;
 import util.Reader;
 import util.Recherche;
 
+/**
+ * Classe permettant de tester la classe Recherche.
+ */
 public class TestRecherche {
     public static void main(String[] args) throws Exception {    
         Reader r = new Reader("instance_200000.txt");

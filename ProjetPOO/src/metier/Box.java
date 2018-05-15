@@ -7,6 +7,7 @@ import java.util.Objects;
  * Classe définissant un colis.
  */
 public class Box {
+    
     private final Integer id;
     private HashMap<Product, Integer> products;
     private static int weightMax;
@@ -17,8 +18,8 @@ public class Box {
 
     public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
         this.id= id;
-        this.volumeMax = volumeMax;
-        this.weightMax = weightMax;
+        Box.volumeMax = volumeMax;
+        Box.weightMax = weightMax;
         this.volume = volume;
         this.weight = weight;
         products = new HashMap();
@@ -53,13 +54,8 @@ public class Box {
         else {
             products.put(p, qt);
         }
-        
         this.weight += p.getWeight() * qt;
         this.volume += p.getVolume() * qt;
-        
-        /*if(this.weight > 12000 || this.volume > 92160) {
-            System.out.println("Weight : " + this.weight + " Volume : " + this.volume);
-        }*/
     }
     
     public void setProducts(HashMap products) {
@@ -114,8 +110,6 @@ public class Box {
         }
         return true;
     }
-
-        
 
     @Override
     public String toString() {

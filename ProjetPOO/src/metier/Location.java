@@ -6,14 +6,11 @@ import static java.lang.Math.pow;
  * Classe définissant une location.
  */
 public class Location {
-    //Attributs
     
     private Integer id;
     private Integer abscisse;
     private Integer ordonnee;
     private String name;
-    
-    //Constructeurs
 
     public Location() {
         this.abscisse = 0;
@@ -29,7 +26,6 @@ public class Location {
         this.name = name;
     }
 
-    //Accesseurs
     public Integer getId() {
         return id;
     }
@@ -58,10 +54,13 @@ public class Location {
         this.name = name;
     }
     
-    // Méthodes
-    
-    //Calcul de la distance à vol d'oiseau entre 2 locations.
-    //Permet d'avoir un ordre d'idée de la distance à parcourir.
+    /**
+     * getDistanceTo
+     * Calcul de la distance à vol d'oiseau entre 2 locations
+     * Permet d'avoir un ordre d'idée de la distance à parcourir
+     * @param loc
+     * @return
+     */
     public double getDistanceTo(Location loc){
         return Math.sqrt(
                   pow((this.abscisse - loc.getAbscisse()), 2) 

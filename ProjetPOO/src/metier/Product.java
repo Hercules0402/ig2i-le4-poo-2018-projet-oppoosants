@@ -3,27 +3,13 @@ package metier;
 import java.util.Objects;
 
 /**
- * Classe définissant un product.
+ * Classe définissant un produit.
  */
 public class Product {
-    /**
-     * Identifiant du produit.
-     */
+
     Integer id;
-    
-    /**
-     * Localisation du produit.
-     */
     Location loc;
-    
-    /**
-     * Poids unitaire du produit.
-     */
     Integer weight;
-    
-    /**
-     * Volume unitaire du produit.
-     */
     Integer volume;
 
     public Product(Integer id, Location loc, Integer weight, Integer volume) {

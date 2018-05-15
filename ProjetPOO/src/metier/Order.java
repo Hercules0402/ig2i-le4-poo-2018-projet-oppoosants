@@ -3,28 +3,20 @@ package metier;
 import java.util.HashMap;
 
 /**
- * Classe définissant un order.
+ * Classe définissant une commande.
  */
 public class Order {
+    
     private Integer id;
     private Integer m;
     private Integer nbProducts;
     private HashMap<Product, Integer> products;
 
-    /**
-     * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
-     * @param id
-     */
     public Order(Integer id) {
         this.id = id;
         products = new HashMap();
     }
 
-    /**
-     * Constructeur par id et produits de la commande Order
-     * @param id
-     * @param products
-     */
     public Order(Integer id, Integer m, Integer nbProducts, HashMap products) {
         this.id = id;
         this.m = m;
@@ -32,26 +24,14 @@ public class Order {
         this.products = products;
     }
 
-    /**
-     * getId
-     * @return l'identifiant de la commande
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * getProducts
-     * @return le hashmap des produits dans la commande
-     */
     public HashMap getProducts() {
         return products;
     }
 
-    /**
-     * setProducts
-     * @param products les produits contenus dans un hashmap
-     */
     public void setProducts(HashMap products) {
         this.products = products;
     }

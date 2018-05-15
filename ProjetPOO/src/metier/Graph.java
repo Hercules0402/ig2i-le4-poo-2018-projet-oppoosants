@@ -4,47 +4,15 @@ package metier;
  * Représente le graphe sous-jacent à la zone de pickeing.
  */
 public class Graph {
-    /**
-     * Identifiant du dépôt de départ.
-     */
+
     private int departingDepot;
-
-    /**
-     * Identifiant du dépôt d'arrivée.
-     */
     private int arrivalDepot;
-
-    /**
-     * Représente le nombre de localisations (sans les dépôts).
-     */
     private int nbLocations;
-
-    /**
-     * Représente le nombre de produits.
-     */
     private int nbProducts;
-
-    /**
-     * Représente le nombre d'intersections.
-     */
     private int nbVerticesIntersections;
-
-    /**
-     * Tableau représentant la liste des arcs.
-     */
     private int[][] arcs;
-
-    /**
-     * Tableau représentant la liste des distances (associé à la liste des arcs).
-     */
     private int[][] distances;
 
-    /**
-     * Constructeur par données.
-     * @param nbVerticesIntersections TODO
-     * @param arcs TODO
-     * @param distances TODO
-     */
     public Graph(int nbVerticesIntersections, int[][] arcs, int[][] distances) {
         this.nbLocations = distances.length;
         this.nbVerticesIntersections = nbVerticesIntersections;

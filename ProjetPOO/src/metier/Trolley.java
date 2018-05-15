@@ -8,37 +8,32 @@ import java.util.List;
  */
 public class Trolley {
     
-    // Attributs
     private Integer id;
     private static Integer nbColisMax;
     private List<Box> boxes;
-    
-    // Constructeurs
 
     public Trolley() {
-        this.nbColisMax = 0;
+        Trolley.nbColisMax = 0;
         this.boxes = new ArrayList<>();
     }
 
     public Trolley(int nbColisMax) {
         this();
-        this.nbColisMax = nbColisMax;
+        Trolley.nbColisMax = nbColisMax;
     }
     
     public Trolley(Integer id, Integer nbColisMax, List<Box> boxes) {
         this();
         this.id = id;
-        this.nbColisMax = nbColisMax;
+        Trolley.nbColisMax = nbColisMax;
         this.boxes = boxes;
     }
     
     public Trolley(Integer id, Integer nbColisMax) {
         this();
         this.id = id;
-        this.nbColisMax = nbColisMax;
+        Trolley.nbColisMax = nbColisMax;
     }
-    
-    // Accesseurs
 
     public int getId() {
         return id;
@@ -57,17 +52,13 @@ public class Trolley {
     }
     
     public boolean addBox(Box p) {   
-        if(this.nbColisMax < boxes.size() + 1) return false;
+        if(Trolley.nbColisMax < boxes.size() + 1) return false;
         boxes.add(p);
         return true;
     }
-    
-    
-    // Méthodes
 
     @Override
     public String toString() {
         return "\nTrolley{" + "id=" + id + ", boxes=" + boxes + '}';
     }
-    
 }
