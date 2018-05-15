@@ -33,9 +33,9 @@ public class Reader {
     private List<Location> locations;
     
     /**
-     * Constructeur par données.
-     * @param filename TODO
-     * @throws java.lang.Exception
+     * Constructeur par données
+     * @param filename nom du fichier instance à lire
+     * @throws java.lang.Exception impossible de lire le fichier
      */
     public Reader(String filename) throws Exception {
         Long time = System.currentTimeMillis();
@@ -51,9 +51,9 @@ public class Reader {
     }
 
     /**
-     * Permet de récupérer les différentes lignes.
-     * @param scan Scanner
-     * @return String
+     * Permet de récupérer une ligne au sein du fichier instance tout en passant les lignes titres
+     * @param scan Scanner itérateur de lignes
+     * @return String ligne récupérée
      */
     private String readNextString(Scanner scan) {
         while (scan.hasNext("//.*")) {
@@ -62,6 +62,10 @@ public class Reader {
         return scan.nextLine();
     }
 
+    /**
+     * Permet de récupérer une ligne au sein du fichier instance tout en passant les lignes titres
+     * @throws java.io.FileNotFoundException
+     */
     public void readAll() throws FileNotFoundException {
         Scanner scan = new Scanner(this.instanceFile);
         
@@ -117,6 +121,11 @@ public class Reader {
         distances = createArcs(s_distances, true);
     }
     
+    /**
+     * Permet de créer les objets produits issus du fichier instance
+     * @param s_products liste des produits sous forme texte
+     * @return liste des produits sous forme objet
+     */
     public List<Product> createProducts(List<String> s_products){
         List<Product> list = new ArrayList();
         for(String s : s_products){
@@ -128,6 +137,11 @@ public class Reader {
         return list;
     }
     
+    /**
+     * Permet de créer les objets commandes issus du fichier instance
+     * @param s_orders liste des commandes sous forme texte
+     * @return liste des commandes sous forme objet
+     */
     public List<Order> createOrders(List<String> s_orders){
         List<Order> list = new ArrayList();
         for(String s : s_orders){
@@ -147,6 +161,12 @@ public class Reader {
         return list;
     }
     
+    /**
+     * Permet de créer les arcs issus du fichier instance
+     * @param s_arcs liste des arcs sous forme texte
+     * @param isShortestPath indique si les arcs fournis sont les plus courtes distances ou alors si ce sont simplement tous les arcs
+     * @return liste des arcs sous forme objet
+     */
     public List<Arc> createArcs(List<String> s_arcs, boolean isShortestPath){
         List<Arc> list = new ArrayList();
         for(String s : s_arcs){
@@ -159,6 +179,11 @@ public class Reader {
         return list;
     }
     
+    /**
+     * Permet de créer les locations produits issus du fichier instance
+     * @param s_locations liste des locations sous forme texte
+     * @return liste des locations sous forme objet
+     */
     public List<Location> createLocations(List<String> s_locations){
         List<Location> list = new ArrayList();
         for(String s : s_locations){

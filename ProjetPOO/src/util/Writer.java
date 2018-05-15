@@ -27,7 +27,7 @@ public class Writer {
     public Writer(String filename, List<Trolley> trolleys) throws Exception {
         Long time = System.currentTimeMillis();
         if (filename == null) {
-            System.err.println("Une erreur a été rencontrée : Aucun nom de fichier fourni...");
+            System.err.println("Une erreur a été rencontrée : Aucun nom de fichier fourni ...");
             throw new Exception();
         }
         filename = filename.substring(0, filename.lastIndexOf(".")) + "_sol"

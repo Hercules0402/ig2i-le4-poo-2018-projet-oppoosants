@@ -15,32 +15,15 @@ import metier.Trolley;
  */
 public class Recherche {
     
-    //Attributs
     private List<Order> orderList;
     private List<Product> productList;
     private List<Arc> arcsList;
     private List<Arc> distancesList;
     private int nbColisMax;
-    
-    //Critères poid/volume
     private int weightMax_box;
     private int volumeMax_box;
-    
-    // Données à déterminer
     private List<Trolley> trolleyList;
     private double cout;
-    
-    // Accesseur
-
-    public double getCout() {
-        return cout;
-    }
-
-    public void setCout(double cout) {
-        this.cout = cout;
-    }
-
-    //Constructeurs
     
     public Recherche() {
         orderList = new ArrayList();
@@ -60,8 +43,13 @@ public class Recherche {
         this.volumeMax_box = volumeMax_box;
     }
     
-    // Méthodes
-    
+    public double getCout() {
+        return cout;
+    }
+
+    public void setCout(double cout) {
+        this.cout = cout;
+    }
     
     public ArrayList<Trolley> lookup(){
         int nbBox = 0;
