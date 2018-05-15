@@ -51,9 +51,14 @@ public class Trolley {
         return boxes;
     }
     
-    public boolean addBox(Box p) {   
+    /**
+     * Ajoute une box à un chariot.
+     * @param b la box en question.
+     * @return true si l'ajout est fait, false sinon.
+     */
+    public boolean addBox(Box b) {   
         if(Trolley.nbColisMax < boxes.size() + 1) return false;
-        boxes.add(p);
+        boxes.add(b);
         return true;
     }
 

@@ -46,6 +46,11 @@ public class Box {
         return order;
     }    
     
+    /**
+     * Ajoute un produit à la box correspondante, met à jour la quantité si le produit est déjà présent.
+     * @param p le produit en question.
+     * @param qt le nombre de produit à placer.
+     */
     public void addProduct(Product p, int qt) {
         if(products.containsKey(p)) {
             int oldQt = products.get(p);
