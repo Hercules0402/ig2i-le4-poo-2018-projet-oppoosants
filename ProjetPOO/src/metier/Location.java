@@ -1,16 +1,33 @@
 package metier;
 
+import java.io.Serializable;
 import static java.lang.Math.pow;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Classe définissant une location.
  */
-public class Location {
-    //Attributs
+@Entity
+public class Location implements Serializable {
+    private static final long serialVersionUID = 1L;
     
+    //Attributs
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @Column
     private Integer abscisse;
+    
+    @Column
     private Integer ordonnee;
+    
+    @Column
     private String name;
     
     //Constructeurs
@@ -68,12 +85,44 @@ public class Location {
                 + pow((this.ordonnee - loc.getOrdonnee()), 2)
         );
     }
-    
-    public static void main(String[] args) {
-        Location loc1 = new Location();
-        loc1.toString();
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.abscisse);
+        hash = 67 * hash + Objects.hashCode(this.ordonnee);
+        hash = 67 * hash + Objects.hashCode(this.name);
+        return hash;
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Location other = (Location) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.abscisse, other.abscisse)) {
+            return false;
+        }
+        if (!Objects.equals(this.ordonnee, other.ordonnee)) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return "metier.Location[ identifiant=" + this.id + ", abscisse=" + this.abscisse

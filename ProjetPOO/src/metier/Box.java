@@ -1,18 +1,48 @@
 package metier;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 
 /**
  * Classe définissant un colis.
  */
-public class Box {
+@Entity
+public class Box implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private final Integer id;
+    
+    @OneToMany
+    @MapKey(name = "id")
     private HashMap<Product, Integer> products;
+    
+    @Column
     private static int weightMax;
+    
+    @Column
     private static int volumeMax;
+    
+    @Column
     private int weight;
+    
+    @Column
     private int volume;
+    
+    @JoinColumn(referencedColumnName = "ID")
+    @ManyToOne
     private Order order;
 
     public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
@@ -92,8 +122,11 @@ public class Box {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + this.weight;
+        hash = 71 * hash + this.volume;
+        hash = 71 * hash + Objects.hashCode(this.order);
         return hash;
     }
 
@@ -109,13 +142,20 @@ public class Box {
             return false;
         }
         final Box other = (Box) obj;
+        if (this.weight != other.weight) {
+            return false;
+        }
+        if (this.volume != other.volume) {
+            return false;
+        }
         if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.order, other.order)) {
             return false;
         }
         return true;
     }
-
-        
 
     @Override
     public String toString() {

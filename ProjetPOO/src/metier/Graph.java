@@ -1,65 +1,67 @@
 package metier;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 /**
  * Représente le graphe sous-jacent à la zone de pickeing.
  */
-public class Graph {
-    /**
-     * Identifiant du dépôt de départ.
-     */
-    private int departingDepot;
+@Entity
+public class Graph implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    
+    @JoinColumn(referencedColumnName = "ID")
+    @ManyToOne
+    private Location departingDepot;
 
-    /**
-     * Identifiant du dépôt d'arrivée.
-     */
-    private int arrivalDepot;
+    @JoinColumn(referencedColumnName = "ID")
+    @ManyToOne
+    private Location arrivalDepot;
 
-    /**
-     * Représente le nombre de localisations (sans les dépôts).
-     */
+    @Column
     private int nbLocations;
 
-    /**
-     * Représente le nombre de produits.
-     */
+    @Column
     private int nbProducts;
 
-    /**
-     * Représente le nombre d'intersections.
-     */
+    @Column
     private int nbVerticesIntersections;
 
-    /**
-     * Tableau représentant la liste des arcs.
-     */
-    private int[][] arcs;
-
-    /**
-     * Tableau représentant la liste des distances (associé à la liste des arcs).
-     */
-    private int[][] distances;
+    @OneToMany(mappedBy = "id")
+    private List<Arc> arcs;
 
     /**
      * Constructeur par données.
      * @param nbVerticesIntersections TODO
      * @param arcs TODO
-     * @param distances TODO
      */
-    public Graph(int nbVerticesIntersections, int[][] arcs, int[][] distances) {
-        this.nbLocations = distances.length;
+    public Graph(int nbVerticesIntersections) {
+        this.arcs = new ArrayList();
+        
+        this.nbLocations = 0;
         this.nbVerticesIntersections = nbVerticesIntersections;
-        this.nbProducts = this.nbLocations - this.nbVerticesIntersections - 2;
-        this.departingDepot = 0;
-        this.arrivalDepot = this.nbLocations - 1;
-        this.arcs = arcs;
-        this.distances = distances;
+        this.nbProducts = this.nbLocations - this.nbVerticesIntersections - 2;        
     }
 
-    public int getDepartingDepot() {
+    public Location getDepartingDepot() {
         return departingDepot;
     }
 
-    public int getArrivalDepot() {
+    public Location getArrivalDepot() {
         return arrivalDepot;
     }
 
@@ -75,13 +77,56 @@ public class Graph {
         return nbVerticesIntersections;
     }
 
-    public int[][] getArcs() {
+    public List<Arc> getArcs() {
         return arcs;
     }
 
-    public int[][] getDistances() {
-        return distances;
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.departingDepot);
+        hash = 79 * hash + Objects.hashCode(this.arrivalDepot);
+        hash = 79 * hash + this.nbLocations;
+        hash = 79 * hash + this.nbProducts;
+        hash = 79 * hash + this.nbVerticesIntersections;
+        return hash;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Graph other = (Graph) obj;
+        if (this.nbLocations != other.nbLocations) {
+            return false;
+        }
+        if (this.nbProducts != other.nbProducts) {
+            return false;
+        }
+        if (this.nbVerticesIntersections != other.nbVerticesIntersections) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.departingDepot, other.departingDepot)) {
+            return false;
+        }
+        if (!Objects.equals(this.arrivalDepot, other.arrivalDepot)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
     @Override
     public String toString() {
