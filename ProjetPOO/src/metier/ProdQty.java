@@ -21,4 +21,9 @@ public class ProdQty implements Serializable {
     
     @Column
     private Integer quantite;
+
+    public ProdQty() {
+    }
+    
+    
 }

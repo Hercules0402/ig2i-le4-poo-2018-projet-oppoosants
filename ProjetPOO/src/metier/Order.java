@@ -28,9 +28,14 @@ public class Order implements Serializable {
     @Column
     private Integer nbProducts;
 
-    @OneToMany(mappedBy = "produit")
+    @OneToMany
     private List<ProdQty> products;
 
+    public Order() {        
+        products = new ArrayList();
+    }
+
+    
     /**
      * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
      * @param id

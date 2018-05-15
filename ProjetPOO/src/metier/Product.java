@@ -44,6 +44,9 @@ public class Product implements Serializable {
     @Column
     Integer volume;
 
+    public Product() {
+    }
+      
     public Product(Integer id, Location loc, Integer weight, Integer volume) {
         this.id = id;
         this.loc = loc;

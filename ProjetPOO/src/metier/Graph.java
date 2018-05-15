@@ -41,8 +41,12 @@ public class Graph implements Serializable {
     @Column
     private int nbVerticesIntersections;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "graph")
     private List<Arc> arcs;
+
+    public Graph() {
+        this.arcs = new ArrayList();
+    }
 
     /**
      * Constructeur par données.

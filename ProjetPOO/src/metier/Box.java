@@ -25,9 +25,9 @@ public class Box implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private final Integer id;
+    private Integer id;
     
-    @OneToMany(mappedBy = "produit")
+    @OneToMany
     private List<ProdQty> products;
     
     @Column
@@ -49,6 +49,10 @@ public class Box implements Serializable {
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
     private Order order;
+
+    public Box() {        
+        products = new ArrayList();
+    }
 
     public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
         this.id= id;

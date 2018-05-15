@@ -35,6 +35,10 @@ public class Arc implements Serializable {
     
     @Column
     private boolean isShortest;
+    
+    @JoinColumn(name = "GRAPH", referencedColumnName = "ID")
+    @ManyToOne
+    private Graph graph;
 
     public Arc() {
        this.id = -1; 
