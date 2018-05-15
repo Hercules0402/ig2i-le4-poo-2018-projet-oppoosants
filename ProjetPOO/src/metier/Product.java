@@ -1,30 +1,55 @@
 package metier;
 
+import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * Classe définissant un product.
  */
-public class Product {
+@Entity
+public class Product implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * Identifiant du produit.
      */
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     
     /**
      * Localisation du produit.
      */
+    @ManyToOne
+    @JoinColumn(name = "LOC", referencedColumnName = "ID")
     Location loc;
     
     /**
      * Poids unitaire du produit.
      */
+    @Column
     Integer weight;
     
     /**
      * Volume unitaire du produit.
      */
+    @Column
     Integer volume;
+    
+    /**
+     * Commande du produit.
+     */
+    @JoinColumn(name = "ORDER", referencedColumnName = "ID")
+	@ManyToOne
+    Order order;
 
     public Product(Integer id, Location loc, Integer weight, Integer volume) {
         this.id = id;
