@@ -42,6 +42,10 @@ public class Box implements Serializable {
     @Column
     private int volume;
     
+    @JoinColumn(name = "TROLLEY", referencedColumnName = "ID")
+    @ManyToOne
+    private Trolley trolley;
+    
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
     private Order order;

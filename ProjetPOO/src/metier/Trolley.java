@@ -26,7 +26,7 @@ public class Trolley implements Serializable {
     @Column
     private static Integer nbColisMax;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(mappedBy = "trolley")
     private List<Box> boxes;
     
     // Constructeurs
