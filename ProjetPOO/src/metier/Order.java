@@ -1,15 +1,14 @@
 package metier;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 
 /**
@@ -29,9 +28,8 @@ public class Order implements Serializable {
     @Column
     private Integer nbProducts;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-	@MapKey(name = "id")
-    private HashMap<Product, Integer> products;
+    @OneToMany(mappedBy = "produit")
+    private List<ProdQty> products;
 
     /**
      * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
@@ -39,7 +37,7 @@ public class Order implements Serializable {
      */
     public Order(Integer id) {
         this.id = id;
-        products = new HashMap();
+        products = new ArrayList();
     }
 
     /**
@@ -47,7 +45,7 @@ public class Order implements Serializable {
      * @param id
      * @param products
      */
-    public Order(Integer id, Integer m, Integer nbProducts, HashMap products) {
+    public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> products) {
         this.id = id;
         this.m = m;
         this.nbProducts = nbProducts;
@@ -66,7 +64,7 @@ public class Order implements Serializable {
      * getProducts
      * @return le hashmap des produits dans la commande
      */
-    public HashMap getProducts() {
+    public List<ProdQty> getProducts() {
         return products;
     }
 
@@ -74,7 +72,7 @@ public class Order implements Serializable {
      * setProducts
      * @param products les produits contenus dans un hashmap
      */
-    public void setProducts(HashMap products) {
+    public void setProducts(List<ProdQty> products) {
         this.products = products;
     }
     
@@ -84,6 +82,7 @@ public class Order implements Serializable {
      * @param product le produit ajouté
      * @param qt sa quantité
      */
+    /* A REFAIRE
     public void addProduct(Product product, int qt) {
         if (!this.products.containsKey(product)) {
             this.products.put(product, qt);
@@ -93,26 +92,30 @@ public class Order implements Serializable {
             this.products.put(product, oldQt + qt);
         }
     }
+    */
     
     /**
      * isItemInOrder
      * @param product le produit à rechercher
      * @return true si le produit est présent dans la commande, false sinon
      */
+    /* A REFAIRE
     public boolean isItemInOrder(Product product) {
         return this.products.containsKey(product);
     }
+    */
     
     /**
      * removeProduct
      * Supprime un produit du hashmap
      * @param product le produit à supprimer
      */
+    /* A REFAIRE
     public void removeProduct(Product product) {
         if (this.products.containsKey(product)) {
             this.products.remove(product);
         }
-    }
+    }*/
 
     @Override
     public String toString() {

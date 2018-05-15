@@ -9,6 +9,7 @@
     <class>metier.Order</class>
     <class>metier.Product</class>
     <class>metier.Trolley</class>
+    <class>metier.ProdQty</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/projet"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

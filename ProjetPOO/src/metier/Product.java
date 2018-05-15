@@ -43,13 +43,6 @@ public class Product implements Serializable {
      */
     @Column
     Integer volume;
-    
-    /**
-     * Commande du produit.
-     */
-    @JoinColumn(name = "ORDER", referencedColumnName = "ID")
-	@ManyToOne
-    Order order;
 
     public Product(Integer id, Location loc, Integer weight, Integer volume) {
         this.id = id;
