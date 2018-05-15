@@ -1,16 +1,32 @@
 package metier;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Classe définissant un chariot.
  */
-public class Trolley {
-    
+@Entity
+public class Trolley implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     // Attributs
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column
     private static Integer nbColisMax;
+
+    @OneToMany(mappedBy = "id")
     private List<Box> boxes;
     
     // Constructeurs
@@ -69,5 +85,31 @@ public class Trolley {
     public String toString() {
         return "\nTrolley{" + "id=" + id + ", boxes=" + boxes + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Trolley other = (Trolley) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }
