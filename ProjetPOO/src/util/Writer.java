@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import metier.Box;
+import metier.ProdQty;
 import metier.Product;
 import metier.Trolley;
 
@@ -50,7 +51,7 @@ public class Writer {
             solution += "\n//IdTournes NbColis\n" + t.getId() + " " 
                     + t.getBoxes().size() + "\n//IdColis IdCommandeInColis"
                     + " NbProducts IdProd1 QtyProd1 IdProd2 QtyProd2 ...";
-            for (Box p : t.getBoxes()) {
+            for (Box b : t.getBoxes()) {
                 /*
                 Attention le nombre de produits à récupérer pour chaque colis
                 est le nombre produits différents dans le colis.
@@ -59,15 +60,11 @@ public class Writer {
                 s'il existe déjà, on peut utiliser la méthode .getProducts().size()
                 pour récupérer le nombre de produits différents dans un colis.
                 */
-                solution += "\n" + p.getId() + " " + p.getOrder().getId()
-                                + " " + p.getProducts().size();
+                solution += "\n" + b.getId() + " " + b.getOrder().getId()
+                                + " " + b.getProdQtys().size();
                     
-                Set keys = p.getProducts().keySet();
-                Iterator it = keys.iterator();
-                while (it.hasNext()){
-                    Product cle = (Product) it.next(); 
-                    Integer valeur = (Integer) p.getProducts().get(cle);
-                    solution += " " + cle.getId() + " " + valeur;
+                for(ProdQty prodQty : b.getProdQtys()) {
+                    solution += " " + prodQty.getProduct() + " " + prodQty.getQuantity();
                 }
             }
         }        

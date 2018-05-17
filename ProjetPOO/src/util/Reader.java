@@ -9,6 +9,7 @@ import java.util.Scanner;
 import metier.Arc;
 import metier.Location;
 import metier.Order;
+import metier.ProdQty;
 import metier.Product;
 
 /**
@@ -135,13 +136,16 @@ public class Reader {
             Integer id = Integer.parseInt(ss[0]);
             Integer m = Integer.parseInt(ss[1]);
             Integer nb = Integer.parseInt(ss[2]);
-            HashMap<Product, Integer> map = new HashMap();
+            ArrayList<ProdQty> prodQtys = new ArrayList<>();
+            //HashMap<Product, Integer> map = new HashMap();
             for(int i=3; i<(3+nb*2); i+=2){
                 Product prod = products.get(Integer.parseInt(ss[i])-1);
                 Integer quantite = Integer.parseInt(ss[i+1]);
-                map.put(prod, quantite);
+                prodQtys.add(new ProdQty(prod, quantite));
+                //map.put(prod, quantite);
             }
-            Order o = new Order(id, m, nb, map);
+            //Order o = new Order(id, m, nb, map);
+            Order o = new Order(id, m, nb, prodQtys);
             list.add(o);
         }
         return list;

@@ -32,10 +32,10 @@ public class Order implements Serializable {
     private Integer nbProducts;
 
     @OneToMany()
-    private List<ProdQty> products;
+    private List<ProdQty> prodQtys;
 
     public Order() {        
-        products = new ArrayList();
+        prodQtys = new ArrayList();
     }
 
     
@@ -45,19 +45,19 @@ public class Order implements Serializable {
      */
     public Order(Integer id) {
         this.id = id;
-        products = new ArrayList();
+        prodQtys = new ArrayList();
     }
 
     /**
      * Constructeur par id et produits de la commande Order
      * @param id
-     * @param products
+     * @param prodQtys
      */
-    public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> products) {
+    public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys) {
         this.id = id;
         this.m = m;
         this.nbProducts = nbProducts;
-        this.products = new ArrayList<>(products);
+        this.prodQtys = new ArrayList<>(prodQtys);
     }
 
     /**
@@ -69,19 +69,19 @@ public class Order implements Serializable {
     }
 
     /**
-     * getProducts
+     * getProdQtys
      * @return le hashmap des produits dans la commande
      */
-    public List<ProdQty> getProducts() {
-        return products;
+    public List<ProdQty> getProdQtys() {
+        return prodQtys;
     }
 
     /**
-     * setProducts
-     * @param products les produits contenus dans un hashmap
+     * setProdQtys
+     * @param prodQtys les produits contenus dans un hashmap
      */
-    public void setProducts(List<ProdQty> products) {
-        this.products = products;
+    public void setProdQtys(List<ProdQty> prodQtys) {
+        this.prodQtys = prodQtys;
     }
     
     /**
@@ -92,12 +92,12 @@ public class Order implements Serializable {
      */
     /* A REFAIRE
     public void addProduct(Product product, int qt) {
-        if (!this.products.containsKey(product)) {
-            this.products.put(product, qt);
+        if (!this.prodQtys.containsKey(product)) {
+            this.prodQtys.put(product, qt);
         }
         else {
-            int oldQt = (int) this.products.get(product);
-            this.products.put(product, oldQt + qt);
+            int oldQt = (int) this.prodQtys.get(product);
+            this.prodQtys.put(product, oldQt + qt);
         }
     }
     */
@@ -109,7 +109,7 @@ public class Order implements Serializable {
      */
     /* A REFAIRE
     public boolean isItemInOrder(Product product) {
-        return this.products.containsKey(product);
+        return this.prodQtys.containsKey(product);
     }
     */
     
@@ -120,14 +120,14 @@ public class Order implements Serializable {
      */
     /* A REFAIRE
     public void removeProduct(Product product) {
-        if (this.products.containsKey(product)) {
-            this.products.remove(product);
+        if (this.prodQtys.containsKey(product)) {
+            this.prodQtys.remove(product);
         }
     }*/
 
     @Override
     public String toString() {
-        return "Order{" + "id=" + id+ ", m=" + m + ", nbProducts=" + nbProducts + ", products=" + products + '}';
+        return "Order{" + "id=" + id+ ", m=" + m + ", nbProducts=" + nbProducts + ", prodQtys=" + prodQtys + '}';
     }
 
     @Override

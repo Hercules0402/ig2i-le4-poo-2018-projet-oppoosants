@@ -68,7 +68,7 @@ public class Box implements Serializable {
         this.order = order;
     }
 
-    public Box(Integer id, HashMap products, int weightMax, int volumeMax, Order order) {
+    public Box(Integer id, HashMap prodQtys, int weightMax, int volumeMax, Order order) {
         this.id = id;
         this.prodQtys = new ArrayList();
         this.volumeMax = volumeMax;
@@ -102,7 +102,7 @@ public class Box implements Serializable {
         prodQtys.add(newPq);
     }
     
-    public void setProducts(List<ProdQty> prodQtys) {
+    public void setProdQtys(List<ProdQty> prodQtys) {
         this.prodQtys = prodQtys;
     }
 
