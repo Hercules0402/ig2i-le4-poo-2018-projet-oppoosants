@@ -24,28 +24,21 @@ public class Trolley implements Serializable {
     private Integer id;
 
     @Column
-    private static Integer nbColisMax;
+    private Integer nbColisMax;
 
-    @OneToMany(mappedBy = "trolley")
+    @OneToMany()
     private List<Box> boxes;
     
     // Constructeurs
 
     public Trolley() {
-        this.nbColisMax = 0;
         this.boxes = new ArrayList<>();
-    }
-
-    public Trolley(int nbColisMax) {
-        this();
-        this.nbColisMax = nbColisMax;
     }
     
     public Trolley(Integer id, Integer nbColisMax, List<Box> boxes) {
-        this();
         this.id = id;
         this.nbColisMax = nbColisMax;
-        this.boxes = boxes;
+        this.boxes = new ArrayList<>(boxes);
     }
     
     public Trolley(Integer id, Integer nbColisMax) {
@@ -60,12 +53,12 @@ public class Trolley implements Serializable {
         return id;
     }
 
-    public static int getNbColisMax() {
+    public int getNbColisMax() {
         return nbColisMax;
     }
 
-    public static void setNbColisMax(int nbColisMax) {
-        Trolley.nbColisMax = nbColisMax;
+    public void setNbColisMax(int nbColisMax) {
+        this.nbColisMax = nbColisMax;
     }
 
     public List<Box> getBoxes() {
@@ -77,19 +70,16 @@ public class Trolley implements Serializable {
         boxes.add(p);
         return true;
     }
-    
-    
-    // Méthodes
 
     @Override
     public String toString() {
-        return "\nTrolley{" + "id=" + id + ", boxes=" + boxes + '}';
+        return "Trolley{" + "id=" + id + ", boxes=" + boxes + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.id);
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -110,6 +100,4 @@ public class Trolley implements Serializable {
         }
         return true;
     }
-    
-    
 }

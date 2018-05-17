@@ -40,6 +40,14 @@ public class Arc implements Serializable {
         id = -1;
     }
     
+    public Arc(Location locationStart, Location locationEnd, Integer distance, boolean isShortest) {
+        this();
+        this.locationStart = locationStart;
+        this.locationEnd = locationEnd;
+        this.distance = distance;
+        this.isShortest = isShortest;
+    }
+    
     public Arc(Integer id, Location locationStart, Location locationEnd, Integer distance, boolean isShortest) {
         this.id = id;
         this.locationStart = locationStart;
