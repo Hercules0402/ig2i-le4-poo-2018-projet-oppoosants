@@ -1,21 +1,26 @@
 package test;
 
+import dao.ArcDao;
+import dao.BoxDao;
 import dao.DaoFactory;
+import dao.GraphDao;
 import dao.LocationDao;
 import dao.OrderDao;
 import dao.PersistenceType;
 import dao.ProdQtyDao;
 import dao.ProductDao;
+import dao.TrolleyDao;
+import metier.Arc;
+import metier.Box;
+import metier.Graph;
 import metier.Location;
 import metier.Order;
 import metier.ProdQty;
 import metier.Product;
+import metier.Trolley;
 
-/**
- *
- * @author Sébastien CORNUEL
- */
 public class TestDao {
+    
     public static void main(String[] args) {
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
         
@@ -38,5 +43,25 @@ public class TestDao {
         OrderDao orderManager = fabrique.getOrderDao();
         Order ord = orderManager.find(1);
 		System.out.println(ord);
+        
+        //Arc
+        ArcDao arcManager = fabrique.getArcDao();
+        Arc arc = arcManager.find(1);
+		System.out.println(arc);
+        
+        //Graph
+        GraphDao graphManager = fabrique.getGraphDao();
+        Graph gra = graphManager.find(1);
+		System.out.println(gra);
+        
+        //Box
+        BoxDao boxManager = fabrique.getBoxDao();
+        Box box = boxManager.find(1);
+		System.out.println(box);
+                
+        //Trolley
+        TrolleyDao trolleyManager = fabrique.getTrolleyDao();
+        Trolley tro = trolleyManager.find(1);
+		System.out.println(tro);
     }
 }

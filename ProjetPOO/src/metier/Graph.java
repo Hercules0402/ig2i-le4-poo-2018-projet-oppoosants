@@ -41,7 +41,7 @@ public class Graph implements Serializable {
     @Column
     private int nbVerticesIntersections;
 
-    @OneToMany(mappedBy = "graph")
+    @OneToMany()
     private List<Arc> arcs;
 
     public Graph() {
@@ -50,15 +50,15 @@ public class Graph implements Serializable {
 
     /**
      * Constructeur par données.
-     * @param nbVerticesIntersections TODO
-     * @param arcs TODO
      */
-    public Graph(int nbVerticesIntersections) {
-        this.arcs = new ArrayList();
-        
-        this.nbLocations = 0;
+    public Graph(Integer id, Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs) {
+        this.id = id;
+        this.departingDepot = departingDepot;
+        this.arrivalDepot = arrivalDepot;
+        this.nbLocations = nbLocations;
+        this.nbProducts = nbProducts;
         this.nbVerticesIntersections = nbVerticesIntersections;
-        this.nbProducts = this.nbLocations - this.nbVerticesIntersections - 2;        
+        this.arcs = arcs;
     }
 
     public Location getDepartingDepot() {

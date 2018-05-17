@@ -41,8 +41,7 @@ public class Box implements Serializable {
     
     @Column
     private int volume;
-    
-    @JoinColumn(name = "TROLLEY", referencedColumnName = "ID")
+
     @ManyToOne
     private Trolley trolley;
     
@@ -52,6 +51,15 @@ public class Box implements Serializable {
 
     public Box() {        
         products = new ArrayList();
+    }
+
+    public Box(Integer id, List<ProdQty> products, int weight, int volume, Trolley trolley, Order order) {
+        this.id = id;
+        this.products = products;
+        this.weight = weight;
+        this.volume = volume;
+        this.trolley = trolley;
+        this.order = order;
     }
 
     public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
@@ -110,6 +118,10 @@ public class Box implements Serializable {
         this.weightMax = weightMax;
     }
 
+    public void setTrolley(Trolley trolley) {
+        this.trolley = trolley;
+    }
+    
     public void setVolumeMax(int volumeMax) {
         this.volumeMax = volumeMax;
     }
