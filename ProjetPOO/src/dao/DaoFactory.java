@@ -1,6 +1,5 @@
 package dao;
 
-
 /**
  * Représente une frabrique DAO.
  */
