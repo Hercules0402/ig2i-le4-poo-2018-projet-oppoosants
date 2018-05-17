@@ -28,7 +28,7 @@ public class Box implements Serializable {
     private Integer id;
     
     @OneToMany
-    private List<ProdQty> products;
+    private List<ProdQty> prodQtys;
     
     @Column
     private static int weightMax;
@@ -47,12 +47,12 @@ public class Box implements Serializable {
     private Order order;
 
     public Box() {        
-        products = new ArrayList();
+        prodQtys = new ArrayList();
     }
 
-    public Box(Integer id, List<ProdQty> products, int weight, int volume, Order order) {
+    public Box(Integer id, List<ProdQty> prodQtys, int weight, int volume, Order order) {
         this.id = id;
-        this.products = products;
+        this.prodQtys = prodQtys;
         this.weight = weight;
         this.volume = volume;
         this.order = order;
@@ -64,13 +64,13 @@ public class Box implements Serializable {
         this.weightMax = weightMax;
         this.volume = volume;
         this.weight = weight;
-        products = new ArrayList();
+        prodQtys = new ArrayList();
         this.order = order;
     }
 
     public Box(Integer id, HashMap products, int weightMax, int volumeMax, Order order) {
         this.id = id;
-        this.products = new ArrayList();
+        this.prodQtys = new ArrayList();
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
         this.order = order;
@@ -80,34 +80,30 @@ public class Box implements Serializable {
         return id;
     }
 
-    public List<ProdQty> getProducts() {
-        return products;
+    public List<ProdQty> getProdQtys() {
+        return prodQtys;
     }
 
     public Order getOrder() {
         return order;
     }    
-    
-    /* A REFAIRE
+
     public void addProduct(Product p, int qt) {
-        if(products.containsKey(p)) {
-            int oldQt = products.get(p);
-            products.put(p, qt + oldQt);
-        }
-        else {
-            products.put(p, qt);
-        }
-        
         this.weight += p.getWeight() * qt;
         this.volume += p.getVolume() * qt;
         
-        //if(this.weight > 12000 || this.volume > 92160) {
-        //    System.out.println("Weight : " + this.weight + " Volume : " + this.volume);
-        //}
-    }*/
+        for(ProdQty pq : prodQtys){
+            if(pq.getProduct().equals(p)){
+                pq.setQuantity(pq.getQuantity() + qt);
+                return;
+            }
+        }
+        ProdQty newPq = new ProdQty(p, qt);
+        prodQtys.add(newPq);
+    }
     
-    public void setProducts(List<ProdQty> products) {
-        this.products = products;
+    public void setProducts(List<ProdQty> prodQtys) {
+        this.prodQtys = prodQtys;
     }
 
     public void setWeightMax(int weightMax) {
@@ -173,6 +169,6 @@ public class Box implements Serializable {
 
     @Override
     public String toString() {
-        return "Box{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
+        return "Box{" + "id=" + id + ", prodQtys=" + prodQtys + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
     }
 }

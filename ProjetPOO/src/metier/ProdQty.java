@@ -23,11 +23,30 @@ public class ProdQty implements Serializable {
     @Column
     private Integer quantity;
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public ProdQty() {
+        id = -1;
     }
 
     public ProdQty(Integer id, Product product, Integer quantity) {
         this.id = id;
+        this.product = product;
+        this.quantity = quantity;
+    }
+    
+    public ProdQty(Product product, Integer quantity) {
+        this();
         this.product = product;
         this.quantity = quantity;
     }

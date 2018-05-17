@@ -7,6 +7,7 @@ import java.util.Map;
 import metier.Arc;
 import metier.Order;
 import metier.Box;
+import metier.ProdQty;
 import metier.Product;
 import metier.Trolley;
 
@@ -79,17 +80,14 @@ public class Recherche {
             // Création du premier colis vide pour la commande
             Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
             
-            // Variable d'itération des produits de la commande
-            Iterator it = order.getProducts().entrySet().iterator();
-            
             //Tant qu'il y a des produits à placer dans la recherche de solution
-            while (it.hasNext()) {
+
+            for(ProdQty pq : order.getProducts()) {
                 //On récupère la paire produit/qt du HashMap
-                Map.Entry pair = (Map.Entry) it.next();
-                p = (Product) pair.getKey();
+                p = pq.getProduct();
                 if (p_precedent == null)
                         p_precedent = p;
-                qt = (int) pair.getValue();
+                qt = pq.getQuantity();
                 nbBox = trolley.getBoxes().size();
                 
                 // Vérifier qu'il y a de la place dans le chariot
