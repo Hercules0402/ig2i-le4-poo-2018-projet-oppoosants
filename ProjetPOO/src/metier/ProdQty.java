@@ -51,11 +51,6 @@ public class ProdQty implements Serializable {
         this.quantity = quantity;
     }
 
-    public ProdQty(Product product, Integer quantity) {
-        this.product = product;
-        this.quantity = quantity;
-    }
-
     @Override
     public String toString() {
         return "ProdQty{" + "id=" + id + ", product=" + product + ", quantity=" + quantity + '}';
@@ -92,14 +87,5 @@ public class ProdQty implements Serializable {
             return false;
         }
         return true;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-        
+    } 
 }

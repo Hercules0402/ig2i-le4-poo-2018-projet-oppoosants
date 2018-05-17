@@ -82,7 +82,7 @@ public class Recherche {
             
             //Tant qu'il y a des produits à placer dans la recherche de solution
 
-            for(ProdQty pq : order.getProducts()) {
+            for(ProdQty pq : order.getProdQtys()) {
                 //On récupère la paire produit/qt du HashMap
                 p = pq.getProduct();
                 if (p_precedent == null)
