@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class Order implements Serializable {
     @Column
     private Integer nbProducts;
 
-    @OneToMany
+    @OneToMany()
     private List<ProdQty> products;
 
     public Order() {        
@@ -56,7 +57,7 @@ public class Order implements Serializable {
         this.id = id;
         this.m = m;
         this.nbProducts = nbProducts;
-        this.products = products;
+        this.products = new ArrayList<>(products);
     }
 
     /**

@@ -125,7 +125,6 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "metier.Location[ identifiant=" + this.id + ", abscisse=" + this.abscisse
-                + ", ordonnee=" + this.ordonnee + ", nom=" + this.name + " ]";
-    }  
+        return "Location{" + "id=" + id + ", abscisse=" + abscisse + ", ordonnee=" + ordonnee + ", name=" + name + '}';
+    }
 }
