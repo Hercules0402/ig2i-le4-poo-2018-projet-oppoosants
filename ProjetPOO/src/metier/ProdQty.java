@@ -1,6 +1,5 @@
 package metier;
 
-import instance.Produit;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;

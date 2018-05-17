@@ -11,10 +11,6 @@ import util.Reader;
 import util.Recherche;
 import util.Writer;
 
-/**
- *
- * @author Sébastien CORNUEL
- */
 public class TestInstance {
     public static boolean copier(Path source, Path destination) { 
     try { 
