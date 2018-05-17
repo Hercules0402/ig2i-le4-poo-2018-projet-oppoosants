@@ -61,7 +61,7 @@ public class Writer {
                                 + " " + b.getProdQtys().size();
                     
                 for(ProdQty prodQty : b.getProdQtys()) {
-                    solution += " " + prodQty.getProduct() + " " + prodQty.getQuantity();
+                    solution += " " + prodQty.getProduct().getId() + " " + prodQty.getQuantity();
                 }
             }
         }        
