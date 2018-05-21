@@ -136,14 +136,11 @@ public class Reader {
             Integer m = Integer.parseInt(ss[1]);
             Integer nb = Integer.parseInt(ss[2]);
             ArrayList<ProdQty> prodQtys = new ArrayList<>();
-            //HashMap<Product, Integer> map = new HashMap();
             for(int i=3; i<(3+nb*2); i+=2){
                 Product prod = products.get(Integer.parseInt(ss[i])-1);
                 Integer quantite = Integer.parseInt(ss[i+1]);
                 prodQtys.add(new ProdQty(prod, quantite));
-                //map.put(prod, quantite);
             }
-            //Order o = new Order(id, m, nb, map);
             Order o = new Order(id, m, nb, prodQtys);
             list.add(o);
         }

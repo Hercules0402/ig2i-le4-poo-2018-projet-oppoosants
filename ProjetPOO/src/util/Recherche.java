@@ -74,32 +74,28 @@ public class Recherche {
         Trolley trolley = new Trolley(idTrolley, nbColisMax);
         
         for(Order order : orderList ){
-        
             // Création du premier colis vide pour la commande
             Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
             
             //Tant qu'il y a des produits à placer dans la recherche de solution
-
             for(ProdQty pq : order.getProdQtys()) {
-                //On récupère la paire produit/qt du HashMap
+                //On récupère le produit et la quantite
                 p = pq.getProduct();
                 if (p_precedent == null)
                         p_precedent = p;
                 qt = pq.getQuantity();
-                nbBox = trolley.getBoxes().size();
-                
-                // Vérifier qu'il y a de la place dans le chariot
-                if (nbBox >= trolley.getNbColisMax()) {  
-                    solution.add(trolley);
-                    idTrolley++;
-                    trolley = new Trolley(idTrolley, nbColisMax);
-                }
+
                 // Vérifier que le colis n'est pas plein ou surchargé
-                if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
-                    //System.out.println("PRODUCT "+p);
+                if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && 
+                        box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
                     box.addProduct(p, qt);
-                }//Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
-                else {
+                } else { //Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
+                    // Vérifier qu'il y a de la place dans le chariot
+                    if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {  
+                        solution.add(trolley);
+                        idTrolley++;
+                        trolley = new Trolley(idTrolley, nbColisMax);
+                    }
                     trolley.addBox(box);
                     idBox++;
                     box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
@@ -111,11 +107,25 @@ public class Recherche {
                 p_precedent = p;
             }
 
+            if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {  
+                solution.add(trolley);
+                idTrolley++;
+                trolley = new Trolley(idTrolley, nbColisMax);
+            }
+       
             trolley.addBox(box);
             idBox++;
         }
-       
+        
         solution.add(trolley);
         return solution;
+    }
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
     }
 }
