@@ -45,6 +45,13 @@ public class Location implements Serializable {
         this.ordonnee = ordonnee;
         this.name = name;
     }
+    
+    public Location(Integer abscisse, Integer ordonnee, String name) {
+        this();
+        this.abscisse = abscisse;
+        this.ordonnee = ordonnee;
+        this.name = name;
+    }
 
     //Accesseurs
     public Integer getId() {

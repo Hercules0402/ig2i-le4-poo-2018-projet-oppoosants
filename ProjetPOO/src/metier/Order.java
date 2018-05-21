@@ -58,6 +58,12 @@ public class Order implements Serializable {
         this.nbProducts = nbProducts;
         this.prodQtys = new ArrayList<>(prodQtys);
     }
+    
+    public Order(Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys) {
+        this.m = m;
+        this.nbProducts = nbProducts;
+        this.prodQtys = new ArrayList<>(prodQtys);
+    }
 
     /**
      * getId

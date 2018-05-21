@@ -52,6 +52,12 @@ public class Product implements Serializable {
         this.weight = weight;
         this.volume = volume;
     }
+    
+    public Product( Location loc, Integer weight, Integer volume) {
+        this.loc = loc;
+        this.weight = weight;
+        this.volume = volume;
+    }
 
     public Integer getId() {
         return id;

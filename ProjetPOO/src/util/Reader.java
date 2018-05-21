@@ -188,6 +188,40 @@ public class Reader {
         return orders;
     }
 
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public List<Arc> getArcs() {
+        return arcs;
+    }
+
+    public List<Arc> getDistances() {
+        return distances;
+    }
+
+    public Integer getNbLocations() {
+        return nbLocations;
+    }
+
+    public Integer getNbProducts() {
+        return nbProducts;
+    }
+
+    public Integer getNbVerticesIntersections() {
+        return nbVerticesIntersections;
+    }
+
+    public Location getDepartingDepot() {
+        return locations.get(departingDepot);
+    }
+
+    public Location getArrivalDepot() {
+        return locations.get(arrivalDepot);
+    }
+    
+    
+
     @Override
     public String toString() {
         return "Reader{" 

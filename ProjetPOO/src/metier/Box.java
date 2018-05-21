@@ -58,7 +58,7 @@ public class Box implements Serializable {
     }
 
     public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
-        this.id= id;
+        this.id = id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
         this.volume = volume;

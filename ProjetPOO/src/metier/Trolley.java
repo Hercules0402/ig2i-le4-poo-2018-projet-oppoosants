@@ -35,7 +35,13 @@ public class Trolley implements Serializable {
         this.boxes = new ArrayList<>();
     }
     
-    public Trolley(Integer id, Integer nbColisMax, List<Box> boxes) {
+    public Trolley(Integer id, Integer nbColisMax, List<Box> boxes) {        
+        this.id = id;
+        this.nbColisMax = nbColisMax;
+        this.boxes = new ArrayList<>(boxes);
+    }
+    
+    public Trolley(Integer nbColisMax, List<Box> boxes) {
         this.id = id;
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);

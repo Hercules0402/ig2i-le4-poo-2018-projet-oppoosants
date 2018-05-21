@@ -60,6 +60,15 @@ public class Graph implements Serializable {
         this.nbVerticesIntersections = nbVerticesIntersections;
         this.arcs = arcs;
     }
+    
+    public Graph(Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs) {
+        this.departingDepot = departingDepot;
+        this.arrivalDepot = arrivalDepot;
+        this.nbLocations = nbLocations;
+        this.nbProducts = nbProducts;
+        this.nbVerticesIntersections = nbVerticesIntersections;
+        this.arcs = arcs;
+    }
 
     public Location getDepartingDepot() {
         return departingDepot;
