@@ -22,10 +22,19 @@ import javax.persistence.OneToMany;
 public class Box implements Serializable {
     private static final long serialVersionUID = 1L;
     
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
+    
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idBox;
     
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ProdQty> prodQtys;
@@ -55,7 +64,7 @@ public class Box implements Serializable {
     }
 
     public Box(Integer id, List<ProdQty> prodQtys, int weight, int volume, Order order) {
-        this.id = id;
+        this.idBox = id;
         this.prodQtys = prodQtys;
         this.weight = weight;
         this.volume = volume;
@@ -64,7 +73,7 @@ public class Box implements Serializable {
     }
 
     public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume,Instance ninstance) {
-        this.id = id;
+        this.idBox = id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
         this.volume = volume;
@@ -75,7 +84,7 @@ public class Box implements Serializable {
     }
 
     public Box(Integer id, HashMap prodQtys, int weightMax, int volumeMax, Order order,Instance ninstance) {
-        this.id = id;
+        this.idBox = id;
         this.prodQtys = new ArrayList();
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
@@ -137,13 +146,19 @@ public class Box implements Serializable {
         this.volume = volume;
     }
 
+    public Integer getIdBox() {
+        return idBox;
+    }    
+
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.idBox);
         hash = 71 * hash + this.weight;
         hash = 71 * hash + this.volume;
         hash = 71 * hash + Objects.hashCode(this.order);
+        hash = 71 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -168,7 +183,13 @@ public class Box implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.idBox, other.idBox)) {
+            return false;
+        }
         if (!Objects.equals(this.order, other.order)) {
+            return false;
+        }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;
@@ -176,6 +197,6 @@ public class Box implements Serializable {
 
     @Override
     public String toString() {
-        return "Box{" + "id=" + id + ", prodQtys=" + prodQtys + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
+        return "Box{" + "id=" + idBox + ", prodQtys=" + prodQtys + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
     }
 }

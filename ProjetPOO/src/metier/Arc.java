@@ -17,10 +17,19 @@ import javax.persistence.ManyToOne;
 public class Arc implements Serializable {
     private static final long serialVersionUID = 1L;
     
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private final Integer id;
+    private Integer id;
+    
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idArc;
     
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
@@ -54,7 +63,7 @@ public class Arc implements Serializable {
     }
     
     public Arc(Integer id, Location locationStart, Location locationEnd, Integer distance, boolean isShortest,Instance ninstance) {
-        this.id = id;
+        this.idArc = id;
         this.locationStart = locationStart;
         this.locationEnd = locationEnd;
         this.distance = distance;
@@ -98,14 +107,20 @@ public class Arc implements Serializable {
         this.isShortest = isShortest;
     }
 
+    public Integer getIdArc() {
+        return idArc;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.idArc);
         hash = 97 * hash + Objects.hashCode(this.locationStart);
         hash = 97 * hash + Objects.hashCode(this.locationEnd);
         hash = 97 * hash + Objects.hashCode(this.distance);
         hash = 97 * hash + (this.isShortest ? 1 : 0);
+        hash = 97 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -127,6 +142,9 @@ public class Arc implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.idArc, other.idArc)) {
+            return false;
+        }
         if (!Objects.equals(this.locationStart, other.locationStart)) {
             return false;
         }
@@ -134,6 +152,9 @@ public class Arc implements Serializable {
             return false;
         }
         if (!Objects.equals(this.distance, other.distance)) {
+            return false;
+        }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

@@ -21,9 +21,18 @@ import javax.persistence.OneToOne;
 public class Graph implements Serializable {
     private static final long serialVersionUID = 1L;
     
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idGraph;
     
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
@@ -57,7 +66,7 @@ public class Graph implements Serializable {
      * Constructeur par données.
      */
     public Graph(Integer id, Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs, Instance ninstance) {
-        this.id = id;
+        this.idGraph = id;
         this.departingDepot = departingDepot;
         this.arrivalDepot = arrivalDepot;
         this.nbLocations = nbLocations;
@@ -101,15 +110,27 @@ public class Graph implements Serializable {
         return arcs;
     }
 
+    public Integer getIdGraph() {
+        return idGraph;
+    }
+
+    public Instance getNinstance() {
+        return ninstance;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.idGraph);
         hash = 79 * hash + Objects.hashCode(this.departingDepot);
         hash = 79 * hash + Objects.hashCode(this.arrivalDepot);
         hash = 79 * hash + this.nbLocations;
         hash = 79 * hash + this.nbProducts;
         hash = 79 * hash + this.nbVerticesIntersections;
+        hash = 79 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -137,16 +158,20 @@ public class Graph implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.idGraph, other.idGraph)) {
+            return false;
+        }
         if (!Objects.equals(this.departingDepot, other.departingDepot)) {
             return false;
         }
         if (!Objects.equals(this.arrivalDepot, other.arrivalDepot)) {
             return false;
         }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
+            return false;
+        }
         return true;
     }
-    
-    
 
     @Override
     public String toString() {

@@ -23,9 +23,18 @@ import javax.persistence.Table;
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
     private Integer id;
+    
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idOrder;
 
     @Column
     private Integer m;
@@ -43,7 +52,6 @@ public class Order implements Serializable {
     public Order() {        
         prodQtys = new ArrayList();
     }
-
     
     /**
      * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
@@ -60,7 +68,7 @@ public class Order implements Serializable {
      * @param prodQtys
      */
     public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
-        this.id = id;
+        this.idOrder = id;
         this.m = m;
         this.nbProducts = nbProducts;
         this.prodQtys = new ArrayList<>(prodQtys);        
@@ -138,18 +146,24 @@ public class Order implements Serializable {
             this.prodQtys.remove(product);
         }
     }*/
+    
+    public Integer getIdOrder() {
+        return idOrder;
+    }
 
     @Override
     public String toString() {
-        return "Order{" + "id=" + id+ ", m=" + m + ", nbProducts=" + nbProducts + ", prodQtys=" + prodQtys + '}';
+        return "Order{" + "id=" + idOrder+ ", m=" + m + ", nbProducts=" + nbProducts + ", prodQtys=" + prodQtys + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 37 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.idOrder);
         hash = 37 * hash + Objects.hashCode(this.m);
         hash = 37 * hash + Objects.hashCode(this.nbProducts);
+        hash = 37 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -168,10 +182,16 @@ public class Order implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.idOrder, other.idOrder)) {
+            return false;
+        }
         if (!Objects.equals(this.m, other.m)) {
             return false;
         }
         if (!Objects.equals(this.nbProducts, other.nbProducts)) {
+            return false;
+        }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

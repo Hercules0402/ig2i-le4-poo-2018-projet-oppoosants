@@ -19,9 +19,18 @@ public class Location implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //Attributs
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idLocation;
     
     @Column
     private Integer abscisse;
@@ -46,7 +55,7 @@ public class Location implements Serializable {
 
     public Location(Integer id, Integer abscisse, Integer ordonnee, String name,Instance ninstance) {
         this();
-        this.id = id;
+        this.idLocation = id;
         this.abscisse = abscisse;
         this.ordonnee = ordonnee;
         this.name = name;
@@ -101,13 +110,21 @@ public class Location implements Serializable {
         );
     }
 
+    public Integer getIdLocation() {
+        return idLocation;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.idLocation);
         hash = 67 * hash + Objects.hashCode(this.abscisse);
         hash = 67 * hash + Objects.hashCode(this.ordonnee);
         hash = 67 * hash + Objects.hashCode(this.name);
+        hash = 67 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -129,10 +146,16 @@ public class Location implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.idLocation, other.idLocation)) {
+            return false;
+        }
         if (!Objects.equals(this.abscisse, other.abscisse)) {
             return false;
         }
         if (!Objects.equals(this.ordonnee, other.ordonnee)) {
+            return false;
+        }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;
@@ -140,6 +163,6 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "Location{" + "id=" + id + ", abscisse=" + abscisse + ", ordonnee=" + ordonnee + ", name=" + name + '}';
+        return "Location{" + "id=" + idLocation + ", abscisse=" + abscisse + ", ordonnee=" + ordonnee + ", name=" + name + '}';
     }
 }

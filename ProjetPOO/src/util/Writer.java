@@ -62,7 +62,7 @@ public class Writer {
     private String getContentSolution() {
         String solution = "//NbTournees\n" + nbTrolleys;
         for (Trolley t : trolleys){
-            solution += "\n//IdTournes NbColis\n" + t.getId() + " " 
+            solution += "\n//IdTournes NbColis\n" + t.getIdTrolley()+ " " 
                     + t.getBoxes().size() + "\n//IdColis IdCommandeInColis"
                     + " NbProducts IdProd1 QtyProd1 IdProd2 QtyProd2 ...";
             for (Box b : t.getBoxes()) {
@@ -74,11 +74,11 @@ public class Writer {
                 s'il existe déjà, on peut utiliser la méthode .getProducts().size()
                 pour récupérer le nombre de produits différents dans un colis.
                 */
-                solution += "\n" + b.getId() + " " + b.getOrder().getId()
+                solution += "\n" + b.getIdBox()+ " " + b.getOrder().getIdOrder()
                                 + " " + b.getProdQtys().size();
                     
                 for(ProdQty prodQty : b.getProdQtys()) {
-                    solution += " " + prodQty.getProduct().getId() + " " + prodQty.getQuantity();
+                    solution += " " + prodQty.getProduct().getIdProduct()+ " " + prodQty.getQuantity();
                 }
             }
         }        
