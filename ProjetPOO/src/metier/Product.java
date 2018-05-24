@@ -42,21 +42,27 @@ public class Product implements Serializable {
      */
     @Column
     Integer volume;
+    
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
 
     public Product() {
     }
       
-    public Product(Integer id, Location loc, Integer weight, Integer volume) {
+    public Product(Integer id, Location loc, Integer weight, Integer volume,Instance ninstance) {
         this.id = id;
         this.loc = loc;
         this.weight = weight;
         this.volume = volume;
+        this.ninstance = ninstance;
     }
     
-    public Product( Location loc, Integer weight, Integer volume) {
+    public Product( Location loc, Integer weight, Integer volume,Instance ninstance) {
         this.loc = loc;
         this.weight = weight;
         this.volume = volume;
+        this.ninstance = ninstance;
     }
 
     public Integer getId() {

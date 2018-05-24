@@ -5,6 +5,7 @@ import java.util.List;
 import metier.Arc;
 import metier.Order;
 import metier.Box;
+import metier.Instance;
 import metier.ProdQty;
 import metier.Product;
 import metier.Trolley;
@@ -29,6 +30,8 @@ public class Recherche {
     private List<Trolley> trolleyList;
     private double cout;
     
+    private Instance instance;
+    
     // Accesseur
 
     public double getCout() {
@@ -48,15 +51,17 @@ public class Recherche {
         this.nbColisMax = 0;
         this.weightMax_box = 0;
         this.volumeMax_box = 0;
+        this.instance = null;
     }
 
-    public Recherche(List<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_box, int volumeMax_box) {
+    public Recherche(List<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_box, int volumeMax_box, Instance instance) {
         this();
         this.orderList = new ArrayList<>(orderList);
         this.productList = productList;
         this.nbColisMax = nbColisMax;
         this.weightMax_box = weightMax_box;
         this.volumeMax_box = volumeMax_box;
+        this.instance = instance;
     }
     
     // Méthodes
@@ -71,11 +76,11 @@ public class Recherche {
         ArrayList<Trolley> solution = new ArrayList();
         
         // Création d'un chariot pour la première tournée
-        Trolley trolley = new Trolley(idTrolley, nbColisMax);
+        Trolley trolley = new Trolley(idTrolley, nbColisMax,this.instance);
         
         for(Order order : orderList ){
             // Création du premier colis vide pour la commande
-            Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
+            Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0,this.instance);
             
             //Tant qu'il y a des produits à placer dans la recherche de solution
             for(ProdQty pq : order.getProdQtys()) {
@@ -94,11 +99,11 @@ public class Recherche {
                     if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {  
                         solution.add(trolley);
                         idTrolley++;
-                        trolley = new Trolley(idTrolley, nbColisMax);
+                        trolley = new Trolley(idTrolley, nbColisMax,this.instance);
                     }
                     trolley.addBox(box);
                     idBox++;
-                    box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0);
+                    box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0,this.instance);
                     box.addProduct(p, qt);
                 }
                 
@@ -110,7 +115,7 @@ public class Recherche {
             if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {  
                 solution.add(trolley);
                 idTrolley++;
-                trolley = new Trolley(idTrolley, nbColisMax);
+                trolley = new Trolley(idTrolley, nbColisMax,this.instance);
             }
        
             trolley.addBox(box);

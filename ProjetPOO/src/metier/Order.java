@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -32,6 +34,10 @@ public class Order implements Serializable {
 
     @OneToMany()
     private List<ProdQty> prodQtys;
+    
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
 
     public Order() {        
         prodQtys = new ArrayList();
@@ -52,17 +58,19 @@ public class Order implements Serializable {
      * @param id
      * @param prodQtys
      */
-    public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys) {
+    public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
         this.id = id;
         this.m = m;
         this.nbProducts = nbProducts;
-        this.prodQtys = new ArrayList<>(prodQtys);
+        this.prodQtys = new ArrayList<>(prodQtys);        
+        this.ninstance = ninstance;
     }
     
-    public Order(Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys) {
+    public Order(Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
         this.m = m;
         this.nbProducts = nbProducts;
-        this.prodQtys = new ArrayList<>(prodQtys);
+        this.prodQtys = new ArrayList<>(prodQtys);        
+        this.ninstance = ninstance;
     }
 
     /**

@@ -16,20 +16,20 @@ import util.Writer;
 public class TestWriter {
     
     public static void main(String[] args) throws Exception {      
-        Order or1 = new Order(1, 5, 15, null);
-        Order or2 = new Order(2, 5, 15, null);
+        Order or1 = new Order(1, 5, 15, null, null);
+        Order or2 = new Order(2, 5, 15, null, null);
         
-        Location l = new Location(1, 200, 200, "Default");
-        Product pr1 = new Product(78, l, 5, 5);
-        Product pr2 = new Product(45, l, 5, 5);
-        Product pr3 = new Product(12, l, 5, 5);
-        Product pr4 = new Product(3, l, 5, 5);
-        Product pr5 = new Product(95, l, 5, 5);
-        Product pr6 = new Product(67, l, 5, 5);
-        Product pr7 = new Product(39, l, 5, 5);
-        Product pr8 = new Product(84, l, 5, 5);
-        Product pr9 = new Product(28, l, 5, 5);
-        Product pr10 = new Product(55, l, 5, 5);
+        Location l = new Location(1, 200, 200, "Default",null);
+        Product pr1 = new Product(78, l, 5, 5,null);
+        Product pr2 = new Product(45, l, 5, 5,null);
+        Product pr3 = new Product(12, l, 5, 5,null);
+        Product pr4 = new Product(3, l, 5, 5,null);
+        Product pr5 = new Product(95, l, 5, 5,null);
+        Product pr6 = new Product(67, l, 5, 5,null);
+        Product pr7 = new Product(39, l, 5, 5,null);
+        Product pr8 = new Product(84, l, 5, 5,null);
+        Product pr9 = new Product(28, l, 5, 5,null);
+        Product pr10 = new Product(55, l, 5, 5,null);
         
         HashMap<Product,Integer> products1 = new HashMap<>();
         HashMap<Product,Integer> products2 = new HashMap<>(); 
@@ -49,10 +49,10 @@ public class TestWriter {
         products4.put(pr8, 9);
         products4.put(pr10, 8);
         
-        Box p1 = new Box(1, products1, 5, 5, or1);
-        Box p2 = new Box(2, products2, 5, 5, or2);
-        Box p3 = new Box(3, products3, 5, 5, or1);
-        Box p4 = new Box(4, products4, 5, 5, or2);
+        Box p1 = new Box(1, products1, 5, 5, or1,null);
+        Box p2 = new Box(2, products2, 5, 5, or2,null);
+        Box p3 = new Box(3, products3, 5, 5, or1,null);
+        Box p4 = new Box(4, products4, 5, 5, or2,null);
         
         List<Box> boxes1 = new ArrayList<>();
         boxes1.add(p1);
@@ -62,8 +62,8 @@ public class TestWriter {
         boxes2.add(p4);
         
         List<Trolley> trolleys = new ArrayList<>();
-        trolleys.add(new Trolley(1, 2, boxes1));
-        trolleys.add(new Trolley(2, 2, boxes2));
+        trolleys.add(new Trolley(1, 2, boxes1,null));
+        trolleys.add(new Trolley(2, 2, boxes2,null));
         
         Writer w = new Writer("instance_0116_131940_Z2.txt",trolleys);
     }

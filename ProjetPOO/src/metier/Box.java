@@ -44,6 +44,10 @@ public class Box implements Serializable {
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
     private Order order;
+    
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
 
     public Box() {        
         prodQtys = new ArrayList();
@@ -55,9 +59,10 @@ public class Box implements Serializable {
         this.weight = weight;
         this.volume = volume;
         this.order = order;
+        this.ninstance = ninstance;
     }
 
-    public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
+    public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume,Instance ninstance) {
         this.id = id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
@@ -65,14 +70,16 @@ public class Box implements Serializable {
         this.weight = weight;
         prodQtys = new ArrayList();
         this.order = order;
+        this.ninstance = ninstance;
     }
 
-    public Box(Integer id, HashMap prodQtys, int weightMax, int volumeMax, Order order) {
+    public Box(Integer id, HashMap prodQtys, int weightMax, int volumeMax, Order order,Instance ninstance) {
         this.id = id;
         this.prodQtys = new ArrayList();
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
         this.order = order;
+        this.ninstance = ninstance;
     }
 
     public int getId() {

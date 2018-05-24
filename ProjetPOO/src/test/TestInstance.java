@@ -39,7 +39,7 @@ public class TestInstance {
                     copie = copier(instance.toPath(), new File(stockage + instance.getName()).toPath());
                     if (copie) {
                         Reader r = new Reader(stockage + instance.getName());
-                        Recherche sol = new Recherche(r.getOrders(), r.getProducts(),r.getNbBoxesTrolley(), r.getCapaBox().get(0), r.getCapaBox().get(1));
+                        Recherche sol = new Recherche(r.getOrders(), r.getProducts(),r.getNbBoxesTrolley(), r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
                         ArrayList<Trolley> trolleys = sol.lookup();                        
                         Writer w = new Writer(stockage + instance.getName(), trolleys);
                         String[] name = {""};

@@ -25,7 +25,7 @@ public class TestAll {
         }*/
         
         /*Recherche*/
-        Recherche sol = new Recherche(r.getOrders(), r.getProducts(), r.getNbBoxesTrolley(),r.getCapaBox().get(0), r.getCapaBox().get(1));
+        Recherche sol = new Recherche(r.getOrders(), r.getProducts(), r.getNbBoxesTrolley(),r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
         /*for(Order o : sol.getOrderList()){
             for(ProdQty pq : o.getProdQtys()){
                 System.out.println(pq.getProduct() + " : " + pq.getQuantity());

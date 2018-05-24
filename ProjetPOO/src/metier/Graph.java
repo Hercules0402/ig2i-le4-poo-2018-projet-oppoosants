@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * Représente le graphe sous-jacent à la zone de pickeing.
@@ -43,6 +44,10 @@ public class Graph implements Serializable {
 
     @OneToMany()
     private List<Arc> arcs;
+    
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@OneToOne
+	private Instance ninstance;
 
     public Graph() {
         this.arcs = new ArrayList();
@@ -51,7 +56,7 @@ public class Graph implements Serializable {
     /**
      * Constructeur par données.
      */
-    public Graph(Integer id, Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs) {
+    public Graph(Integer id, Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs, Instance ninstance) {
         this.id = id;
         this.departingDepot = departingDepot;
         this.arrivalDepot = arrivalDepot;
@@ -59,15 +64,17 @@ public class Graph implements Serializable {
         this.nbProducts = nbProducts;
         this.nbVerticesIntersections = nbVerticesIntersections;
         this.arcs = arcs;
+        this.ninstance = ninstance;
     }
     
-    public Graph(Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs) {
+    public Graph(Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs,Instance ninstance) {
         this.departingDepot = departingDepot;
         this.arrivalDepot = arrivalDepot;
         this.nbLocations = nbLocations;
         this.nbProducts = nbProducts;
         this.nbVerticesIntersections = nbVerticesIntersections;
-        this.arcs = arcs;
+        this.arcs = arcs;        
+        this.ninstance = ninstance;
     }
 
     public Location getDepartingDepot() {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import metier.Arc;
+import metier.Instance;
 import metier.Location;
 import metier.Order;
 import metier.ProdQty;
@@ -31,6 +32,7 @@ public class Reader {
     private List<Arc> arcs;
     private List<Arc> distances;
     private List<Location> locations;
+    private Instance instance;
     
     /**
      * Constructeur par données.
@@ -46,6 +48,8 @@ public class Reader {
         this.instanceFile = new File(filename);
         System.out.println("Fichier trouvé.");
 
+        this.instance = new Instance((this.instanceFile.getName() != null) ? this.instanceFile.getName().substring(0,this.instanceFile.getName().indexOf('.')) : "");
+        
         readAll();
         System.out.println("READER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
     }
@@ -63,6 +67,7 @@ public class Reader {
     }
 
     public void readAll() throws FileNotFoundException {
+        
         Scanner scan = new Scanner(this.instanceFile);
         
         nbLocations = Integer.parseInt(readNextString(scan).trim());
@@ -122,7 +127,7 @@ public class Reader {
         for(String s : s_products){
             String ss[] = s.split("\\s");
             Location loc = locations.get(Integer.parseInt(ss[1]));
-            Product p = new Product(Integer.parseInt(ss[0]), loc, Integer.parseInt(ss[2]), Integer.parseInt(ss[3]));
+            Product p = new Product(Integer.parseInt(ss[0]), loc, Integer.parseInt(ss[2]), Integer.parseInt(ss[3]), this.instance);
             list.add(p);
         }
         return list;
@@ -141,7 +146,7 @@ public class Reader {
                 Integer quantite = Integer.parseInt(ss[i+1]);
                 prodQtys.add(new ProdQty(prod, quantite));
             }
-            Order o = new Order(id, m, nb, prodQtys);
+            Order o = new Order(id, m, nb, prodQtys, this.instance);
             list.add(o);
         }
         return list;
@@ -153,7 +158,7 @@ public class Reader {
             String ss[] = s.split("\\s");
             Location start = locations.get(Integer.parseInt(ss[0]));
             Location end = locations.get(Integer.parseInt(ss[1]));
-            Arc a = new Arc(start, end, Integer.parseInt(ss[2]), isShortestPath);
+            Arc a = new Arc(start, end, Integer.parseInt(ss[2]), isShortestPath, this.instance);
             list.add(a);
         }
         return list;
@@ -163,7 +168,7 @@ public class Reader {
         List<Location> list = new ArrayList();
         for(String s : s_locations){
             String ss[] = s.split("\\s");
-            Location l = new Location(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]), ss[3].substring(1, ss[3].length()-1));
+            Location l = new Location(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]), ss[3].substring(1, ss[3].length()-1), this.instance);
             list.add(l);
         }
         return list;
@@ -216,8 +221,10 @@ public class Reader {
     public Location getArrivalDepot() {
         return locations.get(arrivalDepot);
     }
-    
-    
+
+    public Instance getInstance() {
+        return instance;
+    }
 
     @Override
     public String toString() {

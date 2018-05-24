@@ -18,6 +18,7 @@ import javax.persistence.Persistence;
 import metier.Arc;
 import metier.Box;
 import metier.Graph;
+import metier.Instance;
 import metier.Location;
 import metier.Order;
 import metier.ProdQty;
@@ -28,17 +29,20 @@ public class TestPersistance {
 
     public static void testAnnotations(EntityManager em) {    
         //Location
-        Location loc1 = new Location(1, 0, 0, "depot");
-        Location loc2 = new Location(2, 500, 600, "pos1");
-        Location loc3 = new Location(3, 600, 400, "pos2");
+        Instance inst = new Instance("test");
+        em.persist(inst);
+        
+        Location loc1 = new Location(1, 0, 0, "depot",inst);
+        Location loc2 = new Location(2, 500, 600, "pos1",inst);
+        Location loc3 = new Location(3, 600, 400, "pos2",inst);
         em.persist(loc1);
         em.persist(loc2);
         em.persist(loc3);
 
         //Product
-        Product pro1 = new Product(1, loc1, 3, 100);
-        Product pro2 = new Product(2, loc2, 2, 100);
-        Product pro3 = new Product(3, loc2, 3, 300);
+        Product pro1 = new Product(1, loc1, 3, 100,inst);
+        Product pro2 = new Product(2, loc2, 2, 100,inst);
+        Product pro3 = new Product(3, loc2, 3, 300,inst);
         em.persist(pro1);
         em.persist(pro2);
         em.persist(pro3);
@@ -57,17 +61,17 @@ public class TestPersistance {
         listPrq1.add(prq3);
         ArrayList<ProdQty> listPrq2 = new ArrayList<>();
         listPrq2.add(prq2);
-        Order ord1 = new Order(1, 5, 2, listPrq1);
-        Order ord2 = new Order(2, 2, 2, listPrq1);
-        Order ord3 = new Order(3, 5, 10, listPrq2);
+        Order ord1 = new Order(1, 5, 2, listPrq1,inst);
+        Order ord2 = new Order(2, 2, 2, listPrq1,inst);
+        Order ord3 = new Order(3, 5, 10, listPrq2,inst);
         em.persist(ord1);
         em.persist(ord2);
         em.persist(ord3);
 
         //Arc
-        Arc arc1 = new Arc(1, loc1, loc2, 10, false);
-        Arc arc2 = new Arc(2, loc1, loc2, 5, true);
-        Arc arc3 = new Arc(3, loc1, loc3, 4, false);
+        Arc arc1 = new Arc(1, loc1, loc2, 10, false,inst);
+        Arc arc2 = new Arc(2, loc1, loc2, 5, true,inst);
+        Arc arc3 = new Arc(3, loc1, loc3, 4, false,inst);
         em.persist(arc1);
         em.persist(arc2);
         em.persist(arc3);
@@ -78,8 +82,8 @@ public class TestPersistance {
         listArc1.add(arc2);
         ArrayList<Arc> listArc2 = new ArrayList<>();
         listArc2.add(arc3);
-        Graph gra1 = new Graph(1, loc1, loc2, 2, 0, 0, listArc1);
-        Graph gra2 = new Graph(2, loc1, loc3, 1, 0, 0, listArc2);
+        Graph gra1 = new Graph(1, loc1, loc2, 2, 0, 0, listArc1,inst);
+        Graph gra2 = new Graph(2, loc1, loc3, 1, 0, 0, listArc2,inst);
         em.persist(gra1);
         em.persist(gra2);
 
@@ -93,7 +97,7 @@ public class TestPersistance {
         ArrayList<Box> listBox1 = new ArrayList<>();
         listBox1.add(box1);
         listBox1.add(box2);
-        Trolley tro1 = new Trolley(1, 5, listBox1);
+        Trolley tro1 = new Trolley(1, 5, listBox1,inst);
         em.persist(tro1);     
     }
     

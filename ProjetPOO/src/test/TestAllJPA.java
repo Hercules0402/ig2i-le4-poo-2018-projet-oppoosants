@@ -4,6 +4,7 @@ import dao.ArcDao;
 import dao.BoxDao;
 import dao.DaoFactory;
 import dao.GraphDao;
+import dao.InstanceDao;
 import dao.LocationDao;
 import dao.OrderDao;
 import dao.PersistenceType;
@@ -44,6 +45,9 @@ public class TestAllJPA {
         
         Long time = System.currentTimeMillis();
         
+        InstanceDao instanceManager = fabrique.getInstanceDao();
+        instanceManager.create(r.getInstance());
+        
         LocationDao locationManager = fabrique.getLocationDao();
         for(Location l: r.getLocations()) {
             locationManager.create(l);
@@ -74,7 +78,7 @@ public class TestAllJPA {
         GraphDao graphManager = fabrique.getGraphDao();
         Graph g = new Graph(r.getDepartingDepot(), r.getArrivalDepot(),
                 r.getNbLocations(), r.getNbProducts(), 
-                r.getNbVerticesIntersections(), r.getArcs());
+                r.getNbVerticesIntersections(), r.getArcs(), r.getInstance());
         graphManager.create(g);        
         System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
         
@@ -83,7 +87,7 @@ public class TestAllJPA {
         time = System.currentTimeMillis();
         
         /*Recherche*/
-        Recherche sol = new Recherche(r.getOrders(), r.getProducts(), r.getNbBoxesTrolley(),r.getCapaBox().get(0), r.getCapaBox().get(1));
+        Recherche sol = new Recherche(r.getOrders(), r.getProducts(), r.getNbBoxesTrolley(),r.getCapaBox().get(0), r.getCapaBox().get(1), r.getInstance());
         List<Trolley> trolleys = sol.lookup();        
         
         System.out.println("SEARCH EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");

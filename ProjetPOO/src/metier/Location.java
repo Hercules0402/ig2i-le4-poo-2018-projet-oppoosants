@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Classe définissant une location.
@@ -30,6 +32,10 @@ public class Location implements Serializable {
     @Column
     private String name;
     
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
+    
     //Constructeurs
 
     public Location() {
@@ -38,19 +44,21 @@ public class Location implements Serializable {
         this.name = "Nouvelle Location";
     }
 
-    public Location(Integer id, Integer abscisse, Integer ordonnee, String name) {
+    public Location(Integer id, Integer abscisse, Integer ordonnee, String name,Instance ninstance) {
         this();
         this.id = id;
         this.abscisse = abscisse;
         this.ordonnee = ordonnee;
         this.name = name;
+        this.ninstance = ninstance;
     }
     
-    public Location(Integer abscisse, Integer ordonnee, String name) {
+    public Location(Integer abscisse, Integer ordonnee, String name,Instance ninstance) {
         this();
         this.abscisse = abscisse;
         this.ordonnee = ordonnee;
         this.name = name;
+        this.ninstance = ninstance;
     }
 
     //Accesseurs

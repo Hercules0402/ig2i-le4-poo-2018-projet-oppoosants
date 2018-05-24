@@ -63,4 +63,10 @@ public abstract class DaoFactory {
 	 * @return TrolleyDao
 	 */
 	public abstract TrolleyDao getTrolleyDao();
+    
+    /**
+	 * Retourne un InstanceDao.
+	 * @return InstanceDao
+	 */
+	public abstract InstanceDao getInstanceDao();
 }

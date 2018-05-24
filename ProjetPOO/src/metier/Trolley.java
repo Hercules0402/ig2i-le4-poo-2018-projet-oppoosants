@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -29,28 +31,35 @@ public class Trolley implements Serializable {
     @OneToMany()
     private List<Box> boxes;
     
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
+    
     // Constructeurs
 
     public Trolley() {
         this.boxes = new ArrayList<>();
     }
     
-    public Trolley(Integer id, Integer nbColisMax, List<Box> boxes) {        
+    public Trolley(Integer id, Integer nbColisMax, List<Box> boxes,Instance ninstance) {        
         this.id = id;
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);
+        this.ninstance = ninstance;
     }
     
-    public Trolley(Integer nbColisMax, List<Box> boxes) {
+    public Trolley(Integer nbColisMax, List<Box> boxes,Instance ninstance) {
         this.id = id;
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);
+        this.ninstance = ninstance;
     }
     
-    public Trolley(Integer id, Integer nbColisMax) {
+    public Trolley(Integer id, Integer nbColisMax,Instance ninstance) {
         this();
         this.id = id;
         this.nbColisMax = nbColisMax;
+        this.ninstance = ninstance;
     }
     
     // Accesseurs

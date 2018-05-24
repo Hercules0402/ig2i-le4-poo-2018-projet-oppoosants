@@ -45,4 +45,8 @@ public class DaoFactoryJpa extends DaoFactory {
         return JpaTrolleyDao.getInstance();
     }
 
+    @Override
+    public InstanceDao getInstanceDao() {
+        return JpaInstanceDao.getInstance();
+    }
 }

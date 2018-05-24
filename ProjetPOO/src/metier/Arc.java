@@ -35,25 +35,31 @@ public class Arc implements Serializable {
     
     @Column
     private boolean isShortest;
+    
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
 
     public Arc() {
         id = -1;
     }
     
-    public Arc(Location locationStart, Location locationEnd, Integer distance, boolean isShortest) {
+    public Arc(Location locationStart, Location locationEnd, Integer distance, boolean isShortest,Instance ninstance) {
         this();
         this.locationStart = locationStart;
         this.locationEnd = locationEnd;
         this.distance = distance;
         this.isShortest = isShortest;
+        this.ninstance = ninstance;
     }
     
-    public Arc(Integer id, Location locationStart, Location locationEnd, Integer distance, boolean isShortest) {
+    public Arc(Integer id, Location locationStart, Location locationEnd, Integer distance, boolean isShortest,Instance ninstance) {
         this.id = id;
         this.locationStart = locationStart;
         this.locationEnd = locationEnd;
         this.distance = distance;
-        this.isShortest = isShortest;
+        this.isShortest = isShortest;        
+        this.ninstance = ninstance;
     }
 
     public Integer getId() {
