@@ -65,6 +65,6 @@ public class TestWriter {
         trolleys.add(new Trolley(1, 2, boxes1,null));
         trolleys.add(new Trolley(2, 2, boxes2,null));
 
-        Writer w = new Writer("instance_0116_131940_Z2.txt",trolleys);
+        Writer w = new Writer("instance_0116_131940_Z2.txt", trolleys, false);
     }
 }

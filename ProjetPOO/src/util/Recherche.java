@@ -1,6 +1,8 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import metier.Arc;
 import metier.Order;
@@ -75,14 +77,17 @@ public class Recherche {
         ArrayList<Trolley> solution = new ArrayList();
 
         // Création d'un chariot pour la première tournée
-        Trolley trolley = new Trolley(idTrolley, nbColisMax,this.instance);
+        Trolley trolley = new Trolley(idTrolley, nbColisMax, this.instance);
 
         for(Order order : orderList ){
             // Création du premier colis vide pour la commande
-            Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0,this.instance);
+            Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0, this.instance);
 
+            //On trie les ProdQty en fonction de la localisation du produit, pour minimiser les distances
+            List<ProdQty> listPq = order.getProdQtys();
+            Collections.sort(listPq);
             //Tant qu'il y a des produits à placer dans la recherche de solution
-            for(ProdQty pq : order.getProdQtys()) {
+            for(ProdQty pq : listPq) {
                 //On récupère le produit et la quantite
                 p = pq.getProduct();
                 if (p_precedent == null)

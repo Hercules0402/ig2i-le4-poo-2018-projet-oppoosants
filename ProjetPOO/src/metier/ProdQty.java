@@ -1,6 +1,7 @@
 package metier;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.persistence.ManyToOne;
  * Classe associant un produit à une quantité, utilisée pour les commandes et les colis.
  */
 @Entity
-public class ProdQty implements Serializable {
+public class ProdQty implements Serializable, Comparable<ProdQty>{
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -87,6 +88,15 @@ public class ProdQty implements Serializable {
         }
         return true;
     } 
+
+    public int compareTo(ProdQty otherPq) {
+        if(otherPq == null) return -1;
+
+        int loc = this.product.getLoc().getIdLocation();
+		int otherLoc = otherPq.getProduct().getLoc().getIdLocation(); 
+
+		return (loc - otherLoc);
+	}	
 
     @Override
     public String toString() {

@@ -47,9 +47,10 @@ public class Reader {
     /**
      * Constructeur par données.
      * @param filename TODO
+     * @param save Enregistrer ou non les données en base
      * @throws java.lang.Exception
      */
-    public Reader(String filename) throws Exception {
+    public Reader(String filename, boolean save) throws Exception {
         Long time = System.currentTimeMillis();
         if (filename == null) {
             System.err.println("Une erreur a été rencontrée : Impossible d'ouvrir le fichier ...");
@@ -63,9 +64,11 @@ public class Reader {
         readAll();
         System.out.println("READER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
 
-        time = System.currentTimeMillis();
-        saveAll();
-        System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        if(save){
+            time = System.currentTimeMillis();
+            saveAll();
+            System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        }
     }
 
     public void saveAll() {

@@ -71,6 +71,10 @@ public class Location implements Serializable {
         return id;
     }
 
+    public Integer getIdLocation() {
+        return idLocation;
+    }
+    
     public double getAbscisse() {
         return abscisse;
     }
@@ -104,10 +108,6 @@ public class Location implements Serializable {
                   pow((this.abscisse - loc.getAbscisse()), 2) 
                 + pow((this.ordonnee - loc.getOrdonnee()), 2)
         );
-    }
-
-    public Integer getIdLocation() {
-        return idLocation;
     }
 
     @Override
