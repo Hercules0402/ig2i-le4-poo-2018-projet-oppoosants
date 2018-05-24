@@ -18,7 +18,6 @@ import javax.persistence.ManyToOne;
 public class Location implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    //Attributs
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,8 +34,6 @@ public class Location implements Serializable {
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
-    
-    //Constructeurs
 
     public Location() {
         this.abscisse = 0;
@@ -61,7 +58,6 @@ public class Location implements Serializable {
         this.ninstance = ninstance;
     }
 
-    //Accesseurs
     public Integer getId() {
         return id;
     }
@@ -90,10 +86,10 @@ public class Location implements Serializable {
         this.name = name;
     }
     
-    // Méthodes
-    
-    //Calcul de la distance à vol d'oiseau entre 2 locations.
-    //Permet d'avoir un ordre d'idée de la distance à parcourir.
+    /*
+    Calcul de la distance à vol d'oiseau entre 2 locations.
+    Permet d'avoir un ordre d'idée de la distance à parcourir.
+    */
     public double getDistanceTo(Location loc){
         return Math.sqrt(
                   pow((this.abscisse - loc.getAbscisse()), 2) 

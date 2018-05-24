@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Classe définissant un order.
+ * Classe définissant un commande.
  */
 @Entity
 @Table(name = "ORD")
@@ -43,7 +43,6 @@ public class Order implements Serializable {
     public Order() {        
         prodQtys = new ArrayList();
     }
-
     
     /**
      * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
@@ -97,52 +96,6 @@ public class Order implements Serializable {
     public void setProdQtys(List<ProdQty> prodQtys) {
         this.prodQtys = prodQtys;
     }
-    
-    /**
-     * addProduct
-     * Ajoute un produit dans le hashmap. S'il est déjà présent, le nombre de produits du produit que l'on souhaitait ajouter est ajouté au nombre de produits déjà présent
-     * @param product le produit ajouté
-     * @param qt sa quantité
-     */
-    /* A REFAIRE
-    public void addProduct(Product product, int qt) {
-        if (!this.prodQtys.containsKey(product)) {
-            this.prodQtys.put(product, qt);
-        }
-        else {
-            int oldQt = (int) this.prodQtys.get(product);
-            this.prodQtys.put(product, oldQt + qt);
-        }
-    }
-    */
-    
-    /**
-     * isItemInOrder
-     * @param product le produit à rechercher
-     * @return true si le produit est présent dans la commande, false sinon
-     */
-    /* A REFAIRE
-    public boolean isItemInOrder(Product product) {
-        return this.prodQtys.containsKey(product);
-    }
-    */
-    
-    /**
-     * removeProduct
-     * Supprime un produit du hashmap
-     * @param product le produit à supprimer
-     */
-    /* A REFAIRE
-    public void removeProduct(Product product) {
-        if (this.prodQtys.containsKey(product)) {
-            this.prodQtys.remove(product);
-        }
-    }*/
-
-    @Override
-    public String toString() {
-        return "Order{" + "id=" + id+ ", m=" + m + ", nbProducts=" + nbProducts + ", prodQtys=" + prodQtys + '}';
-    }
 
     @Override
     public int hashCode() {
@@ -176,6 +129,9 @@ public class Order implements Serializable {
         }
         return true;
     }
-
-        
+    
+    @Override
+    public String toString() {
+        return "Order{" + "id=" + id+ ", m=" + m + ", nbProducts=" + nbProducts + ", prodQtys=" + prodQtys + '}';
+    }
 }

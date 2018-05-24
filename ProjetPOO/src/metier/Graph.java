@@ -146,8 +146,6 @@ public class Graph implements Serializable {
         return true;
     }
     
-    
-
     @Override
     public String toString() {
         return "Graph{" + "departingDepot=" + departingDepot + ", arrivalDepot="

@@ -21,7 +21,6 @@ import javax.persistence.OneToMany;
 public class Trolley implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // Attributs
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,8 +34,6 @@ public class Trolley implements Serializable {
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
-    
-    // Constructeurs
 
     public Trolley() {
         this.boxes = new ArrayList<>();
@@ -50,7 +47,6 @@ public class Trolley implements Serializable {
     }
     
     public Trolley(Integer nbColisMax, List<Box> boxes,Instance ninstance) {
-        this.id = id;
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);
         this.ninstance = ninstance;
@@ -62,8 +58,6 @@ public class Trolley implements Serializable {
         this.nbColisMax = nbColisMax;
         this.ninstance = ninstance;
     }
-    
-    // Accesseurs
 
     public int getId() {
         return id;
@@ -85,11 +79,6 @@ public class Trolley implements Serializable {
         if(this.nbColisMax < boxes.size() + 1) return false;
         boxes.add(p);
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Trolley{" + "id=" + id + ", boxes=" + boxes + '}';
     }
 
     @Override
@@ -115,5 +104,10 @@ public class Trolley implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return "Trolley{" + "id=" + id + ", boxes=" + boxes + '}';
     }
 }

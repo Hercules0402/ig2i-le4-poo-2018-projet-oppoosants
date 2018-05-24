@@ -2,10 +2,8 @@ package metier;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,7 +48,6 @@ public class Instance implements Serializable{
 	@OneToOne(mappedBy = "ninstance")
 	private Graph graph;
 
-    
     public Instance() {
 		this.graph = null;
 		this.arcs = new ArrayList<>();
@@ -107,11 +104,6 @@ public class Instance implements Serializable{
     }
 
     @Override
-    public String toString() {
-        return "Instance{" + "id=" + id + ", nom=" + nom + '}';
-    }
-
-    @Override
     public int hashCode() {
         int hash = 5;
         hash = 97 * hash + Objects.hashCode(this.nom);
@@ -143,4 +135,8 @@ public class Instance implements Serializable{
         return true;
     }
     
+    @Override
+    public String toString() {
+        return "Instance{" + "id=" + id + ", nom=" + nom + '}';
+    }
 }

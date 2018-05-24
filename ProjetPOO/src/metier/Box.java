@@ -54,7 +54,7 @@ public class Box implements Serializable {
         prodQtys = new ArrayList();
     }
 
-    public Box(Integer id, List<ProdQty> prodQtys, int weight, int volume, Order order) {
+    public Box(Integer id, List<ProdQty> prodQtys, int weight, int volume, Order order, Instance ninstance) {
         this.id = id;
         this.prodQtys = prodQtys;
         this.weight = weight;
@@ -63,7 +63,7 @@ public class Box implements Serializable {
         this.ninstance = ninstance;
     }
 
-    public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume,Instance ninstance) {
+    public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume, Instance ninstance) {
         this.id = id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
@@ -74,7 +74,7 @@ public class Box implements Serializable {
         this.ninstance = ninstance;
     }
 
-    public Box(Integer id, HashMap prodQtys, int weightMax, int volumeMax, Order order,Instance ninstance) {
+    public Box(Integer id, HashMap prodQtys, int weightMax, int volumeMax, Order order, Instance ninstance) {
         this.id = id;
         this.prodQtys = new ArrayList();
         this.volumeMax = volumeMax;
@@ -94,20 +94,6 @@ public class Box implements Serializable {
     public Order getOrder() {
         return order;
     }    
-
-    public void addProduct(Product p, int qt) {
-        this.weight += p.getWeight() * qt;
-        this.volume += p.getVolume() * qt;
-        
-        for(ProdQty pq : prodQtys){
-            if(pq.getProduct().equals(p)){
-                pq.setQuantity(pq.getQuantity() + qt);
-                return;
-            }
-        }
-        ProdQty newPq = new ProdQty(p, qt);
-        prodQtys.add(newPq);
-    }
     
     public void setProdQtys(List<ProdQty> prodQtys) {
         this.prodQtys = prodQtys;
@@ -135,6 +121,20 @@ public class Box implements Serializable {
 
     public void setVolume(int volume) {
         this.volume = volume;
+    }
+
+    public void addProduct(Product p, int qt) {
+        this.weight += p.getWeight() * qt;
+        this.volume += p.getVolume() * qt;
+        
+        for(ProdQty pq : prodQtys){
+            if(pq.getProduct().equals(p)){
+                pq.setQuantity(pq.getQuantity() + qt);
+                return;
+            }
+        }
+        ProdQty newPq = new ProdQty(p, qt);
+        prodQtys.add(newPq);
     }
 
     @Override

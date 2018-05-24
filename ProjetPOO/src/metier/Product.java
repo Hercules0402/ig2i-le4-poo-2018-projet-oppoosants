@@ -11,35 +11,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
- * Classe définissant un product.
+ * Classe définissant un produit.
  */
 @Entity
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Identifiant du produit.
-     */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     
-    /**
-     * Localisation du produit.
-     */
     @ManyToOne
     @JoinColumn(name = "LOC", referencedColumnName = "ID")
     Location loc;
     
-    /**
-     * Poids unitaire du produit.
-     */
     @Column
     Integer weight;
     
-    /**
-     * Volume unitaire du produit.
-     */
     @Column
     Integer volume;
     
@@ -82,11 +70,6 @@ public class Product implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Product{" + "id=" + id + ", loc=" + loc + ", weight=" + weight + ", volume=" + volume + '}';
-    }
-
-    @Override
     public int hashCode() {
         int hash = 5;
         hash = 67 * hash + Objects.hashCode(this.id);
@@ -121,5 +104,10 @@ public class Product implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", loc=" + loc + ", weight=" + weight + ", volume=" + volume + '}';
     }
 }

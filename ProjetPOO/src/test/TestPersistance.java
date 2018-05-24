@@ -88,8 +88,8 @@ public class TestPersistance {
         em.persist(gra2);
 
         //Box
-        Box box1 = new Box(1, listPrq1, 100, 1000, ord1);
-        Box box2 = new Box(2, listPrq2, 110, 1100, ord3);
+        Box box1 = new Box(1, listPrq1, 100, 1000, ord1, inst);
+        Box box2 = new Box(2, listPrq2, 110, 1100, ord3, inst);
         em.persist(box1);
         em.persist(box2);
 
