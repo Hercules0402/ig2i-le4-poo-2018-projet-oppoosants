@@ -56,11 +56,6 @@ public class ProdQty implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "ProdQty{" + "id=" + id + ", product=" + product + ", quantity=" + quantity + '}';
-    }
-
-    @Override
     public int hashCode() {
         int hash = 5;
         hash = 79 * hash + Objects.hashCode(this.id);
@@ -92,4 +87,9 @@ public class ProdQty implements Serializable {
         }
         return true;
     } 
+    
+    @Override
+    public String toString() {
+        return "ProdQty{" + "id=" + id + ", product=" + product + ", quantity=" + quantity + '}';
+    }
 }

@@ -61,6 +61,5 @@ public class JpaGraphDao extends JpaDao<Graph> implements GraphDao {
     public boolean create(Graph obj) {
         return super.create(obj);
     }
-    
-    
+
 }

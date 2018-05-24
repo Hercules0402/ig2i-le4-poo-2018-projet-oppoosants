@@ -61,6 +61,5 @@ public class JpaArcDao extends JpaDao<Arc> implements ArcDao {
     public boolean create(Arc obj) {
         return super.create(obj);
     }
-    
-    
+
 }

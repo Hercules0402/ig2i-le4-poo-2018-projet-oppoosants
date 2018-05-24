@@ -4,19 +4,19 @@ import java.util.Collection;
 
 /**
  * Interface générique représentant un DAO.
- * @param <T> TODO
+ * @param <T>
  */
 public interface DAO<T> {
     /**
 	 * Méthode permettant de créer un objet.
-	 * @param obj TODO
+	 * @param obj
 	 * @return boolean
 	 */
 	public boolean create(T obj);
 
 	/**
 	 * Méthode permettant de rechercher un objet.
-	 * @param id TODO
+	 * @param id
 	 * @return object
 	 */
 	public T find(Integer id);
@@ -29,14 +29,14 @@ public interface DAO<T> {
 
 	/**
 	 * Méthode permettant de mettre à jour un objet.
-	 * @param obj TODO
+	 * @param obj
 	 * @return boolean
 	 */
 	public boolean update(T obj);
 
 	/**
 	 * Méthode permettant de supprimer un objet.
-	 * @param obj TODO
+	 * @param obj
 	 * @return boolean
 	 */
 	public boolean delete(T obj);

@@ -21,9 +21,18 @@ import javax.persistence.OneToMany;
 public class Trolley implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idTrolley;
 
     @Column
     private Integer nbColisMax;
@@ -40,7 +49,7 @@ public class Trolley implements Serializable {
     }
     
     public Trolley(Integer id, Integer nbColisMax, List<Box> boxes,Instance ninstance) {        
-        this.id = id;
+        this.idTrolley = id;
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);
         this.ninstance = ninstance;
@@ -54,7 +63,7 @@ public class Trolley implements Serializable {
     
     public Trolley(Integer id, Integer nbColisMax,Instance ninstance) {
         this();
-        this.id = id;
+        this.idTrolley = id;
         this.nbColisMax = nbColisMax;
         this.ninstance = ninstance;
     }
@@ -81,10 +90,16 @@ public class Trolley implements Serializable {
         return true;
     }
 
+    public Integer getIdTrolley() {
+        return idTrolley;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 53 * hash + Objects.hashCode(this.id);
+        hash = 53 * hash + Objects.hashCode(this.idTrolley);
+        hash = 53 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -103,11 +118,17 @@ public class Trolley implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.idTrolley, other.idTrolley)) {
+            return false;
+        }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
+            return false;
+        }
         return true;
     }
     
     @Override
     public String toString() {
-        return "Trolley{" + "id=" + id + ", boxes=" + boxes + '}';
+        return "Trolley{" + "idTrolley=" + idTrolley + ", boxes=" + boxes + '}';
     }
 }

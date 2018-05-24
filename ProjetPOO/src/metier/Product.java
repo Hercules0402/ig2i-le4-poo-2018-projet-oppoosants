@@ -17,19 +17,28 @@ import javax.persistence.ManyToOne;
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
+    
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idProduct;
     
     @ManyToOne
     @JoinColumn(name = "LOC", referencedColumnName = "ID")
-    Location loc;
+    private Location loc;
     
     @Column
-    Integer weight;
+    private Integer weight;
     
     @Column
-    Integer volume;
+    private Integer volume;
     
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
@@ -39,7 +48,7 @@ public class Product implements Serializable {
     }
       
     public Product(Integer id, Location loc, Integer weight, Integer volume,Instance ninstance) {
-        this.id = id;
+        this.idProduct = id;
         this.loc = loc;
         this.weight = weight;
         this.volume = volume;
@@ -69,13 +78,19 @@ public class Product implements Serializable {
         return volume;
     }
 
+    public Integer getIdProduct() {
+        return idProduct;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 67 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.idProduct);
         hash = 67 * hash + Objects.hashCode(this.loc);
         hash = 67 * hash + Objects.hashCode(this.weight);
         hash = 67 * hash + Objects.hashCode(this.volume);
+        hash = 67 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -94,6 +109,9 @@ public class Product implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        if (!Objects.equals(this.idProduct, other.idProduct)) {
+            return false;
+        }
         if (!Objects.equals(this.loc, other.loc)) {
             return false;
         }
@@ -103,11 +121,14 @@ public class Product implements Serializable {
         if (!Objects.equals(this.volume, other.volume)) {
             return false;
         }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
+            return false;
+        }
         return true;
     }
     
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", loc=" + loc + ", weight=" + weight + ", volume=" + volume + '}';
+        return "Product{" + "idProduct=" + idProduct + ", loc=" + loc + ", weight=" + weight + ", volume=" + volume + '}';
     }
 }

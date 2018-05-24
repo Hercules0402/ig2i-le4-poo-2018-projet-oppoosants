@@ -73,5 +73,5 @@ public class JpaLocationDao extends JpaDao<Location> implements LocationDao {
 		cq.select(tasks).where(cb.like(tasks.get("name"), "%" + name + "%"));
 		return super.em.createQuery(cq).getSingleResult();
 	}
-    
+
 }
