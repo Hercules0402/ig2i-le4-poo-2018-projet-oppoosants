@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ public class Trolley implements Serializable {
     @Column
     private Integer nbColisMax;
 
-    @OneToMany()
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Box> boxes;
     
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")

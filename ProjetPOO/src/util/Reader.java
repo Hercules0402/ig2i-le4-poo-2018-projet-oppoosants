@@ -73,36 +73,31 @@ public class Reader {
         
         InstanceDao instanceManager = fabrique.getInstanceDao();
         instanceManager.create(this.getInstance());
-        System.out.println("1");
+        
+        System.out.println("[DEBUG] Enregistrement locations");
         LocationDao locationManager = fabrique.getLocationDao();
         for(Location l: this.getLocations()) {
             locationManager.create(l);
         }
-        System.out.println("2");
+        System.out.println("[DEBUG] Enregistrement produits");
         ProductDao productManager = fabrique.getProductDao();
         for(Product p: this.getProducts()) {
             productManager.create(p);
         }
-        System.out.println("3");
+        
+        System.out.println("[DEBUG] Enregistrement arcs");
         ArcDao arcManager = fabrique.getArcDao();
         for(Arc a: this.getArcs()) {
             arcManager.create(a);
         }
-        System.out.println("3b");
-        for(Arc a: this.getDistances()) {
-            System.out.println("x");
-            arcManager.create(a);
-        }
-        System.out.println("4");
-        ProdQtyDao prodQtyManager1 = fabrique.getProdQtyDao();
+
+        System.out.println("[DEBUG] Enregistrement prodQty");
         OrderDao orderManager = fabrique.getOrderDao();
         for(Order o: this.getOrders()) {
-            for(ProdQty pq: o.getProdQtys()){
-                prodQtyManager1.create(pq);
-            }
              orderManager.create(o);
         }
-        System.out.println("5");
+        
+        System.out.println("[DEBUG] Enregistrement graph");
         GraphDao graphManager = fabrique.getGraphDao();
         Graph g = new Graph(this.getDepartingDepot(), this.getArrivalDepot(),
                 this.getNbLocations(), this.getNbProducts(), 

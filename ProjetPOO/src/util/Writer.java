@@ -49,20 +49,12 @@ public class Writer {
     
     public void saveAll(){
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
-        
         TrolleyDao trolleyManager = fabrique.getTrolleyDao();
-        BoxDao boxManager = fabrique.getBoxDao();
-        ProdQtyDao prodQtyManager2 = fabrique.getProdQtyDao();
         for(Trolley t: trolleys){
-            for(Box b: t.getBoxes()){
-                for(ProdQty pqty: b.getProdQtys()){
-                    prodQtyManager2.create(pqty);
-                }
-                boxManager.create(b);
-            }
             trolleyManager.create(t);
         }
     }
+    
     /**
      * Retourne sous forme de chaine de caractère la soluttion à écrire.
      * @return String
