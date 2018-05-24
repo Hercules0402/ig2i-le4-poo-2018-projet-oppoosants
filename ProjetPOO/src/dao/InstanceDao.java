@@ -3,9 +3,9 @@ package dao;
 import metier.Instance;
 
 /**
- * Interface générique représentant un DAO de type Instance.
+ * Interface générique représentant un Dao de type Instance.
  */
-public interface InstanceDao extends DAO<Instance> {
+public interface InstanceDao extends Dao<Instance> {
 
 	/**
 	 * Permet derechercher une instance par nom.

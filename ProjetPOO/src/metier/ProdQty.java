@@ -15,15 +15,15 @@ import javax.persistence.ManyToOne;
 @Entity
 public class ProdQty implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    
+
     @ManyToOne()
     private Product product;
-    
+
     @Column
     private Integer quantity;
 
@@ -48,7 +48,7 @@ public class ProdQty implements Serializable {
         this.product = product;
         this.quantity = quantity;
     }
-    
+
     public ProdQty(Product product, Integer quantity) {
         this();
         this.product = product;
@@ -87,7 +87,7 @@ public class ProdQty implements Serializable {
         }
         return true;
     } 
-    
+
     @Override
     public String toString() {
         return "ProdQty{" + "id=" + id + ", product=" + product + ", quantity=" + quantity + '}';

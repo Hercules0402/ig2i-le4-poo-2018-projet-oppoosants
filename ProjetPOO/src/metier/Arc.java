@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Arc implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * id corespondant à l'id de la ligne dans le bdd.
      */
@@ -24,27 +24,27 @@ public class Arc implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    
+
     /**
      * Correspond à l'id dans le fichier instance.
      */
     @Column
     private Integer idArc;
-    
+
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
     private Location locationStart;
-    
+
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
     private Location locationEnd;
-    
+
     @Column
     private Integer distance;
-    
+
     @Column
     private boolean isShortest;
-    
+
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
@@ -52,7 +52,7 @@ public class Arc implements Serializable {
     public Arc() {
         id = -1;
     }
-    
+
     public Arc(Location locationStart, Location locationEnd, Integer distance, boolean isShortest,Instance ninstance) {
         this();
         this.locationStart = locationStart;
@@ -61,13 +61,13 @@ public class Arc implements Serializable {
         this.isShortest = isShortest;
         this.ninstance = ninstance;
     }
-    
+
     public Arc(Integer id, Location locationStart, Location locationEnd, Integer distance, boolean isShortest,Instance ninstance) {
         this.idArc = id;
         this.locationStart = locationStart;
         this.locationEnd = locationEnd;
         this.distance = distance;
-        this.isShortest = isShortest;        
+        this.isShortest = isShortest;
         this.ninstance = ninstance;
     }
 
@@ -110,7 +110,7 @@ public class Arc implements Serializable {
     public Integer getIdArc() {
         return idArc;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 5;

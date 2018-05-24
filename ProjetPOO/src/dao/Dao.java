@@ -3,10 +3,10 @@ package dao;
 import java.util.Collection;
 
 /**
- * Interface générique représentant un DAO.
+ * Interface générique représentant un Dao.
  * @param <T>
  */
-public interface DAO<T> {
+public interface Dao<T> {
     /**
 	 * Méthode permettant de créer un objet.
 	 * @param obj

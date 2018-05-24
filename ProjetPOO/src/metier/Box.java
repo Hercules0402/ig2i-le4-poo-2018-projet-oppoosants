@@ -21,7 +21,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Box implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * id corespondant à l'id de la ligne dans le bdd.
      */
@@ -29,37 +29,37 @@ public class Box implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    
+
     /**
      * Correspond à l'id dans le fichier instance.
      */
     @Column
     private Integer idBox;
-    
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ProdQty> prodQtys;
-    
+
     @Column
     private static int weightMax;
-    
+
     @Column
     private static int volumeMax;
-    
+
     @Column
     private int weight;
-    
+
     @Column
     private int volume;
-    
+
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
     private Order order;
-    
+
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
 
-    public Box() {        
+    public Box() {
         prodQtys = new ArrayList();
     }
 
@@ -106,8 +106,8 @@ public class Box implements Serializable {
 
     public Order getOrder() {
         return order;
-    }    
-    
+    }
+
     public void setProdQtys(List<ProdQty> prodQtys) {
         this.prodQtys = prodQtys;
     }
@@ -115,7 +115,7 @@ public class Box implements Serializable {
     public void setWeightMax(int weightMax) {
         this.weightMax = weightMax;
     }
-    
+
     public void setVolumeMax(int volumeMax) {
         this.volumeMax = volumeMax;
     }
@@ -139,7 +139,7 @@ public class Box implements Serializable {
     public void addProduct(Product p, int qt) {
         this.weight += p.getWeight() * qt;
         this.volume += p.getVolume() * qt;
-        
+
         for(ProdQty pq : prodQtys){
             if(pq.getProduct().equals(p)){
                 pq.setQuantity(pq.getQuantity() + qt);

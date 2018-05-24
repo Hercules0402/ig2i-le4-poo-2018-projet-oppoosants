@@ -3,8 +3,8 @@ package dao;
 import metier.Graph;
 
 /**
- * Interface générique représentant un DAO de type Graph.
+ * Interface générique représentant un Dao de type Graph.
  */
-public interface GraphDao extends DAO<Graph> {
-    
+public interface GraphDao extends Dao<Graph> {
+
 }

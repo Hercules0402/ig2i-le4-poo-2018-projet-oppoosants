@@ -43,7 +43,7 @@ public class Reader {
     private List<Arc> distances;
     private List<Location> locations;
     private Instance instance;
-    
+
     /**
      * Constructeur par données.
      * @param filename TODO
@@ -59,32 +59,33 @@ public class Reader {
         System.out.println("Fichier trouvé.");
 
         this.instance = new Instance((this.instanceFile.getName() != null) ? this.instanceFile.getName().substring(0,this.instanceFile.getName().indexOf('.')) : "");
-        
+
         readAll();
         System.out.println("READER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
-        
+
         time = System.currentTimeMillis();
         saveAll();
         System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
     }
-    
+
     public void saveAll() {
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
-        
+
         InstanceDao instanceManager = fabrique.getInstanceDao();
         instanceManager.create(this.getInstance());
-        
+
         System.out.println("[DEBUG] Enregistrement locations");
         LocationDao locationManager = fabrique.getLocationDao();
         for(Location l: this.getLocations()) {
             locationManager.create(l);
         }
+
         System.out.println("[DEBUG] Enregistrement produits");
         ProductDao productManager = fabrique.getProductDao();
         for(Product p: this.getProducts()) {
             productManager.create(p);
         }
-        
+
         System.out.println("[DEBUG] Enregistrement arcs");
         ArcDao arcManager = fabrique.getArcDao();
         for(Arc a: this.getArcs()) {
@@ -96,13 +97,13 @@ public class Reader {
         for(Order o: this.getOrders()) {
              orderManager.create(o);
         }
-        
+
         System.out.println("[DEBUG] Enregistrement graph");
         GraphDao graphManager = fabrique.getGraphDao();
         Graph g = new Graph(this.getDepartingDepot(), this.getArrivalDepot(),
                 this.getNbLocations(), this.getNbProducts(), 
                 this.getNbVerticesIntersections(), this.getArcs(), this.getInstance());
-        graphManager.create(g);        
+        graphManager.create(g);
     }
 
     /**
@@ -118,20 +119,20 @@ public class Reader {
     }
 
     public void readAll() throws FileNotFoundException {
-        
         Scanner scan = new Scanner(this.instanceFile);
-        
+
         nbLocations = Integer.parseInt(readNextString(scan).trim());
         nbProducts = Integer.parseInt(readNextString(scan).trim());
         nbBoxesTrolley = Integer.parseInt(readNextString(scan).trim());
         nbDimensionsCapacity = Integer.parseInt(readNextString(scan).trim());
-        
+
         capaBox = new ArrayList();
-        for(String s : readNextString(scan).split("\\s"))
+        for(String s : readNextString(scan).split("\\s")) {
             capaBox.add(Integer.parseInt(s.trim()));
-      
+        }
+
         mixedOrders = readNextString(scan).equals("1");
-        
+
         scan.nextLine();
         String ligne = null;
         List<String> s_products = new ArrayList();
@@ -140,39 +141,39 @@ public class Reader {
         }
 
         nbOrders = Integer.parseInt(readNextString(scan).trim());
-        
+
         List<String> s_orders = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_orders.add(ligne);
         }
-        
+
         nbVerticesIntersections = Integer.parseInt(readNextString(scan).trim());
         departingDepot = Integer.parseInt(readNextString(scan).trim());
         arrivalDepot = Integer.parseInt(readNextString(scan).trim());
-        
+
         scan.nextLine();
         List<String> s_arcs = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_arcs.add(ligne);
         }
-        
+
         List<String> s_distances = new ArrayList();
         while (!(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_distances.add(ligne);
         }
-        
+
         List<String> s_locations = new ArrayList();
         while (scan.hasNext() && !(ligne = scan.nextLine().trim()).isEmpty()) {
             if(!ligne.startsWith("//")) s_locations.add(ligne);
         }
-        
+
         locations = createLocations(s_locations);
         products = createProducts(s_products);
         orders = createOrders(s_orders);
         arcs = createArcs(s_arcs, false);
         distances = createArcs(s_distances, true);
     }
-    
+
     public List<Product> createProducts(List<String> s_products){
         List<Product> list = new ArrayList();
         for(String s : s_products){
@@ -183,7 +184,7 @@ public class Reader {
         }
         return list;
     }
-    
+
     public List<Order> createOrders(List<String> s_orders){
         List<Order> list = new ArrayList();
         for(String s : s_orders){
@@ -202,7 +203,7 @@ public class Reader {
         }
         return list;
     }
-    
+
     public List<Arc> createArcs(List<String> s_arcs, boolean isShortestPath){
         List<Arc> list = new ArrayList();
         for(String s : s_arcs){
@@ -214,7 +215,7 @@ public class Reader {
         }
         return list;
     }
-    
+
     public List<Location> createLocations(List<String> s_locations){
         List<Location> list = new ArrayList();
         for(String s : s_locations){

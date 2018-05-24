@@ -11,10 +11,10 @@ import util.Writer;
  * Lit le fichier d'instances, génère une solution, et l'écrit dans un fichier texte.
  */
 public class TestAll {
-    
+
     public static void main(String[] args) throws Exception {
         String fileName = "instance_buged.txt";
-        
+
         /*Reader*/
         Reader r = new Reader(fileName); 
         //System.out.println(r);
@@ -23,7 +23,7 @@ public class TestAll {
                 System.out.println(pq.getProduct() + " : " + pq.getQuantity());
             }
         }*/
-        
+
         /*Recherche*/
         Recherche sol = new Recherche(r.getOrders(), r.getProducts(), r.getNbBoxesTrolley(),r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
         /*for(Order o : sol.getOrderList()){
@@ -39,10 +39,10 @@ public class TestAll {
                 }
             }
         }*/
-        
+
         /*Writer*/
         Writer w = new Writer(fileName, trolleys);
-        
+
         /*Checker*/
         String[] name = {""};
         name[0] = fileName.substring(0, fileName.lastIndexOf("."));

@@ -27,11 +27,11 @@ import metier.Trolley;
 
 public class TestPersistance {
 
-    public static void testAnnotations(EntityManager em) {    
+    public static void testAnnotations(EntityManager em) {
         //Location
         Instance inst = new Instance("test");
         em.persist(inst);
-        
+
         Location loc1 = new Location(1, 0, 0, "depot",inst);
         Location loc2 = new Location(2, 500, 600, "pos1",inst);
         Location loc3 = new Location(3, 600, 400, "pos2",inst);
@@ -98,57 +98,57 @@ public class TestPersistance {
         listBox1.add(box1);
         listBox1.add(box2);
         Trolley tro1 = new Trolley(1, 5, listBox1,inst);
-        em.persist(tro1);     
+        em.persist(tro1);
     }
-    
+
     public static void testDAOs() {
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
-        
+
         //Location
         LocationDao locationManager = fabrique.getLocationDao();
         Location loc = locationManager.findByName("depot");
 		System.out.println(loc);
-        
+
         //Product
         ProductDao productManager = fabrique.getProductDao();
         Product pro = productManager.find(1);
 		System.out.println(pro);
-        
+
         //ProdQty
         ProdQtyDao prodQtyManager = fabrique.getProdQtyDao();
         ProdQty prq = prodQtyManager.find(1);
 		System.out.println(prq);
-        
+
         //Order
         OrderDao orderManager = fabrique.getOrderDao();
         Order ord = orderManager.find(1);
 		System.out.println(ord);
-        
+
         //Arc
         ArcDao arcManager = fabrique.getArcDao();
         Arc arc = arcManager.find(1);
 		System.out.println(arc);
-        
+
         //Graph
         GraphDao graphManager = fabrique.getGraphDao();
         Graph gra = graphManager.find(1);
 		System.out.println(gra);
-        
+
         //Box
         BoxDao boxManager = fabrique.getBoxDao();
         Box box = boxManager.find(1);
 		System.out.println(box);
-                
+       
         //Trolley
         TrolleyDao trolleyManager = fabrique.getTrolleyDao();
         Trolley tro = trolleyManager.find(1);
 		System.out.println(tro);
     }
-    
+
     public static void main(String[] args) {
         final EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
         final EntityManager em = emf.createEntityManager();
-        
+
         try {
             final EntityTransaction et = em.getTransaction();
             try {
@@ -168,5 +168,5 @@ public class TestPersistance {
                 emf.close();
             }
         }
-    } 
+    }
 }

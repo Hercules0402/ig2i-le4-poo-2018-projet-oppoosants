@@ -36,15 +36,15 @@ public class Writer {
         this.instanceFile = new File(filename);
         this.nbTrolleys = trolleys.size();
         this.trolleys = trolleys;
-        writeSolutions();        
-        System.out.println("Fichier créé.");        
+        writeSolutions();
+        System.out.println("Fichier créé.");
         System.out.println("WRITER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
-        
+
         time = System.currentTimeMillis();
         saveAll();
         System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
     }
-    
+
     public void saveAll(){
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
         TrolleyDao trolleyManager = fabrique.getTrolleyDao();
@@ -52,7 +52,7 @@ public class Writer {
             trolleyManager.create(t);
         }
     }
-    
+
     /**
      * Retourne sous forme de chaine de caractère la soluttion à écrire.
      * @return String
@@ -60,14 +60,14 @@ public class Writer {
     private String getContentSolution() {
         String solution = "//NbTournees\n" + nbTrolleys;
         for (Trolley t : trolleys){
-            solution += "\n//IdTournes NbColis\n" + t.getIdTrolley()+ " " 
+            solution += "\n//IdTournes NbColis\n" + t.getIdTrolley()+ " "
                     + t.getBoxes().size() + "\n//IdColis IdCommandeInColis"
                     + " NbProducts IdProd1 QtyProd1 IdProd2 QtyProd2 ...";
             for (Box b : t.getBoxes()) {
                 /*
                 Attention le nombre de produits à récupérer pour chaque colis
                 est le nombre produits différents dans le colis.
-                Or comme notre ensemble de produits dans un colis est une map 
+                Or comme notre ensemble de produits dans un colis est une map
                 avec comme clé le produit  et que le produit est mis à jour 
                 s'il existe déjà, on peut utiliser la méthode .getProducts().size()
                 pour récupérer le nombre de produits différents dans un colis.
@@ -82,12 +82,12 @@ public class Writer {
         }        
         return solution;
     }
-    
+
     /**
      * Permet d'écrire la solution dans le fichier.
-     * @throws java.lang.Exception  
+     * @throws java.lang.Exception
      */
-    private void writeSolutions() throws Exception  {
+    private void writeSolutions() throws Exception {
         /*
         Création d'un writer sur l'instance de type File : instanceFile pour
         écrire les données dans le fichier de solution.
