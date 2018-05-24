@@ -1,11 +1,21 @@
 package util;
 
+import dao.ArcDao;
+import dao.DaoFactory;
+import dao.GraphDao;
+import dao.InstanceDao;
+import dao.LocationDao;
+import dao.OrderDao;
+import dao.PersistenceType;
+import dao.ProdQtyDao;
+import dao.ProductDao;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import metier.Arc;
+import metier.Graph;
 import metier.Instance;
 import metier.Location;
 import metier.Order;
@@ -52,6 +62,52 @@ public class Reader {
         
         readAll();
         System.out.println("READER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        
+        time = System.currentTimeMillis();
+        saveAll();
+        System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+    }
+    
+    public void saveAll() {
+        DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
+        
+        InstanceDao instanceManager = fabrique.getInstanceDao();
+        instanceManager.create(this.getInstance());
+        System.out.println("1");
+        LocationDao locationManager = fabrique.getLocationDao();
+        for(Location l: this.getLocations()) {
+            locationManager.create(l);
+        }
+        System.out.println("2");
+        ProductDao productManager = fabrique.getProductDao();
+        for(Product p: this.getProducts()) {
+            productManager.create(p);
+        }
+        System.out.println("3");
+        ArcDao arcManager = fabrique.getArcDao();
+        for(Arc a: this.getArcs()) {
+            arcManager.create(a);
+        }
+        System.out.println("3b");
+        for(Arc a: this.getDistances()) {
+            System.out.println("x");
+            arcManager.create(a);
+        }
+        System.out.println("4");
+        ProdQtyDao prodQtyManager1 = fabrique.getProdQtyDao();
+        OrderDao orderManager = fabrique.getOrderDao();
+        for(Order o: this.getOrders()) {
+            for(ProdQty pq: o.getProdQtys()){
+                prodQtyManager1.create(pq);
+            }
+             orderManager.create(o);
+        }
+        System.out.println("5");
+        GraphDao graphManager = fabrique.getGraphDao();
+        Graph g = new Graph(this.getDepartingDepot(), this.getArrivalDepot(),
+                this.getNbLocations(), this.getNbProducts(), 
+                this.getNbVerticesIntersections(), this.getArcs(), this.getInstance());
+        graphManager.create(g);        
     }
 
     /**

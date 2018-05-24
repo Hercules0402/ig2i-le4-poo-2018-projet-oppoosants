@@ -1,5 +1,10 @@
 package util;
 
+import dao.BoxDao;
+import dao.DaoFactory;
+import dao.PersistenceType;
+import dao.ProdQtyDao;
+import dao.TrolleyDao;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -36,8 +41,28 @@ public class Writer {
         writeSolutions();        
         System.out.println("Fichier créé.");        
         System.out.println("WRITER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        
+        time = System.currentTimeMillis();
+        saveAll();
+        System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
     }
     
+    public void saveAll(){
+        DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
+        
+        TrolleyDao trolleyManager = fabrique.getTrolleyDao();
+        BoxDao boxManager = fabrique.getBoxDao();
+        ProdQtyDao prodQtyManager2 = fabrique.getProdQtyDao();
+        for(Trolley t: trolleys){
+            for(Box b: t.getBoxes()){
+                for(ProdQty pqty: b.getProdQtys()){
+                    prodQtyManager2.create(pqty);
+                }
+                boxManager.create(b);
+            }
+            trolleyManager.create(t);
+        }
+    }
     /**
      * Retourne sous forme de chaine de caractère la soluttion à écrire.
      * @return String
