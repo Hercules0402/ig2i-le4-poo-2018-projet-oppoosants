@@ -61,6 +61,5 @@ public class JpaBoxDao extends JpaDao<Box> implements BoxDao {
     public boolean create(Box obj) {
         return super.create(obj);
     }
-    
-    
+
 }

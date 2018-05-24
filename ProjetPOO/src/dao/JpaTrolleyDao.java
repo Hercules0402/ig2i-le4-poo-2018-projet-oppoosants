@@ -61,6 +61,5 @@ public class JpaTrolleyDao extends JpaDao<Trolley> implements TrolleyDao {
     public boolean create(Trolley obj) {
         return super.create(obj);
     }
-    
-    
+
 }

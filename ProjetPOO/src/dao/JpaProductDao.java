@@ -61,6 +61,5 @@ public class JpaProductDao extends JpaDao<Product> implements ProductDao {
     public boolean create(Product obj) {
         return super.create(obj);
     }
-    
-    
+
 }

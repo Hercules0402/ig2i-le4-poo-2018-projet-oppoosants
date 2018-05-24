@@ -61,6 +61,5 @@ public class JpaOrderDao extends JpaDao<Order> implements OrderDao {
     public boolean create(Order obj) {
         return super.create(obj);
     }
-    
-    
+
 }

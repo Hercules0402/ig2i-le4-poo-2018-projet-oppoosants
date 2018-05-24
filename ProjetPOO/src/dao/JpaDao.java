@@ -12,21 +12,20 @@ import javax.persistence.criteria.Root;
 
 /**
  * Représente un DAO utilisant comme source de données une bdd.
- * @param <T> TODO
+ * @param <T>
  */
 public abstract class JpaDao<T> implements DAO<T> {
     protected EntityManagerFactory emf;
 
 	protected EntityManager em;
 
-	//CHECKSTYLE:OFF: ModifierOrderCheck
 	protected final static String PERSISTENCE_UNIT = "pu";
-	//CHECKSTYLE:ON
-	protected Class<T> entite;
+
+    protected Class<T> entite;
 
 	/**
 	 * Constructeur par données.
-	 * @param entite TODO
+	 * @param entite
 	 */
 	public JpaDao(Class<T> entite) {
 		this.entite = entite;
