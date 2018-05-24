@@ -65,6 +65,10 @@ public class Product implements Serializable {
     public Integer getId() {
         return id;
     }
+    
+    public Integer getIdProduct() {
+        return idProduct;
+    }
 
     public Location getLoc() {
         return loc;
@@ -76,10 +80,6 @@ public class Product implements Serializable {
 
     public Integer getVolume() {
         return volume;
-    }
-
-    public Integer getIdProduct() {
-        return idProduct;
     }
 
     @Override
