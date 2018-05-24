@@ -7,7 +7,7 @@ import util.Reader;
  */
 public class TestReader {
     public static void main(String[] args) throws Exception {
-        Reader r = new Reader("instance_simple.txt");
+        Reader r = new Reader("instance_simple.txt", false);
         System.out.println(r);
     }
 }

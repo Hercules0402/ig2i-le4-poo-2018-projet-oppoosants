@@ -7,7 +7,7 @@ import util.Recherche;
 
 public class TestRecherche {
     public static void main(String[] args) throws Exception {    
-        Reader r = new Reader("instance_200000.txt");
+        Reader r = new Reader("instance_200000.txt", false);
 
         Recherche sol = new Recherche(r.getOrders(), r.getProducts(),r.getNbBoxesTrolley(), r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
         ArrayList<Trolley> solutions = sol.lookup();

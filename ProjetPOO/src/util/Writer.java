@@ -23,9 +23,10 @@ public class Writer {
      * Constructeur par données.
      * @param filename TODO
      * @param trolleys TODO
+     * @param save Boolean Enregistrer ou non les données en base
      * @throws java.lang.Exception 
      */
-    public Writer(String filename, List<Trolley> trolleys) throws Exception {
+    public Writer(String filename, List<Trolley> trolleys, boolean save) throws Exception {
         Long time = System.currentTimeMillis();
         if (filename == null) {
             System.err.println("Une erreur a été rencontrée : Aucun nom de fichier fourni...");
@@ -40,9 +41,11 @@ public class Writer {
         System.out.println("Fichier créé.");        
         System.out.println("WRITER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
         
-        time = System.currentTimeMillis();
-        saveAll();
-        System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        if(save){
+            time = System.currentTimeMillis();
+            saveAll();
+            System.out.println("SAVE DATA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
+        }
     }
     
     public void saveAll(){

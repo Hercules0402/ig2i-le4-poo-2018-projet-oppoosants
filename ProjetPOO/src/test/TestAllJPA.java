@@ -14,7 +14,7 @@ public class TestAllJPA {
         String fileName = "instance_200000.txt";
         
         /*Reader*/
-        Reader r = new Reader(fileName);
+        Reader r = new Reader(fileName, false);
         //System.out.println(r);
 
         /*Recherche*/
@@ -22,6 +22,6 @@ public class TestAllJPA {
         List<Trolley> trolleys = sol.lookup();        
        
         /*Writer*/
-        Writer w = new Writer(fileName, trolleys);
+        Writer w = new Writer(fileName, trolleys, false);
     }
 }

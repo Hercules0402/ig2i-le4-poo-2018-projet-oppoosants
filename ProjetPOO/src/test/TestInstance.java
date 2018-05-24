@@ -38,10 +38,10 @@ public class TestInstance {
                 for(File instance : instances) {
                     copie = copier(instance.toPath(), new File(stockage + instance.getName()).toPath());
                     if (copie) {
-                        Reader r = new Reader(stockage + instance.getName());
+                        Reader r = new Reader(stockage + instance.getName(), true);
                         Recherche sol = new Recherche(r.getOrders(), r.getProducts(),r.getNbBoxesTrolley(), r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
                         ArrayList<Trolley> trolleys = sol.lookup();                        
-                        Writer w = new Writer(stockage + instance.getName(), trolleys);
+                        Writer w = new Writer(stockage + instance.getName(), trolleys, true);
                         String[] name = {""};
                         name[0] = stockage + instance.getName().substring(0, instance.getName().lastIndexOf("."));
                         System.out.println("\n\nChecker de l'instance : "+ instance.getName());

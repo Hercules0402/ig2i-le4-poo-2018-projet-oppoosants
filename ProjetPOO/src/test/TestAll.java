@@ -13,10 +13,10 @@ import util.Writer;
 public class TestAll {
     
     public static void main(String[] args) throws Exception {
-        String fileName = "instance_buged.txt";
+        String fileName = "instance_40000.txt";
         
         /*Reader*/
-        Reader r = new Reader(fileName); 
+        Reader r = new Reader(fileName, false); 
         //System.out.println(r);
         /*for(Order o : r.getOrders()){
             for(ProdQty pq : o.getProdQtys()){
@@ -41,7 +41,7 @@ public class TestAll {
         }*/
         
         /*Writer*/
-        Writer w = new Writer(fileName, trolleys);
+        Writer w = new Writer(fileName, trolleys, false);
         
         /*Checker*/
         String[] name = {""};
