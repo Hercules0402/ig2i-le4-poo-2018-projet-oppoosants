@@ -83,15 +83,6 @@ public class Box implements Serializable {
         this.ninstance = ninstance;
     }
 
-    public Box(Integer id, HashMap prodQtys, int weightMax, int volumeMax, Order order, Instance ninstance) {
-        this.idBox = id;
-        this.prodQtys = new ArrayList();
-        this.volumeMax = volumeMax;
-        this.weightMax = weightMax;
-        this.order = order;
-        this.ninstance = ninstance;
-    }
-
     public int getId() {
         return id;
     }
