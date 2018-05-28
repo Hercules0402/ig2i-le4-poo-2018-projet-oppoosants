@@ -1,8 +1,8 @@
 package metier;
 
+import algo.IntraTrolleyInfos;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -126,6 +126,12 @@ public class Box implements Serializable {
     public void setVolume(int volume) {
         this.volume = volume;
     }
+    
+    public void clear() {
+        this.prodQtys.clear();
+        this.volume = 0;
+        this.weight = 0;
+    }
 
     public void addProduct(Product p, int qt) {
         this.weight += p.getWeight() * qt;
@@ -139,6 +145,81 @@ public class Box implements Serializable {
         }
         ProdQty newPq = new ProdQty(p, qt);
         prodQtys.add(newPq);
+    }
+    
+    /**
+	 * Permet de calculer le coût d'une fusion.
+	 * @param b TODO
+	 * @return double
+	 */
+	public double coutFusion(Box b) {
+		if (b == null) {
+			return Double.MAX_VALUE;
+		}
+		if (this.prodQtys.isEmpty()) {
+			return Double.MAX_VALUE;
+		}
+		if (b.prodQtys.isEmpty()) {
+			return Double.MAX_VALUE;
+		}
+		/*if ((this.capaciteutilisee + v.getCapaciteutilisee()) > this.capacite) {
+			return Double.MAX_VALUE;
+		}
+
+		Client i = this.ensClients.get(this.ensClients.size() - 1);
+		Client j = v.ensClients.get(0);
+
+		return i.getDistanceTo(j) - i.getDistanceTo(ndepot) - ndepot.getDistanceTo(j);*/
+        return 0.0;
+	}
+    
+    /**
+	 * Permet la fusion de deux boxes.
+	 * @param b TODO
+	 * @return boolean
+	 */
+	public boolean fusion(Box b) {
+		double coutFusion = this.coutFusion(b);
+		if (coutFusion > (Double.MAX_VALUE - 1)) {
+			return false;
+		}
+
+		/*this.cout += (b.cout + coutFusion);
+		this.capaciteutilisee += v.capaciteutilisee;
+		this.nplanning.setCout(this.nplanning.getCout() + coutFusion);
+		for (Client c : v.ensClients) {
+			c.changeVehicule(this);
+		}
+		this.ensClients.addAll(v.ensClients);
+		v.clear();
+		this.nplanning.removeVehicule(v);*/
+		return true;
+	}
+    
+    public boolean doEchangeIntraTrolley(IntraTrolleyInfos intraTrolleyInfos) {
+		/*Client c1 = (Client) ensClients.get(intraTourneeInfos.getOldPosition());
+		Client c2 = (Client) ensClients.get(intraTourneeInfos.getNewPosition());
+
+		this.setCout(this.getCout() + intraTourneeInfos.getDiffCout());
+		this.getNplanning().setCout(this.getNplanning().getCout()
+				+ intraTourneeInfos.getDiffCout());
+
+		if (this.addClientByPos(c1, intraTourneeInfos.getNewPosition())
+				&& this.addClientByPos(c2,intraTourneeInfos.getOldPosition())) {
+			return true;
+		} else {
+			return false;
+		}*/
+        return true;
+    }
+    
+    public boolean doDeplacementIntraTrolley(IntraTrolleyInfos intraTrolleyInfos) {
+		/*Client c = (Client) ensClients.get(intraTourneeInfos.getOldPosition());
+		this.setCout(this.getCout() + intraTourneeInfos.getDiffCout());
+		this.getNplanning().setCout(this.getNplanning().getCout() + intraTourneeInfos.getDiffCout());
+
+		return this.addClientByPos(c, intraTourneeInfos.getNewPosition());*/
+        return true;
     }
 
     @Override

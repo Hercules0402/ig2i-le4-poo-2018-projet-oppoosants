@@ -3,7 +3,7 @@ package test;
 import java.util.ArrayList;
 import metier.Trolley;
 import util.Reader;
-import util.Recherche;
+import algo.Recherche;
 
 public class TestRecherche {
     public static void main(String[] args) throws Exception {    

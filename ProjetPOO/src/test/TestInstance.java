@@ -8,7 +8,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import metier.Trolley;
 import util.Reader;
-import util.Recherche;
+import algo.Recherche;
 import util.Writer;
 
 public class TestInstance {

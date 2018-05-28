@@ -102,6 +102,27 @@ public class Instance implements Serializable{
     public Graph getGraph() {
         return graph;
     }
+    
+    public void clear() {
+		for (Box b : this.boxes) {
+			b.clear();
+		}
+		this.graph.clear();
+    }
+    
+    public boolean deplacementIntraBox() {
+		if (this.graph == null) {
+			return false;
+		}
+		return this.graph.deplacementIntraBox();
+    }
+    
+    public boolean echangeIntraBox() {
+		if (this.graph == null) {
+			return false;
+		}
+		return this.graph.echangeIntraBox();
+    }
 
     @Override
     public int hashCode() {

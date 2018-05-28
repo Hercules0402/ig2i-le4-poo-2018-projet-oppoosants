@@ -3,7 +3,7 @@ package test;
 import java.util.List;
 import metier.Trolley;
 import util.Reader;
-import util.Recherche;
+import algo.Recherche;
 import util.Writer;
 
 /**
