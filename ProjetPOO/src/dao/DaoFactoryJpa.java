@@ -3,7 +3,7 @@ package dao;
 /**
  * Représente une frabrique DAO de type JPA.
  */
-public class DaoFactoryJpa extends DaoFactory {    
+public class DaoFactoryJpa extends DaoFactory {
 
     @Override
     public ArcDao getArcDao() {

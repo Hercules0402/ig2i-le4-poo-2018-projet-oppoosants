@@ -29,7 +29,7 @@ public class Order implements Serializable {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
     private Integer id;
-    
+
     /**
      * Correspond à l'id dans le fichier instance.
      */
@@ -44,41 +44,28 @@ public class Order implements Serializable {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ProdQty> prodQtys;
-    
+
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
 
-    public Order() {        
-        prodQtys = new ArrayList();
-    }
-    
-    /**
-     * Constructeur par id de la commande Order (id sera généré dans le futur tout seul)
-     * @param id
-     */
-    public Order(Integer id) {
-        this.id = id;
+    public Order() {
         prodQtys = new ArrayList();
     }
 
     /**
      * Constructeur par id et produits de la commande Order
      * @param id
+     * @param m
+     * @param nbProducts
      * @param prodQtys
+     * @param ninstance
      */
     public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
         this.idOrder = id;
         this.m = m;
         this.nbProducts = nbProducts;
-        this.prodQtys = new ArrayList<>(prodQtys);        
-        this.ninstance = ninstance;
-    }
-    
-    public Order(Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
-        this.m = m;
-        this.nbProducts = nbProducts;
-        this.prodQtys = new ArrayList<>(prodQtys);        
+        this.prodQtys = new ArrayList<>(prodQtys);
         this.ninstance = ninstance;
     }
 
@@ -138,7 +125,7 @@ public class Order implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "Order{" + "idOrder=" + idOrder + ", m=" + m + ", nbProducts=" + nbProducts + ", prodQtys=" + prodQtys + '}';

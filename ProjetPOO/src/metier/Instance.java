@@ -29,19 +29,19 @@ public class Instance implements Serializable{
 
 	@OneToMany(mappedBy = "ninstance")
 	private List<Arc> arcs;
-    
+
     @OneToMany(mappedBy = "ninstance")
 	private List<Box> boxes;
-    
+
     @OneToMany(mappedBy = "ninstance")
 	private List<Location> locations;
-    
+
     @OneToMany(mappedBy = "ninstance")
 	private List<Order> orders;
-    
+
     @OneToMany(mappedBy = "ninstance")
 	private List<Product> products;
-    
+
     @OneToMany(mappedBy = "ninstance")
 	private List<Trolley> trolleys;
 
@@ -134,7 +134,7 @@ public class Instance implements Serializable{
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "Instance{" + "id=" + id + ", nom=" + nom + '}';

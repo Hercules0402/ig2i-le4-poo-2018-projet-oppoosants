@@ -26,22 +26,22 @@ public class Location implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     /**
      * Correspond à l'id dans le fichier instance.
      */
     @Column
     private Integer idLocation;
-    
+
     @Column
     private Integer abscisse;
-    
+
     @Column
     private Integer ordonnee;
-    
+
     @Column
     private String name;
-    
+
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
@@ -63,7 +63,7 @@ public class Location implements Serializable {
         this.name = name;
         this.ninstance = ninstance;
     }
-    
+
     public Location(Integer abscisse, Integer ordonnee, String name,Instance ninstance) {
         this();
         this.abscisse = abscisse;
@@ -75,7 +75,7 @@ public class Location implements Serializable {
     public Integer getId() {
         return id;
     }
-    
+
     public Integer getIdLocation() {
         return idLocation;
     }
@@ -123,7 +123,7 @@ public class Location implements Serializable {
                 + pow((this.ordonnee - loc.getOrdonnee()), 2)
         );
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;

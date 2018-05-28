@@ -23,30 +23,30 @@ public class Product implements Serializable {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     /**
      * Correspond à l'id dans le fichier instance.
      */
     @Column
     private Integer idProduct;
-    
+
     @ManyToOne
     @JoinColumn(name = "LOC", referencedColumnName = "ID")
     private Location loc;
-    
+
     @Column
     private Integer weight;
-    
+
     @Column
     private Integer volume;
-    
+
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
 
     public Product() {
     }
-      
+
     public Product(Integer id, Location loc, Integer weight, Integer volume,Instance ninstance) {
         this.idProduct = id;
         this.loc = loc;
@@ -54,7 +54,7 @@ public class Product implements Serializable {
         this.volume = volume;
         this.ninstance = ninstance;
     }
-    
+
     public Product( Location loc, Integer weight, Integer volume,Instance ninstance) {
         this.loc = loc;
         this.weight = weight;
@@ -126,7 +126,7 @@ public class Product implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "Product{" + "idProduct=" + idProduct + ", loc=" + loc + ", weight=" + weight + ", volume=" + volume + '}';

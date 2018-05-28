@@ -27,7 +27,7 @@ public class Trolley implements Serializable {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     /**
      * Correspond à l'id dans le fichier instance.
      */
@@ -39,7 +39,7 @@ public class Trolley implements Serializable {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Box> boxes;
-    
+
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@ManyToOne
 	private Instance ninstance;
@@ -47,20 +47,20 @@ public class Trolley implements Serializable {
     public Trolley() {
         this.boxes = new ArrayList<>();
     }
-    
-    public Trolley(Integer id, Integer nbColisMax, List<Box> boxes,Instance ninstance) {        
+
+    public Trolley(Integer id, Integer nbColisMax, List<Box> boxes,Instance ninstance) {
         this.idTrolley = id;
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);
         this.ninstance = ninstance;
     }
-    
+
     public Trolley(Integer nbColisMax, List<Box> boxes,Instance ninstance) {
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);
         this.ninstance = ninstance;
     }
-    
+
     public Trolley(Integer id, Integer nbColisMax,Instance ninstance) {
         this();
         this.idTrolley = id;
@@ -87,8 +87,8 @@ public class Trolley implements Serializable {
     public List<Box> getBoxes() {
         return boxes;
     }
-    
-    public boolean addBox(Box p) {   
+
+    public boolean addBox(Box p) {
         if(this.nbColisMax < boxes.size() + 1) return false;
         boxes.add(p);
         return true;
@@ -126,7 +126,7 @@ public class Trolley implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "Trolley{" + "idTrolley=" + idTrolley + ", boxes=" + boxes + '}';

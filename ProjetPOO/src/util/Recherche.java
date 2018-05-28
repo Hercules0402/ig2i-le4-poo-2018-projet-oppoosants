@@ -15,26 +15,26 @@ import metier.Trolley;
  * Classe permettant la recherche d'un itinéraire simple dans la zone de picking.
  */
 public class Recherche {
-    
+
     //Attributs
     private List<Order> orderList;
     private List<Product> productList;
     private List<Arc> arcsList;
     private List<Arc> distancesList;
     private int nbColisMax;
-    
+
     //Critères poid/volume
     private int weightMax_box;
     private int volumeMax_box;
-    
+
     // Données à déterminer
     private List<Trolley> trolleyList;
     private double cout;
-    
+
     private Instance instance;
     
     //Constructeurs
-    
+
     public Recherche() {
         orderList = new ArrayList();
         productList = new ArrayList();
@@ -82,14 +82,14 @@ public class Recherche {
         int idTrolley = 1;
         int idBox = 1;
         ArrayList<Trolley> solution = new ArrayList();
-        
+
         // Création d'un chariot pour la première tournée
         Trolley trolley = new Trolley(idTrolley, nbColisMax, this.instance);
-        
+
         for(Order order : orderList ){
             // Création du premier colis vide pour la commande
             Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0, this.instance);
-            
+
             //On trie les ProdQty en fonction de la localisation du produit, pour minimiser les distances
             List<ProdQty> listPq = order.getProdQtys();
             Collections.sort(listPq);
@@ -102,12 +102,12 @@ public class Recherche {
                 qt = pq.getQuantity();
 
                 // Vérifier que le colis n'est pas plein ou surchargé
-                if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box && 
+                if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box &&
                         box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
                     box.addProduct(p, qt);
                 } else { //Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
                     // Vérifier qu'il y a de la place dans le chariot
-                    if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {  
+                    if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {
                         solution.add(trolley);
                         idTrolley++;
                         trolley = new Trolley(idTrolley, nbColisMax,this.instance);
@@ -117,18 +117,18 @@ public class Recherche {
                     box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0,this.instance);
                     box.addProduct(p, qt);
                 }
-                
+
                 // Mettre à jour le coût (calcul à vol d'oiseau)
                 this.cout += p.getLoc().getDistanceTo(p_precedent.getLoc());
                 p_precedent = p;
             }
 
-            if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {  
+            if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {
                 solution.add(trolley);
                 idTrolley++;
                 trolley = new Trolley(idTrolley, nbColisMax,this.instance);
             }
-       
+
             trolley.addBox(box);
             idBox++;
         }

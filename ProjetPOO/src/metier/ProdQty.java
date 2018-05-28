@@ -16,15 +16,15 @@ import javax.persistence.ManyToOne;
 @Entity
 public class ProdQty implements Serializable, Comparable<ProdQty>{
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    
+
     @ManyToOne()
     private Product product;
-    
+
     @Column
     private Integer quantity;
     
@@ -37,7 +37,7 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
         this.product = product;
         this.quantity = quantity;
     }
-    
+
     public ProdQty(Product product, Integer quantity) {
         this();
         this.product = product;
@@ -88,16 +88,16 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
         }
         return true;
     } 
-    
+
     public int compareTo(ProdQty otherPq) {
         if(otherPq == null) return -1;
-        
+
         int loc = this.product.getLoc().getIdLocation();
 		int otherLoc = otherPq.getProduct().getLoc().getIdLocation(); 
-		
+
 		return (loc - otherLoc);
 	}	
-    
+
     @Override
     public String toString() {
         return "ProdQty{" + "id=" + id + ", product=" + product + ", quantity=" + quantity + '}';

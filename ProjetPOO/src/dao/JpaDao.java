@@ -11,10 +11,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- * Représente un DAO utilisant comme source de données une bdd.
+ * Représente un Dao utilisant comme source de données une bdd.
  * @param <T>
  */
-public abstract class JpaDao<T> implements DAO<T> {
+public abstract class JpaDao<T> implements Dao<T> {
     protected EntityManagerFactory emf;
 
 	protected EntityManager em;

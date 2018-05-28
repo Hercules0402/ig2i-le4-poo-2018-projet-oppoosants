@@ -20,20 +20,20 @@ import javax.persistence.OneToOne;
 @Entity
 public class Graph implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * id corespondant à l'id de la ligne dans le bdd.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     /**
      * Correspond à l'id dans le fichier instance.
      */
     @Column
     private Integer idGraph;
-    
+
     @JoinColumn(referencedColumnName = "ID")
     @ManyToOne
     private Location departingDepot;
@@ -53,7 +53,7 @@ public class Graph implements Serializable {
 
     @OneToMany()
     private List<Arc> arcs;
-    
+
     @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
 	@OneToOne
 	private Instance ninstance;
@@ -72,7 +72,7 @@ public class Graph implements Serializable {
         this.arcs = arcs;
         this.ninstance = ninstance;
     }
-    
+
     public Graph(Location departingDepot, Location arrivalDepot, int nbLocations, int nbProducts, int nbVerticesIntersections, List<Arc> arcs,Instance ninstance) {
         this.departingDepot = departingDepot;
         this.arrivalDepot = arrivalDepot;
@@ -167,7 +167,7 @@ public class Graph implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "Graph{" + "departingDepot=" + departingDepot + ", arrivalDepot="
