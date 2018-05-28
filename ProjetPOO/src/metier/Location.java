@@ -2,6 +2,8 @@ package metier;
 
 import java.io.Serializable;
 import static java.lang.Math.pow;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,10 +46,13 @@ public class Location implements Serializable {
 	@ManyToOne
 	private Instance ninstance;
 
+    //private Map<Location,Integer> distances;
+    
     public Location() {
         this.abscisse = 0;
         this.ordonnee = 0;
         this.name = "Nouvelle Location";
+        //distances = new HashMap<>();
     }
 
     public Location(Integer id, Integer abscisse, Integer ordonnee, String name,Instance ninstance) {
@@ -98,6 +103,15 @@ public class Location implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+   /* public Map<Location, Integer> getDistances() {
+        return distances;
+    }
+
+    public boolean addDistance(Location loc, Integer distance){
+        if(distances.containsKey(loc)) return false;
+        return (distances.put(loc, distance)) == null;
+    }*/
     
     /*
     Calcul de la distance à vol d'oiseau entre 2 locations.

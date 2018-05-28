@@ -1,7 +1,6 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import metier.Arc;
@@ -34,16 +33,6 @@ public class Recherche {
     
     private Instance instance;
     
-    // Accesseur
-
-    public double getCout() {
-        return cout;
-    }
-
-    public void setCout(double cout) {
-        this.cout = cout;
-    }
-
     //Constructeurs
     
     public Recherche() {
@@ -66,8 +55,26 @@ public class Recherche {
         this.instance = instance;
     }
     
-    // Méthodes
+    // Accesseur
+
+    public double getCout() {
+        return cout;
+    }
+
+    public void setCout(double cout) {
+        this.cout = cout;
+    }
     
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
+    }
+    
+    // Méthodes
+
     public ArrayList<Trolley> lookup(){
         int nbBox = 0;
         int qt;
@@ -125,16 +132,8 @@ public class Recherche {
             trolley.addBox(box);
             idBox++;
         }
-        
+
         solution.add(trolley);
         return solution;
-    }
-
-    public List<Order> getOrderList() {
-        return orderList;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
     }
 }

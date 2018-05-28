@@ -213,6 +213,7 @@ public class Reader {
             Location start = locations.get(Integer.parseInt(ss[0]));
             Location end = locations.get(Integer.parseInt(ss[1]));
             Arc a = new Arc(start, end, Integer.parseInt(ss[2]), isShortestPath, this.instance);
+            //start.addDistance(end, Integer.parseInt(ss[2]));
             list.add(a);
         }
         return list;

@@ -71,6 +71,10 @@ public class Trolley implements Serializable {
     public int getId() {
         return id;
     }
+    
+    public Integer getIdTrolley() {
+        return idTrolley;
+    }
 
     public int getNbColisMax() {
         return nbColisMax;
@@ -88,10 +92,6 @@ public class Trolley implements Serializable {
         if(this.nbColisMax < boxes.size() + 1) return false;
         boxes.add(p);
         return true;
-    }
-
-    public Integer getIdTrolley() {
-        return idTrolley;
     }
     
     @Override

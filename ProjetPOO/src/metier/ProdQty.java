@@ -27,19 +27,7 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
     
     @Column
     private Integer quantity;
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
+    
     public ProdQty() {
         id = -1;
     }
@@ -53,6 +41,18 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
     public ProdQty(Product product, Integer quantity) {
         this();
         this.product = product;
+        this.quantity = quantity;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

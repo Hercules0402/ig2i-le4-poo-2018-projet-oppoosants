@@ -39,6 +39,7 @@ public class TestAll {
                 }
             }
         }*/
+        //System.out.println(calcDistance(trolleys, r.getDistances(), r.getDepartingDepot(), r.getArrivalDepot())+"");
         
         /*Writer*/
         Writer w = new Writer(fileName, trolleys, false);
@@ -49,4 +50,24 @@ public class TestAll {
         System.out.println("\n\nChecker de l'instance : "+ fileName);
         checker.Checker.main(name);
     }
+    
+   /* public static int calcDistance(List<Trolley> trolleys, List<Arc> distances, Location dep, Location arr){
+        int d = 0;
+        for (Trolley t : trolleys) {
+            List<Location> locations = new ArrayList();
+            for (Box b : t.getBoxes()) {
+                for (ProdQty pq : b.getProdQtys()) {
+                    locations.add(pq.getProduct().getLoc());
+                }
+            }
+            
+            d += dep.getDistances().get(locations.get(0)); //Distance entre le depart et la premiere loc
+            for (int i=1; i<locations.size(); i++) {
+                System.out.println(locations.get(i-1).getDistances().get(locations.get(i)));
+              //d += locations.get(i-1).getDistances().get(locations.get(i)); //Distance entre loc n et n+1
+            }
+            d += locations.get(locations.size() - 1).getDistances().get(arr);; //Distance entre la derniere loc et l'arrivee
+        }
+        return d;
+    }*/
 }
