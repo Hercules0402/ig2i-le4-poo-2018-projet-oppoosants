@@ -45,7 +45,7 @@ public class Distances {
                 d += locations.get(i-1).getDistances().get(locations.get(i)); //Distance entre loc n et n+1
                 //System.out.println(locations.get(i-1).getDistances().get(locations.get(i)));
             }
-            d += locations.get(locations.size() - 1).getDistances().get(arr);; //Distance entre la derniere loc et l'arrivee
+            d += locations.get(locations.size() - 1).getDistances().get(arr); //Distance entre la derniere loc et l'arrivee
         }
         return d;
     }
@@ -65,5 +65,31 @@ public class Distances {
         String partDecimale = sdist.substring(sdist.length() - 2);
         
         return partEntiereSpaced  + "," + partDecimale + " m.";
+    }
+    
+    
+    
+    public static int calcDistanceBox(List<Box> colis, Location dep, Location arr){
+        int d = 0;
+
+        List<Location> locations = new ArrayList();
+        for (Box b : colis) {
+            for (ProdQty pq : b.getProdQtys()) {
+                Location act = pq.getProduct().getLoc();
+                if(!locations.contains(act))
+                    locations.add(act);
+            }
+        }
+        Collections.sort(locations);
+        
+        /*for(Location l : locations)
+            System.out.printf(l.getIdLocation() + ", ");
+        d += dep.getDistances().get(locations.get(0)); 
+        for (int i=1; i<locations.size(); i++) {
+            d += locations.get(i-1).getDistances().get(locations.get(i)); 
+        }
+        d += locations.get(locations.size() - 1).getDistances().get(arr);*/
+
+        return (int)(Math.random()*101); //TO FIX
     }
 }

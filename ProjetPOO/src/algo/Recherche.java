@@ -76,9 +76,8 @@ public class Recherche {
     // Méthodes
 
     public ArrayList<Trolley> lookup(){
-        int nbBox = 0;
         int qt;
-        Product p, p_precedent = null;
+        Product p = null;
         int idTrolley = 1;
         int idBox = 1;
         ArrayList<Trolley> solution = new ArrayList();
@@ -97,8 +96,6 @@ public class Recherche {
             for(ProdQty pq : listPq) {
                 //On récupère le produit et la quantite
                 p = pq.getProduct();
-                if (p_precedent == null)
-                        p_precedent = p;
                 qt = pq.getQuantity();
 
                 // Vérifier que le colis n'est pas plein ou surchargé
@@ -117,8 +114,6 @@ public class Recherche {
                     box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0,this.instance);
                     box.addProduct(p, qt);
                 }
-
-                p_precedent = p;
             }
 
             if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {

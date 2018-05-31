@@ -1,0 +1,19 @@
+package algogen;
+
+import java.util.List;
+import metier.Box;
+import util.Reader;
+import metier.Instance;
+
+public class TestGA {
+    public static void main(String[] args) throws Exception {
+        String fileName = "instance_40000.txt";
+
+        /*Reader*/
+        Instance inst = Reader.read(fileName, false); 
+
+        /*GA*/
+        //List<Trolley> trolleys = AlgoGen.run(inst);
+        List<List<Box>> colis = GAColis.runTest(inst.getOrders().get(0), inst);
+    }
+}
