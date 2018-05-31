@@ -41,11 +41,11 @@ public class TestInstance {
                     copie = copier(instance.toPath(), new File(stockage + instance.getName()).toPath());
                     if (copie) {
                         Instance inst = Reader.read(stockage + instance.getName(), false);
-                        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getCapaBox().get(0), inst.getCapaBox().get(1),inst);
-                        List<Trolley> trolleys = sol.lookup();
-                        int distance = Distances.calcDistance(trolleys, inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
+                        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMax_box(), inst.getVolumeMax_box(),inst);
+                        inst = sol.lookup();
+                        int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));
-                        Writer w = new Writer(stockage + instance.getName(), trolleys, false);
+                        Writer w = new Writer(stockage + instance.getName(), inst.getTrolleys(), false);
                         String[] name = {""};
                         name[0] = stockage + instance.getName().substring(0, instance.getName().lastIndexOf("."));
                         System.out.println("\n\nChecker de l'instance : "+ instance.getName());

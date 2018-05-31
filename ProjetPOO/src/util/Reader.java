@@ -114,7 +114,9 @@ public class Reader {
         for(String s : readNextString(scan).split("\\s")) {
             capaBox.add(Integer.parseInt(s.trim()));
         }
-        inst.setCapaBox(capaBox);
+
+        inst.setWeightMax_box(capaBox.get(0));
+        inst.setVolumeMax_box(capaBox.get(1));
         
         boolean mixedOrders = readNextString(scan).equals("1");
 

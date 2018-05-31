@@ -75,7 +75,7 @@ public class Recherche {
     
     // Méthodes
 
-    public ArrayList<Trolley> lookup(){
+    public Instance lookup(){
         int qt;
         Product p = null;
         int idTrolley = 1;
@@ -127,6 +127,7 @@ public class Recherche {
         }
 
         solution.add(trolley);
-        return solution;
+        this.instance.setTrolleys(solution);
+        return this.instance;
     }
 }

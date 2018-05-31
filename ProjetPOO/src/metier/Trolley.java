@@ -97,7 +97,6 @@ public class Trolley implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.id);
         hash = 53 * hash + Objects.hashCode(this.idTrolley);
         return hash;
     }
@@ -114,9 +113,6 @@ public class Trolley implements Serializable {
             return false;
         }
         final Trolley other = (Trolley) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idTrolley, other.idTrolley)) {
             return false;
         }

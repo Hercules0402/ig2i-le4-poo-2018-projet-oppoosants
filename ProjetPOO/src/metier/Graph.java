@@ -153,7 +153,6 @@ public class Graph implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.id);
         hash = 79 * hash + Objects.hashCode(this.idGraph);
         hash = 79 * hash + Objects.hashCode(this.departingDepot);
         hash = 79 * hash + Objects.hashCode(this.arrivalDepot);
@@ -182,9 +181,6 @@ public class Graph implements Serializable {
             return false;
         }
         if (this.nbVerticesIntersections != other.nbVerticesIntersections) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.idGraph, other.idGraph)) {

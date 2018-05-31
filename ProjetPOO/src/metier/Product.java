@@ -85,7 +85,6 @@ public class Product implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.id);
         hash = 67 * hash + Objects.hashCode(this.idProduct);
         hash = 67 * hash + Objects.hashCode(this.loc);
         hash = 67 * hash + Objects.hashCode(this.weight);
@@ -105,9 +104,6 @@ public class Product implements Serializable {
             return false;
         }
         final Product other = (Product) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idProduct, other.idProduct)) {
             return false;
         }

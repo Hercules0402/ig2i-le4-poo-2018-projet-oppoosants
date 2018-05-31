@@ -88,7 +88,6 @@ public class Order implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.id);
         hash = 37 * hash + Objects.hashCode(this.idOrder);
         hash = 37 * hash + Objects.hashCode(this.m);
         hash = 37 * hash + Objects.hashCode(this.nbProducts);
@@ -107,9 +106,6 @@ public class Order implements Serializable {
             return false;
         }
         final Order other = (Order) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idOrder, other.idOrder)) {
             return false;
         }

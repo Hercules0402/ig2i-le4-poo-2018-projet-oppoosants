@@ -19,10 +19,10 @@ public class TestAllJPA {
         //System.out.println(r);
 
         /*Recherche*/
-        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getCapaBox().get(0), inst.getCapaBox().get(1),inst);
-        List<Trolley> trolleys = sol.lookup();
+        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMax_box(), inst.getVolumeMax_box(),inst);
+        inst = sol.lookup();
 
         /*Writer*/
-        Writer w = new Writer(fileName, trolleys, false);
+        Writer w = new Writer(fileName, inst.getTrolleys(), false);
     }
 }
