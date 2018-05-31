@@ -51,10 +51,15 @@ public class Instance implements Serializable{
 
 	@OneToOne(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
 	private Graph graph;
-    
+
+    @Column
     private int nbBoxesTrolley;
-    
-    private List<Integer> capaBox;
+
+    @Column
+    private int weightMax_box;
+
+    @Column
+    private int volumeMax_box;
 
     public Instance() {
 		this.graph = null;
@@ -64,7 +69,6 @@ public class Instance implements Serializable{
 		this.orders = new ArrayList<>();
 		this.products = new ArrayList<>();
         this.trolleys = new ArrayList<>();
-        this.capaBox = new ArrayList<>();
 	}
 
 	public Instance(String nom) {
@@ -96,14 +100,6 @@ public class Instance implements Serializable{
         return boxes;
     }
 
-    public List<Integer> getCapaBox() {
-        return capaBox;
-    }
-
-    public void setCapaBox(List<Integer> capaBox) {
-        this.capaBox = capaBox;
-    }
-
     public List<Location> getLocations() {
         return locations;
     }
@@ -128,8 +124,12 @@ public class Instance implements Serializable{
         return nbBoxesTrolley;
     }
 
-    public void setNbBoxesTrolley(int nbBoxesTrolley) {
-        this.nbBoxesTrolley = nbBoxesTrolley;
+    public int getWeightMax_box() {
+        return weightMax_box;
+    }
+
+    public int getVolumeMax_box() {
+        return volumeMax_box;
     }
 
     public void setArcs(List<Arc> arcs) {
@@ -158,6 +158,18 @@ public class Instance implements Serializable{
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public void setNbBoxesTrolley(int nbBoxesTrolley) {
+        this.nbBoxesTrolley = nbBoxesTrolley;
+    }
+
+    public void setWeightMax_box(int weightMax_box) {
+        this.weightMax_box = weightMax_box;
+    }
+
+    public void setVolumeMax_box(int volumeMax_box) {
+        this.volumeMax_box = volumeMax_box;
     }
     
     public void clear() {
@@ -202,9 +214,6 @@ public class Instance implements Serializable{
         }
         final Instance other = (Instance) obj;
         if (!Objects.equals(this.nom, other.nom)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.graph, other.graph)) {

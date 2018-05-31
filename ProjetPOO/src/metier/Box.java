@@ -225,7 +225,6 @@ public class Box implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.id);
         hash = 71 * hash + Objects.hashCode(this.idBox);
         hash = 71 * hash + this.weight;
         hash = 71 * hash + this.volume;
@@ -249,9 +248,6 @@ public class Box implements Serializable {
             return false;
         }
         if (this.volume != other.volume) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.idBox, other.idBox)) {

@@ -114,7 +114,6 @@ public class Arc implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
         hash = 97 * hash + Objects.hashCode(this.idArc);
         hash = 97 * hash + Objects.hashCode(this.locationStart);
         hash = 97 * hash + Objects.hashCode(this.locationEnd);
@@ -136,9 +135,6 @@ public class Arc implements Serializable {
         }
         final Arc other = (Arc) obj;
         if (this.isShortest != other.isShortest) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.idArc, other.idArc)) {

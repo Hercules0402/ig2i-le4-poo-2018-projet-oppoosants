@@ -28,7 +28,7 @@ public class TestAll {
         }*/
         
         /*Recherche*/
-        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getCapaBox().get(0), inst.getCapaBox().get(1),inst);
+        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMax_box(), inst.getVolumeMax_box(),inst);
         List<Trolley> trolleys = sol.lookup();
 
         int distance = Distances.calcDistance(trolleys, inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());

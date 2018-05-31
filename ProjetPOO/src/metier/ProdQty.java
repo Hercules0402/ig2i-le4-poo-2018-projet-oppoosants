@@ -59,7 +59,6 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 79 * hash + Objects.hashCode(this.id);
         hash = 79 * hash + Objects.hashCode(this.product);
         hash = 79 * hash + Objects.hashCode(this.quantity);
         return hash;
@@ -77,9 +76,6 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
             return false;
         }
         final ProdQty other = (ProdQty) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.product, other.product)) {
             return false;
         }
