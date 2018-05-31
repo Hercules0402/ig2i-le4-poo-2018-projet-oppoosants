@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 /**
  * Classe représentant une instance.
@@ -32,7 +33,7 @@ public class Instance implements Serializable{
 	private List<Arc> arcs;
  
     @OneToMany(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
-	private List<Arc> distances;
+    private List<Arc> distances;
 
     @OneToMany(mappedBy = "ninstance")
 	private List<Box> boxes;
@@ -142,6 +143,10 @@ public class Instance implements Serializable{
 
     public void setBoxes(List<Box> boxes) {
         this.boxes = boxes;
+    }
+
+    public void setTrolleys(List<Trolley> trolleys) {
+        this.trolleys = trolleys;
     }
 
     public void setGraph(Graph graph) {
