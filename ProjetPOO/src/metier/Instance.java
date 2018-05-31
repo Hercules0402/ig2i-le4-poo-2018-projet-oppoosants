@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 
 /**
  * Classe représentant une instance.
@@ -57,10 +56,10 @@ public class Instance implements Serializable{
     private int nbBoxesTrolley;
 
     @Column
-    private int weightMax_box;
+    private int weightMaxBox;
 
     @Column
-    private int volumeMax_box;
+    private int volumeMaxBox;
 
     public Instance() {
 		this.graph = null;
@@ -125,12 +124,12 @@ public class Instance implements Serializable{
         return nbBoxesTrolley;
     }
 
-    public int getWeightMax_box() {
-        return weightMax_box;
+    public int getWeightMaxBox() {
+        return weightMaxBox;
     }
 
-    public int getVolumeMax_box() {
-        return volumeMax_box;
+    public int getVolumeMaxBox() {
+        return volumeMaxBox;
     }
 
     public void setArcs(List<Arc> arcs) {
@@ -169,12 +168,12 @@ public class Instance implements Serializable{
         this.nbBoxesTrolley = nbBoxesTrolley;
     }
 
-    public void setWeightMax_box(int weightMax_box) {
-        this.weightMax_box = weightMax_box;
+    public void setWeightMaxBox(int weightMaxBox) {
+        this.weightMaxBox = weightMaxBox;
     }
 
-    public void setVolumeMax_box(int volumeMax_box) {
-        this.volumeMax_box = volumeMax_box;
+    public void setVolumeMaxBox(int volumeMaxBox) {
+        this.volumeMaxBox = volumeMaxBox;
     }
     
     public void clear() {

@@ -37,8 +37,8 @@ public class GAColis {
         instance = inst;
         products = new ArrayList<>(inst.getProducts());
         nbColisMax = inst.getNbBoxesTrolley();
-        weightMaxBox = inst.getCapaBox().get(0);
-        volumeMaxBox = inst.getCapaBox().get(1);
+        weightMaxBox = inst.getWeightMaxBox();
+        volumeMaxBox = inst.getVolumeMaxBox();
     
         genereration();
         System.out.println("- - - - - - - - - - - - - - - -");

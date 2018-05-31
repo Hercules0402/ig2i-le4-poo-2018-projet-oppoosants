@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import metier.Trolley;
 import util.Reader;
 import algo.Recherche;
-import java.util.List;
 import metier.Instance;
 import util.Distances;
 import util.Writer;
@@ -41,7 +39,7 @@ public class TestInstance {
                     copie = copier(instance.toPath(), new File(stockage + instance.getName()).toPath());
                     if (copie) {
                         Instance inst = Reader.read(stockage + instance.getName(), false);
-                        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMax_box(), inst.getVolumeMax_box(),inst);
+                        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMaxBox(), inst.getVolumeMaxBox(),inst);
                         inst = sol.lookup();
                         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));

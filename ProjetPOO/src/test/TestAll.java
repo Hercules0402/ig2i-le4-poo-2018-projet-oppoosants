@@ -1,7 +1,5 @@
 package test;
 
-import java.util.List;
-import metier.Trolley;
 import util.Reader;
 import algo.Recherche;
 import metier.Instance;
@@ -28,7 +26,7 @@ public class TestAll {
         }*/
         
         /*Recherche*/
-        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMax_box(), inst.getVolumeMax_box(),inst);
+        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMaxBox(), inst.getVolumeMaxBox(),inst);
         inst = sol.lookup();
         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
         System.out.println(Distances.formatDistance(distance));
