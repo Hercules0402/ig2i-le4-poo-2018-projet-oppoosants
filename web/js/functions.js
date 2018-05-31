@@ -10,15 +10,49 @@ function testConnexion() {
     });
 }
 
-function getTrolleys() {
+function getInstances() {
     $.ajax({
         type: "POST",
         url: 'php/request.php',
-        data: { requestType: "getTrolleysSol" },
+        data: { requestType: "getInstancesSol" },
         success : function(result, statut){ 
             result = JSON.parse(result);
             console.log(result);
-            var content = '<br/><div class="row"><div align="center" class="col-md-12"><h1>Solution :</h1>';
+            var content = '<br/><div class="row"><div align="center" class="col-md-12"><h1>Menu des solutions</h1>';
+
+            content += '<table id="table_instances" class="display">' +
+            '<thead>' +
+            '    <tr>' +
+            '        <th>ID</th>' +
+            '        <th>Nom</th>' +
+            '    </tr>' +
+            '</thead><tbody>';
+            
+            for(var i in result["content"]) {
+                var instance = result["content"][i];
+                
+                content += '<tr id="' + instance['ID'] + '" onclick="getTrolleysInInstance(' + instance['ID'] + ')">' +
+                    '<td>Instance n°' + instance['ID'] + '</td>' +
+                    '<td>' + instance['NOM'] + '</td>' +
+                '</tr>';
+            }
+
+            content += '</tbody></table></div></div>';
+            $("#webContent").html(content);
+            $('#table_instances').DataTable();
+        }
+    });
+}
+
+function getTrolleysInInstance(idInstance) {
+    $.ajax({
+        type: "POST",
+        url: 'php/request.php',
+        data: { requestType: "getTrolleysSol", idInstance: idInstance },
+        success : function(result, statut){ 
+            result = JSON.parse(result);
+            console.log(result);
+            var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance,null, null);
 
             content += '<table id="table_trolleys" class="display">' +
             '<thead>' +
@@ -33,7 +67,7 @@ function getTrolleys() {
             for(var t in result["content"]) {
                 var trolley = result["content"][t];
                 
-                content += '<tr id="' + trolley['ID'] + '" onclick="getBoxesInTrolley(' + trolley['ID'] + ')">' +
+                content += '<tr id="' + trolley['ID'] + '" onclick="getBoxesInTrolley('+ idInstance +',' + trolley['ID'] + ')">' +
                     '<td>Trolley n°' + trolley['ID'] + '</td>' +
                     '<td>' + trolley['IDTROLLEY'] + '</td>' +
                     '<td>' + trolley['NBCOLISMAX'] + '</td>' +
@@ -42,13 +76,14 @@ function getTrolleys() {
             }
 
             content += '</tbody></table></div></div>';
+            content += '</tbody></table></div></div><button class="btn btn-secondary" onclick="getInstances()">Retour à l\'accueil</button>';
             $("#webContent").html(content);
             $('#table_trolleys').DataTable();
         }
     });
 }
 
-function getProductsInBox(idBox, idTrolley) {
+function getProductsInBox(idInstance, idBox, idTrolley) {
     $.ajax({
         type: "POST",
         url: 'php/request.php',
@@ -57,7 +92,7 @@ function getProductsInBox(idBox, idTrolley) {
             result = JSON.parse(result);
             console.log("Products : ");
             console.log(result);
-            var content = '<br/><div class="row"><div align="center" class="col-md-12"><h1>Solution :</h1>';
+            var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, idTrolley, idBox);
 
             content += '<table id="table_products" class="display">' +
             '<thead>' +
@@ -86,23 +121,22 @@ function getProductsInBox(idBox, idTrolley) {
                 '</tr>';
             }
 
-            content += '</tbody></table></div></div><button class="btn btn-secondary" onclick="getBoxesInTrolley(' + idTrolley + ')">Retour au trolley</button>';
-
+            content += '</tbody></table></div></div><button class="btn btn-secondary" onclick="getBoxesInTrolley(' + idInstance + ',' + idTrolley + ')">Retour au trolley</button>';
             $("#webContent").html(content);
             $('#table_products').DataTable();
         }
     });
 }
 
-function getBoxesInTrolley(id) {
+function getBoxesInTrolley(idInstance, idTrolley) {
     $.ajax({
         type: "POST",
         url: 'php/request.php',
-        data: { requestType: "getBoxesSol", idTrolley: id },
+        data: { requestType: "getBoxesSol", idTrolley: idTrolley },
         success : function(result, statut){ 
             result = JSON.parse(result);
             console.log(result);
-            var content = '<br/><div class="row"><div align="center" class="col-md-12"><h1>Colis dans le trolley n°'+ id +' :</h1>';
+            var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, idTrolley);
 
             content += '<table id="table_boxes" class="display">' +
             '<thead>' +
@@ -120,7 +154,7 @@ function getBoxesInTrolley(id) {
             
             for(var b in result["content"]) {
                 var box = result["content"][b];
-                content += '<tr onclick="getProductsInBox(' + box['ID'] + ',' + id + ')" id="' + box['ID'] +'">' +
+                content += '<tr onclick="getProductsInBox('+ idInstance +',' + box['ID'] + ',' + idTrolley + ')" id="' + box['ID'] +'">' +
                     '<td>Colis n°' + box['ID'] + '</td>' +
                     '<td>' + box['IDBOX'] + '</td>' +
                     '<td>' + box['VOLUME'] + '</td>' +
@@ -132,7 +166,8 @@ function getBoxesInTrolley(id) {
                 '</tr>';
             }
 
-            content += '</tbody></table></div></div><button class="btn btn-secondary" onclick="getTrolleys()">Retour au menu</button>';
+            content += '</tbody></table></div></div><button class="btn btn-secondary" onclick="getTrolleysInInstance(' + idInstance + ')">Retour à l\'instance</button>';
+            
             $("#webContent").html(content);
             $('#table_boxes').DataTable();
         }
@@ -140,8 +175,32 @@ function getBoxesInTrolley(id) {
     
 }
 
+function getArbo(idInstance, idTrolley, idColis) {
+    var content = '<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active"><a href="#" onclick="getInstances()">Accueil</a></li>';
+
+    if (idInstance != null && idTrolley == null && idColis == null) {
+        content += '<li class="breadcrumb-item active"><a href="#" onclick="getTrolleysInInstance('+ idInstance +')">Instance n°'+ idInstance +'</a></li>';
+    }
+
+    if (idInstance != null && idTrolley != null && idColis == null) {
+        content += '<li class="breadcrumb-item"><a href="#" onclick="getTrolleysInInstance('+ idInstance +')">Instance n°'+ idInstance +'</a></li>';
+        content += '<li class="breadcrumb-item active"><a href="#" onclick="getBoxesInTrolley('+ idInstance +','+ idTrolley +')">Chariot n°'+ idTrolley +'</a></li>';
+    }
+
+    if (idInstance != null && idTrolley != null && idColis != null) {
+        content += '<li class="breadcrumb-item"><a href="#" onclick="getTrolleysInInstance('+ idInstance +')">Instance n°'+ idInstance +'</a></li>';
+        content += '<li class="breadcrumb-item"><a href="#" onclick="getBoxesInTrolley('+ idInstance +','+ idTrolley +')">Chariot n°'+ idTrolley +'</a></li>';
+        content += '<li class="breadcrumb-item active"><a href="#" onclick="getProductsInBox('+ idInstance +','+ idColis +','+ idTrolley +')">Colis n°'+ idColis +'</a></li>';
+    }
+
+    content += '</ol></nav>';
+
+    return content;
+}
+
 $(document).ready(function() {     
-    getTrolleys();
+    getInstances();
 });
+
   
 

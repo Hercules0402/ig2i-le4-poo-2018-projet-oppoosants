@@ -16,10 +16,19 @@
                 }
             break; 
 
-            case "getTrolleysSol" :
+            case "getInstancesSol" :
                 if(isConnexionOk()) {
                     $response["status"] = "success";
-                    $response["content"] = getTrolleysSol();
+                    $response["content"] = getInstancesSol();
+                }
+            break;
+
+            case "getTrolleysSol" :
+                $idInstance = $_POST["idInstance"]; 
+
+                if(isConnexionOk() && isset($idInstance)) {
+                    $response["status"] = "success";
+                    $response["content"] = getTrolleysSol($idInstance);
                 }
             break;
 

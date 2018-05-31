@@ -21,14 +21,35 @@
         return false;
     }
 
-    function getTrolleysSol() {
+    function getInstancesSol() {
+        $bdd = connect();
+        $instance = array();
+        $instances = array();
+
+        if (!$bdd) return false;
+
+        $reponse = $bdd->query('SELECT * FROM INSTANCE');
+
+        // On affiche chaque entrée une à une
+        while ($donnees = $reponse->fetch()) {
+            $instance["ID"] = $donnees["ID"];
+            $instance["NOM"] = $donnees["NOM"];
+
+            array_push($instances, $instance);
+            $instance = array();
+        }
+
+        return $instances;
+    }
+
+    function getTrolleysSol($idInstance) {
         $bdd = connect();
         $trolley = array();
         $trolleys = array();
 
         if (!$bdd) return false;
 
-        $reponse = $bdd->query('SELECT * FROM TROLLEY');
+        $reponse = $bdd->query('SELECT * FROM TROLLEY WHERE NINSTANCE =' . $idInstance);
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
