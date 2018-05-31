@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,26 +28,33 @@ public class Instance implements Serializable{
 	@Column(name = "NOM")
 	private String nom;
 
-	@OneToMany(mappedBy = "ninstance")
+	@OneToMany(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Arc> arcs;
+ 
+    @OneToMany(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+	private List<Arc> distances;
 
     @OneToMany(mappedBy = "ninstance")
 	private List<Box> boxes;
 
-    @OneToMany(mappedBy = "ninstance")
+    @OneToMany(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Location> locations;
 
-    @OneToMany(mappedBy = "ninstance")
+    @OneToMany(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Order> orders;
 
-    @OneToMany(mappedBy = "ninstance")
+    @OneToMany(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
 	private List<Product> products;
 
     @OneToMany(mappedBy = "ninstance")
 	private List<Trolley> trolleys;
 
-	@OneToOne(mappedBy = "ninstance")
+	@OneToOne(mappedBy = "ninstance", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
 	private Graph graph;
+    
+    private int nbBoxesTrolley;
+    
+    private List<Integer> capaBox;
 
     public Instance() {
 		this.graph = null;
@@ -56,6 +64,7 @@ public class Instance implements Serializable{
 		this.orders = new ArrayList<>();
 		this.products = new ArrayList<>();
         this.trolleys = new ArrayList<>();
+        this.capaBox = new ArrayList<>();
 	}
 
 	public Instance(String nom) {
@@ -79,8 +88,20 @@ public class Instance implements Serializable{
         return arcs;
     }
 
+    public List<Arc> getDistances() {
+        return distances;
+    }
+
     public List<Box> getBoxes() {
         return boxes;
+    }
+
+    public List<Integer> getCapaBox() {
+        return capaBox;
+    }
+
+    public void setCapaBox(List<Integer> capaBox) {
+        this.capaBox = capaBox;
     }
 
     public List<Location> getLocations() {
@@ -101,6 +122,42 @@ public class Instance implements Serializable{
 
     public Graph getGraph() {
         return graph;
+    }
+
+    public int getNbBoxesTrolley() {
+        return nbBoxesTrolley;
+    }
+
+    public void setNbBoxesTrolley(int nbBoxesTrolley) {
+        this.nbBoxesTrolley = nbBoxesTrolley;
+    }
+
+    public void setArcs(List<Arc> arcs) {
+        this.arcs = arcs;
+    }
+
+    public void setDistances(List<Arc> distances) {
+        this.distances = distances;
+    }
+
+    public void setBoxes(List<Box> boxes) {
+        this.boxes = boxes;
+    }
+
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
     
     public void clear() {

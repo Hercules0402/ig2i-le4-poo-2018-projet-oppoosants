@@ -99,7 +99,6 @@ public class Trolley implements Serializable {
         int hash = 5;
         hash = 53 * hash + Objects.hashCode(this.id);
         hash = 53 * hash + Objects.hashCode(this.idTrolley);
-        hash = 53 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -119,9 +118,6 @@ public class Trolley implements Serializable {
             return false;
         }
         if (!Objects.equals(this.idTrolley, other.idTrolley)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

@@ -230,7 +230,6 @@ public class Box implements Serializable {
         hash = 71 * hash + this.weight;
         hash = 71 * hash + this.volume;
         hash = 71 * hash + Objects.hashCode(this.order);
-        hash = 71 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -259,9 +258,6 @@ public class Box implements Serializable {
             return false;
         }
         if (!Objects.equals(this.order, other.order)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

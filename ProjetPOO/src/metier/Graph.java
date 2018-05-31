@@ -160,7 +160,6 @@ public class Graph implements Serializable {
         hash = 79 * hash + this.nbLocations;
         hash = 79 * hash + this.nbProducts;
         hash = 79 * hash + this.nbVerticesIntersections;
-        hash = 79 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -195,9 +194,6 @@ public class Graph implements Serializable {
             return false;
         }
         if (!Objects.equals(this.arrivalDepot, other.arrivalDepot)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import metier.Trolley;
 import util.Reader;
 import algo.Recherche;
+import java.util.List;
+import metier.Instance;
 import util.Distances;
 import util.Writer;
 
@@ -39,10 +40,10 @@ public class TestInstance {
                 for(File instance : instances) {
                     copie = copier(instance.toPath(), new File(stockage + instance.getName()).toPath());
                     if (copie) {
-                        Reader r = new Reader(stockage + instance.getName(), false);
-                        Recherche sol = new Recherche(r.getOrders(), r.getProducts(),r.getNbBoxesTrolley(), r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
-                        ArrayList<Trolley> trolleys = sol.lookup(); 
-                        int distance = Distances.calcDistance(trolleys, r.getDepartingDepot(), r.getArrivalDepot());
+                        Instance inst = Reader.read(stockage + instance.getName(), false);
+                        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getCapaBox().get(0), inst.getCapaBox().get(1),inst);
+                        List<Trolley> trolleys = sol.lookup();
+                        int distance = Distances.calcDistance(trolleys, inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));
                         Writer w = new Writer(stockage + instance.getName(), trolleys, false);
                         String[] name = {""};

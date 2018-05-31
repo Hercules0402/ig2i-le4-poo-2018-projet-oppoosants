@@ -90,7 +90,6 @@ public class Product implements Serializable {
         hash = 67 * hash + Objects.hashCode(this.loc);
         hash = 67 * hash + Objects.hashCode(this.weight);
         hash = 67 * hash + Objects.hashCode(this.volume);
-        hash = 67 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -119,9 +118,6 @@ public class Product implements Serializable {
             return false;
         }
         if (!Objects.equals(this.volume, other.volume)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

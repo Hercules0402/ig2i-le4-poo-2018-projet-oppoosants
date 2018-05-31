@@ -120,7 +120,6 @@ public class Arc implements Serializable {
         hash = 97 * hash + Objects.hashCode(this.locationEnd);
         hash = 97 * hash + Objects.hashCode(this.distance);
         hash = 97 * hash + (this.isShortest ? 1 : 0);
-        hash = 97 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -152,9 +151,6 @@ public class Arc implements Serializable {
             return false;
         }
         if (!Objects.equals(this.distance, other.distance)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

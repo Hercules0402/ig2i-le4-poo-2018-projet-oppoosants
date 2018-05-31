@@ -1,7 +1,6 @@
 package metier;
 
 import java.io.Serializable;
-import static java.lang.Math.pow;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -128,12 +127,10 @@ public class Location implements Serializable, Comparable<Location> {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
         hash = 67 * hash + Objects.hashCode(this.idLocation);
         hash = 67 * hash + Objects.hashCode(this.abscisse);
         hash = 67 * hash + Objects.hashCode(this.ordonnee);
         hash = 67 * hash + Objects.hashCode(this.name);
-        hash = 67 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -152,9 +149,6 @@ public class Location implements Serializable, Comparable<Location> {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idLocation, other.idLocation)) {
             return false;
         }
@@ -162,9 +156,6 @@ public class Location implements Serializable, Comparable<Location> {
             return false;
         }
         if (!Objects.equals(this.ordonnee, other.ordonnee)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

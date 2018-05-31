@@ -92,7 +92,6 @@ public class Order implements Serializable {
         hash = 37 * hash + Objects.hashCode(this.idOrder);
         hash = 37 * hash + Objects.hashCode(this.m);
         hash = 37 * hash + Objects.hashCode(this.nbProducts);
-        hash = 37 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -118,9 +117,6 @@ public class Order implements Serializable {
             return false;
         }
         if (!Objects.equals(this.nbProducts, other.nbProducts)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

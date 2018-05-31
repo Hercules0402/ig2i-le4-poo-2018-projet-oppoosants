@@ -4,6 +4,7 @@ import java.util.List;
 import metier.Trolley;
 import util.Reader;
 import algo.Recherche;
+import metier.Instance;
 import util.Distances;
 import util.Writer;
 
@@ -17,7 +18,7 @@ public class TestAll {
         String fileName = "instance_40000.txt";
 
         /*Reader*/
-        Reader r = new Reader(fileName, false); 
+        Instance inst = Reader.read(fileName, true); 
         /*for(Location l : r.getLocations()) {
             System.out.printf(l.getName() + " vers :");
             for (Map.Entry<Location, Integer> e : l.getDistances().entrySet()){
@@ -25,16 +26,16 @@ public class TestAll {
             }
             System.out.println("");
         }*/
-
+        
         /*Recherche*/
-        Recherche sol = new Recherche(r.getOrders(), r.getProducts(), r.getNbBoxesTrolley(),r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
+        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getCapaBox().get(0), inst.getCapaBox().get(1),inst);
         List<Trolley> trolleys = sol.lookup();
 
-        int distance = Distances.calcDistance(trolleys, r.getDepartingDepot(), r.getArrivalDepot());
+        int distance = Distances.calcDistance(trolleys, inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
         System.out.println(Distances.formatDistance(distance));
         
         /*Writer*/
-        Writer w = new Writer(fileName, trolleys, false);
+        Writer w = new Writer(fileName, trolleys, true);
 
         /*Checker*/
         String[] name = {""};
