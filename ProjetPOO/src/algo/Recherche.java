@@ -118,8 +118,6 @@ public class Recherche {
                     box.addProduct(p, qt);
                 }
 
-                // Mettre à jour le coût (calcul à vol d'oiseau)
-                this.cout += p.getLoc().getDistanceTo(p_precedent.getLoc());
                 p_precedent = p;
             }
 

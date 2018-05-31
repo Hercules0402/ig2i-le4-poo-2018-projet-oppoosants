@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
  * Classe définissant une location.
  */
 @Entity
-public class Location implements Serializable {
+public class Location implements Serializable, Comparable<Location> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -46,13 +46,13 @@ public class Location implements Serializable {
 	@ManyToOne
 	private Instance ninstance;
 
-    //private Map<Location,Integer> distances;
+    private Map<Location,Integer> distances;
     
     public Location() {
         this.abscisse = 0;
         this.ordonnee = 0;
         this.name = "Nouvelle Location";
-        //distances = new HashMap<>();
+        distances = new HashMap<>();
     }
 
     public Location(Integer id, Integer abscisse, Integer ordonnee, String name,Instance ninstance) {
@@ -104,24 +104,23 @@ public class Location implements Serializable {
         this.name = name;
     }
 
-   /* public Map<Location, Integer> getDistances() {
+    public Map<Location, Integer> getDistances() {
         return distances;
     }
 
     public boolean addDistance(Location loc, Integer distance){
-        if(distances.containsKey(loc)) return false;
-        return (distances.put(loc, distance)) == null;
-    }*/
-    
-    /*
-    Calcul de la distance à vol d'oiseau entre 2 locations.
-    Permet d'avoir un ordre d'idée de la distance à parcourir.
-    */
-    public double getDistanceTo(Location loc){
-        return Math.sqrt(
-                  pow((this.abscisse - loc.getAbscisse()), 2) 
-                + pow((this.ordonnee - loc.getOrdonnee()), 2)
-        );
+        if(!distances.containsKey(loc)){
+            distances.put(loc, distance);
+            if(distances.containsKey(loc)){
+                return true;
+            } else {
+                System.out.println("[ERREUR] addDistance, loc non ajoutée");
+                return false;
+            }
+        } else {
+            System.out.println("[ERREUR] addDistance, les distances de " + this.getName() + " contiennent déja " + loc.getName());
+            return false;
+        }
     }
 
     @Override
@@ -169,6 +168,11 @@ public class Location implements Serializable {
         return true;
     }
 
+    public int compareTo(Location otherLoc) {
+        if(otherLoc == null) return -1;
+		return (this.getIdLocation() - otherLoc.getIdLocation());
+	}	
+     
     @Override
     public String toString() {
         return "Location{" + "idLocation=" + idLocation + ", abscisse=" + abscisse + ", ordonnee=" + ordonnee + ", name=" + name + '}';
