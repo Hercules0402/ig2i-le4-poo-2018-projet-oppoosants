@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 /**
  * Classe définissant une location.
@@ -46,6 +47,7 @@ public class Location implements Serializable, Comparable<Location> {
 	@ManyToOne
 	private Instance ninstance;
 
+    @Transient 
     private Map<Location,Integer> distances;
     
     public Location() {

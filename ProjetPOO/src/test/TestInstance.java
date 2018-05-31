@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import metier.Trolley;
 import util.Reader;
 import algo.Recherche;
+import util.Distances;
 import util.Writer;
 
 public class TestInstance {
@@ -40,7 +41,9 @@ public class TestInstance {
                     if (copie) {
                         Reader r = new Reader(stockage + instance.getName(), false);
                         Recherche sol = new Recherche(r.getOrders(), r.getProducts(),r.getNbBoxesTrolley(), r.getCapaBox().get(0), r.getCapaBox().get(1),r.getInstance());
-                        ArrayList<Trolley> trolleys = sol.lookup();                        
+                        ArrayList<Trolley> trolleys = sol.lookup(); 
+                        int distance = Distances.calcDistance(trolleys, r.getDepartingDepot(), r.getArrivalDepot());
+                        System.out.println(Distances.formatDistance(distance));
                         Writer w = new Writer(stockage + instance.getName(), trolleys, false);
                         String[] name = {""};
                         name[0] = stockage + instance.getName().substring(0, instance.getName().lastIndexOf("."));
