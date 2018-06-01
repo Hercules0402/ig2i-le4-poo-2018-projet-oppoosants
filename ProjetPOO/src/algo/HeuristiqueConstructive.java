@@ -18,23 +18,23 @@ public class HeuristiqueConstructive {
     }
     
     public Instance clarkeAndWright() {
-        //this.instance.clear();
+        this.instance.clear();
 		List<Box> boxes = this.instance.getBoxes();
 		List<Trolley> trolleys = this.instance.getTrolleys();
 		List<Trolley> trolleysUsed = new ArrayList<>();
 		int next = 0;
-
+        
 		for (Box box : boxes) {
-			if (boxes.isEmpty()) {
+			if (trolleys.isEmpty()) {
 				System.out.println("Erreur : Plus de trolley dispo pour "
-						+ "affecter la box " + box);
+						+ "affecter la box " + box.getIdBox());
 			} else {
-				Trolley t = trolleys.remove(0);  
+				Trolley t = trolleys.remove(0);
                 if (!t.addBoxes(box)) {
-					System.out.println("Erreur : Box " + box + " n'a pas "
-							+ "pu être affecté au trolley " + t);
-				}				
-				trolleysUsed.add(t);
+                    System.out.println("Erreur : Box " + box.getIdBox() + " n'a pas "
+                            + "pu être affecté au trolley " + t.getIdTrolley());
+                }				
+                trolleysUsed.add(t);
 			}
 		}
 		boolean ameliore = true;
@@ -86,6 +86,10 @@ public class HeuristiqueConstructive {
         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
         System.out.println(Distances.formatDistance(distance));
         Writer.save(fileName, inst, false);
+        
+        for(Trolley t : inst.getTrolleys()){
+            inst.getBoxes().addAll(t.getBoxes());
+        }
         
         HeuristiqueConstructive heuris = new HeuristiqueConstructive(inst);
         inst = heuris.clarkeAndWright();

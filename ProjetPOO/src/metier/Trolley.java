@@ -119,6 +119,25 @@ public class Trolley implements Serializable {
         }
     }
 
+    public void setBoxes(List<Box> boxes) {
+        this.boxes = boxes;
+    }
+    
+    public boolean addBoxes(List<Box> boxes){
+        if (boxes == null) return false;
+        for (Box b : boxes) {
+            addBox(b);
+        }            
+        return true;
+    } 
+    
+    public boolean addBox2(Box b){
+        if (b == null) return false;
+        if(this.nbColisMax < this.boxes.size() + 1) return false;
+        this.boxes.add(b);
+        return true;
+    }
+
     /**
 	 * Permet de calculer le coût d'une fusion.
 	 * @param t TODO
