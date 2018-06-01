@@ -180,6 +180,9 @@ public class Instance implements Serializable{
 		for (Box b : this.boxes) {
 			b.clear();
 		}
+        /*for (Trolley t : this.trolleys) {
+			t.clear();
+		}*/
 		this.graph.clear();
     }
     

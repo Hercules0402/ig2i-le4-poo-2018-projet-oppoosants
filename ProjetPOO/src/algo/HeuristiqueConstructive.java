@@ -5,6 +5,10 @@ import java.util.List;
 import metier.Box;
 import metier.Instance;
 import metier.Product;
+import metier.Trolley;
+import util.Distances;
+import util.Reader;
+import util.Writer;
 
 public class HeuristiqueConstructive {
     private Instance instance;
@@ -13,48 +17,46 @@ public class HeuristiqueConstructive {
         this.instance = instance;
     }
     
-    public void clarkeAndWright() {
+    public Instance clarkeAndWright() {
         this.instance.clear();
-		List<Product> products = this.instance.getProducts();
 		List<Box> boxes = this.instance.getBoxes();
-		List<Box> boxesUsed = new ArrayList<>();
+		List<Trolley> trolleys = this.instance.getTrolleys();
+		List<Trolley> trolleysUsed = new ArrayList<>();
 		int next = 0;
-
-		for (Product p : products) {
-			if (boxes.isEmpty()) {
-				System.out.println("Erreur : Plus de boxes dispo pour "
-						+ "affecter le produit " + p);
+        
+		for (Box box : boxes) {
+			if (trolleys.isEmpty()) {
+				System.out.println("Erreur : Plus de trolley dispo pour "
+						+ "affecter la box " + box.getIdBox());
 			} else {
-				Box b = boxes.remove(0);
-				/*this.instance.addBoxInGraph(b);
-				if (!b.addProduct(p.getProduct(), p.getQuantity())) {
-					System.out.println("Erreur : product " + p + " n'a pas "
-							+ "pu être affecté au box " + b);
-				}*/
-				boxesUsed.add(b);
+				Trolley t = trolleys.remove(0);
+                if (!t.addBoxes(box)) {
+                    System.out.println("Erreur : Box " + box.getIdBox() + " n'a pas "
+                            + "pu être affecté au trolley " + t.getIdTrolley());
+                }				
+                trolleysUsed.add(t);
 			}
 		}
 		boolean ameliore = true;
 		while (ameliore) {
-			ameliore = fusionTrolleys(boxesUsed);
+			ameliore = fusionTrolleys(trolleysUsed);
 		}
-
-		//this.instance.updatePositions();
+        return this.instance;
     }
     
     /**
 	 * Algo de fusion des trolleys.
-	 * @param boxesUsed TODO
+	 * @param trolleysUsed TODO
 	 * @return boolean
 	 */
-	private boolean fusionTrolleys(List<Box> boxesUsed) {
+	private boolean fusionTrolleys(List<Trolley> trolleysUsed) {
 		int bestR = -1;
 		int bestS = -1;
 		double bestGain = 1;
-		for (int r = 0; r < boxesUsed.size(); r++) {
-			for (int s = 0; s < boxesUsed.size(); s++) {
+		for (int r = 0; r < trolleysUsed.size(); r++) {
+			for (int s = 0; s < trolleysUsed.size(); s++) {
 				if (r != s) {
-					double gain = boxesUsed.get(r).coutFusion(boxesUsed.get(s));
+					double gain = trolleysUsed.get(r).coutFusion(trolleysUsed.get(s));
 					if (gain < bestGain) {
 						bestGain = gain;
 						bestR = r;
@@ -66,10 +68,35 @@ public class HeuristiqueConstructive {
 		if (bestGain >= 0) {
 			return false;
 		}
-		boolean fusion = boxesUsed.get(bestR).fusion(boxesUsed.get(bestS));
+		boolean fusion = trolleysUsed.get(bestR).fusion(trolleysUsed.get(bestS));
 		if (fusion) {
-			boxesUsed.remove(bestS);
+			trolleysUsed.remove(bestS);
 		}
 		return true;
+    }
+    
+    public static void main(String[] args) {
+        String fileName = "instance_0116_131940_Z2.txt";
+
+        /*Reader*/
+        Instance inst = Reader.read(fileName, false);
+        
+        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMaxBox(), inst.getVolumeMaxBox(),inst);
+        inst = sol.lookup();
+        int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
+        System.out.println(Distances.formatDistance(distance));
+        Writer.save(fileName, inst, false);
+        
+        for(Trolley t : inst.getTrolleys()){
+            inst.getBoxes().addAll(t.getBoxes());
+        }
+        
+        HeuristiqueConstructive heuris = new HeuristiqueConstructive(inst);
+        inst = heuris.clarkeAndWright();
+        
+        Writer.save("toto.txt", inst, false);
+        
+        distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
+        System.out.println(Distances.formatDistance(distance));
     }
 }

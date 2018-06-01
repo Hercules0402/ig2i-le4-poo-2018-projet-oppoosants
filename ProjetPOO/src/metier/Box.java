@@ -147,55 +147,6 @@ public class Box implements Serializable {
         prodQtys.add(newPq);
     }
     
-    /**
-	 * Permet de calculer le coût d'une fusion.
-	 * @param b TODO
-	 * @return double
-	 */
-	public double coutFusion(Box b) {
-		if (b == null) {
-			return Double.MAX_VALUE;
-		}
-		if (this.prodQtys.isEmpty()) {
-			return Double.MAX_VALUE;
-		}
-		if (b.prodQtys.isEmpty()) {
-			return Double.MAX_VALUE;
-		}
-		/*if ((this.capaciteutilisee + v.getCapaciteutilisee()) > this.capacite) {
-			return Double.MAX_VALUE;
-		}
-
-		Client i = this.ensClients.get(this.ensClients.size() - 1);
-		Client j = v.ensClients.get(0);
-
-		return i.getDistanceTo(j) - i.getDistanceTo(ndepot) - ndepot.getDistanceTo(j);*/
-        return 0.0;
-	}
-    
-    /**
-	 * Permet la fusion de deux boxes.
-	 * @param b TODO
-	 * @return boolean
-	 */
-	public boolean fusion(Box b) {
-		double coutFusion = this.coutFusion(b);
-		if (coutFusion > (Double.MAX_VALUE - 1)) {
-			return false;
-		}
-
-		/*this.cout += (b.cout + coutFusion);
-		this.capaciteutilisee += v.capaciteutilisee;
-		this.nplanning.setCout(this.nplanning.getCout() + coutFusion);
-		for (Client c : v.ensClients) {
-			c.changeVehicule(this);
-		}
-		this.ensClients.addAll(v.ensClients);
-		v.clear();
-		this.nplanning.removeVehicule(v);*/
-		return true;
-	}
-    
     public boolean doEchangeIntraTrolley(IntraTrolleyInfos intraTrolleyInfos) {
 		/*Client c1 = (Client) ensClients.get(intraTourneeInfos.getOldPosition());
 		Client c2 = (Client) ensClients.get(intraTourneeInfos.getNewPosition());

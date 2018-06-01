@@ -43,7 +43,7 @@ public class TestInstance {
                         inst = sol.lookup();
                         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));
-                        Writer w = new Writer(stockage + instance.getName(), inst.getTrolleys(), false);
+                        Writer.save(stockage + instance.getName(), inst, false);
                         String[] name = {""};
                         name[0] = stockage + instance.getName().substring(0, instance.getName().lastIndexOf("."));
                         System.out.println("\n\nChecker de l'instance : "+ instance.getName());

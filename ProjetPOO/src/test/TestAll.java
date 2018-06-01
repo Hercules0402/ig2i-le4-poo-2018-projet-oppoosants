@@ -32,7 +32,7 @@ public class TestAll {
         System.out.println(Distances.formatDistance(distance));
         
         /*Writer*/
-        Writer w = new Writer(fileName, inst.getTrolleys(), true);
+        Writer.save(fileName, inst, true);
 
         /*Checker*/
         String[] name = {""};
