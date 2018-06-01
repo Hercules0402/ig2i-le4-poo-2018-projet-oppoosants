@@ -1,19 +1,15 @@
 package algogen;
 
-import algogen.jmona.OX;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import metier.Box;
 import metier.Instance;
 import metier.Location;
 import metier.Order;
 import metier.ProdQty;
 import metier.Product;
-import util.Distances;
-
 
 public class GAColis {
     private static Order order;
@@ -45,44 +41,17 @@ public class GAColis {
         volumeMaxBox = inst.getVolumeMaxBox();
     
         genereration();
-        System.out.println("- - - - - - - - - - - - - - - -");
-        System.out.println("Population initiale: ");
-        int i = 1;
-        for(ArrayList<Integer> list : popList) {
-            System.out.println("Liste de produits numéro " + i + ":");
-            for(Integer nb : list)
-                System.out.printf(nb+ "("+data[nb].getProduct().getIdProduct() + "x"+ data[nb].getQuantity() + "), ");
-            System.out.println("");
-            i++;
-        }
-        System.out.println("- - - - - - - - - - - - - - - -");
+        printPopList("Génération population initiale");
         
         evaluation();
-        System.out.println("Evaluation: " + results);
-        System.out.println("- - - - - - - - - - - - - - - -");
+        printResults("Evaluation");
         
         selection();
-        System.out.println("Selection: ");
-        i = 1;
-        for(ArrayList<Integer> list : popList) {
-            System.out.println("Liste de produits numéro " + i + ":");
-            for(Integer nb : list)
-                System.out.printf(nb+ "("+data[nb].getProduct().getIdProduct() + "x"+ data[nb].getQuantity() + "), ");
-            System.out.println("");
-            i++;
-        }
-        System.out.println("- - - - - - - - - - - - - - - -");
+        printPopList("Selection");
         
         crossover();
-        i = 1;
-        for(ArrayList<Integer> list : popList) {
-            System.out.println("Liste de produits numéro " + i + ":");
-            for(Integer nb : list)
-                System.out.printf(nb+ "("+data[nb].getProduct().getIdProduct() + "x"+ data[nb].getQuantity() + "), ");
-            System.out.println("");
-            i++;
-        }
-        System.out.println("- - - - - - - - - - - - - - - -");
+        printPopList("Cross-over");
+        
         return null;
     }
     
@@ -109,54 +78,9 @@ public class GAColis {
             for(Integer nb : genome)
                 products.add(data[nb]);
             int r = split(products);
-            //int r = Distances.calcDistanceProducts(products, instance.getGraph().getArrivalDepot(), instance.getGraph().getDepartingDepot());
             results.put(i, r);
             i++;
         }
-    }
-    
-    public static int split(ArrayList<ProdQty> genome){
-        int n = genome.size();
-        Integer V[] = new Integer[n+1];
-        Integer P[] = new Integer[n+1];
-        int W = instance.getWeightMaxBox();
-        int Vol = instance.getVolumeMaxBox();
-        int L = Integer.MAX_VALUE;
-        
-        Location dep = instance.getGraph().getDepartingDepot();
-        Location arr  = instance.getGraph().getArrivalDepot();
-        
-        V[0] = 0;
-        for(int i=1; i<n; i++){
-            V[i] = Integer.MAX_VALUE;
-        }
-        for(int i=1; i<n; i++){
-            int loadW = 0, loadV = 0, cost = 0, j = i;
-            do {
-                loadW += genome.get(i-1).getProduct().getWeight() * genome.get(i-1).getQuantity();
-                loadV += genome.get(i-1).getProduct().getVolume() * genome.get(i-1).getQuantity();
-                if(i == j){
-                    cost = cost + dep.getDistances().get(genome.get(j-1).getProduct().getLoc())
-                            + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
-                } else { //TODO
-                    cost = cost - genome.get(j-2).getProduct().getLoc().getDistances().get(arr)
-                            + genome.get(j-2).getProduct().getLoc().getDistances().get(genome.get(j-1).getProduct().getLoc())
-                            + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
-                }
-                if(loadW<=W && loadV<=Vol && cost<=L){
-                    //System.out.println(V[i-1]);
-                    if(V[i-1] + cost < V[j]){
-                        V[j] = V[i-1]+cost;
-                        P[j] = i-1;
-                    }
-                    j = j+1;
-                }
-            } while(j>n || loadW>W || loadV>Vol ||cost>L);
-        }
-        for(int i=1; i<n; i++){
-            //System.out.println("V:" + V[i] + " P:" + P[i]);
-        }
-        return V[n-1];
     }
     
     public static void selection(){
@@ -168,7 +92,6 @@ public class GAColis {
                 max1 = en;
             }                   
         }
-        
         for(Map.Entry<Integer, Integer> en : results.entrySet()){
             if (en != max1 && (max2 == null || (en.getValue().compareTo(max2.getValue()) >0))) {
                 max2 = en;
@@ -194,6 +117,10 @@ public class GAColis {
         }
     }
     
+    /**
+     * Fonctions basicsmart(pour generation) et split (pour evaluation)
+     */
+    
     public static ProdQty[] basicsmart(boolean random){
         List<ProdQty> listPq = order.getProdQtys();
         
@@ -208,5 +135,74 @@ public class GAColis {
             tab[i] = listPq.get(i);
         }
         return tab;
+    }
+    
+    public static int split(ArrayList<ProdQty> genome){
+        int n = genome.size();
+        Integer V[] = new Integer[n+1];
+        Integer P[] = new Integer[n+1];
+        int W = instance.getWeightMaxBox();
+        int Vol = instance.getVolumeMaxBox();
+        int L = Integer.MAX_VALUE;
+        
+        Location dep = instance.getGraph().getDepartingDepot();
+        Location arr  = instance.getGraph().getArrivalDepot();
+        
+        V[0] = 0;
+        for(int i=1; i<n; i++){
+            V[i] = Integer.MAX_VALUE;
+        }
+        for(int i=1; i<n; i++){
+            int loadW = 0, loadV = 0, cost = 0, j = i;
+            do {
+                loadW += genome.get(i-1).getProduct().getWeight() * genome.get(i-1).getQuantity();
+                loadV += genome.get(i-1).getProduct().getVolume() * genome.get(i-1).getQuantity();
+                if(i == j){
+                    cost = cost + dep.getDistances().get(genome.get(j-1).getProduct().getLoc())
+                            + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
+                } else { //TODO: Trier par locations
+                    cost = cost - genome.get(j-2).getProduct().getLoc().getDistances().get(arr)
+                            + genome.get(j-2).getProduct().getLoc().getDistances().get(genome.get(j-1).getProduct().getLoc())
+                            + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
+                }
+                if(loadW<=W && loadV<=Vol && cost<=L){
+                    if(V[i-1] + cost < V[j]){
+                        V[j] = V[i-1]+cost;
+                        P[j] = i-1;
+                    }
+                    j = j+1;
+                }
+            } while(j>n || loadW>W || loadV>Vol ||cost>L);
+        }
+        /*for(int i=1; i<n; i++){
+            System.out.println("V:" + V[i] + " P:" + P[i]);
+        }*/
+        return V[n-1];
+    }
+    
+    /**
+     * Fonctions d'affichages
+     */
+    
+    public static void printPopList(String etape){
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        System.out.println(etape + " : ");
+        int i = 1;
+        for(ArrayList<Integer> list : popList) {
+            System.out.printf("Liste produits " + i + ": ");
+            for(Integer nb : list)
+                System.out.printf(nb+ "("+data[nb].getProduct().getIdProduct() + "x"+ data[nb].getQuantity() + "), ");
+            System.out.println("");
+            i++;
+        }
+    }
+    
+    public static void printResults(String etape){
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        System.out.printf(etape + " : ");
+        for (Map.Entry<Integer, Integer> e : results.entrySet()){
+            System.out.printf(e.getKey() + "=" + e.getValue() + ", ");
+        }
+        System.out.println("");
     }
 }

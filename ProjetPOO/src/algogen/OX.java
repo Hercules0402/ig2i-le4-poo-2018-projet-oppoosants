@@ -1,4 +1,4 @@
-package algogen.jmona;
+package algogen;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -67,27 +67,4 @@ public class Distances {
         
         return partEntiereSpaced  + "," + partDecimale + " m.";
     }
-    
-    
-    
-    public static int calcDistanceProducts(ArrayList<ProdQty> products, Location dep, Location arr){
-        int d = 0;
-
-        List<Location> locations = new ArrayList();
-
-        for (ProdQty pq : products) {
-            Location act = pq.getProduct().getLoc();
-            if(!locations.contains(act))
-                locations.add(act);
-        }
-        
-        Collections.sort(locations);
-        
-        for (int i=1; i<locations.size(); i++) {
-            d += locations.get(i-1).getDistances().get(locations.get(i)); 
-        }   
-
-        System.out.println("dist calculed : "+d);
-        return d;
-    }
 }
