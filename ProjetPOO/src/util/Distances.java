@@ -7,6 +7,7 @@ import java.util.List;
 import metier.Box;
 import metier.Location;
 import metier.ProdQty;
+import metier.Product;
 import metier.Trolley;
 
 /**
@@ -69,27 +70,24 @@ public class Distances {
     
     
     
-    public static int calcDistanceBox(List<Box> colis, Location dep, Location arr){
+    public static int calcDistanceProducts(ArrayList<ProdQty> products, Location dep, Location arr){
         int d = 0;
 
         List<Location> locations = new ArrayList();
-        for (Box b : colis) {
-            for (ProdQty pq : b.getProdQtys()) {
-                Location act = pq.getProduct().getLoc();
-                if(!locations.contains(act))
-                    locations.add(act);
-            }
+
+        for (ProdQty pq : products) {
+            Location act = pq.getProduct().getLoc();
+            if(!locations.contains(act))
+                locations.add(act);
         }
+        
         Collections.sort(locations);
         
-        /*for(Location l : locations)
-            System.out.printf(l.getIdLocation() + ", ");
-        d += dep.getDistances().get(locations.get(0)); 
         for (int i=1; i<locations.size(); i++) {
             d += locations.get(i-1).getDistances().get(locations.get(i)); 
-        }
-        d += locations.get(locations.size() - 1).getDistances().get(arr);*/
+        }   
 
-        return (int)(Math.random()*101); //TO FIX
+        System.out.println("dist calculed : "+d);
+        return d;
     }
 }

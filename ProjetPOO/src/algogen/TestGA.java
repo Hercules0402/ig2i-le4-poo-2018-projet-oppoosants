@@ -1,7 +1,7 @@
 package algogen;
 
+import java.util.ArrayList;
 import java.util.List;
-import metier.Box;
 import util.Reader;
 import metier.Instance;
 
@@ -14,6 +14,6 @@ public class TestGA {
 
         /*GA*/
         //List<Trolley> trolleys = AlgoGen.run(inst);
-        List<List<Box>> colis = GAColis.runTest(inst.getOrders().get(0), inst);
+        List<ArrayList<Integer>> products = GAColis.runTest(inst.getOrders().get(0), inst);
     }
 }

@@ -1,5 +1,6 @@
 package algogen;
 
+import algogen.jmona.OX;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import metier.Box;
 import metier.Instance;
+import metier.Location;
 import metier.Order;
 import metier.ProdQty;
 import metier.Product;
@@ -22,16 +24,18 @@ public class GAColis {
     private static int weightMaxBox;
     private static int volumeMaxBox;
     
-    private static List<List<Box>> popList;
+    private static List<ArrayList<Integer>> popList;
     private static Map<Integer, Integer> results;
     private static int tempBest;
     
-    public static List<List<Box>> runTest(Order o, Instance inst){
+    private static ProdQty[] data;
+    
+    public static List<ArrayList<Integer>> runTest(Order o, Instance inst){
         GAColis.run(o, inst);
         return popList;
-        
     }
-    public static List<Box> run(Order o, Instance inst){
+    
+    public static List<Product> run(Order o, Instance inst){
         GAColis.order = o;
         
         instance = inst;
@@ -44,17 +48,10 @@ public class GAColis {
         System.out.println("- - - - - - - - - - - - - - - -");
         System.out.println("Population initiale: ");
         int i = 1;
-        for(List<Box> l : popList) {
-            System.out.println("Liste de colis numéro " + i + ":");
-            int j = 1;
-            for(Box c : l) {
-                System.out.printf("Colis numéro " + j + ": ");
-                for(ProdQty pq : c.getProdQtys()) {
-                    System.out.printf(pq.getProduct().getLoc().getIdLocation() + ", ");
-                }
-                System.out.println("");
-                j++;
-            }
+        for(ArrayList<Integer> list : popList) {
+            System.out.println("Liste de produits numéro " + i + ":");
+            for(Integer nb : list)
+                System.out.printf(nb+ "("+data[nb].getProduct().getIdProduct() + "x"+ data[nb].getQuantity() + "), ");
             System.out.println("");
             i++;
         }
@@ -67,17 +64,21 @@ public class GAColis {
         selection();
         System.out.println("Selection: ");
         i = 1;
-        for(List<Box> l : popList) {
-            System.out.println("Liste de colis numéro " + i + ":");
-            int j = 1;
-            for(Box c : l) {
-                System.out.printf("Colis numéro " + j + ": ");
-                for(ProdQty pq : c.getProdQtys()) {
-                    System.out.printf(pq.getProduct().getLoc().getIdLocation() + ", ");
-                }
-                System.out.println("");
-                j++;
-            }
+        for(ArrayList<Integer> list : popList) {
+            System.out.println("Liste de produits numéro " + i + ":");
+            for(Integer nb : list)
+                System.out.printf(nb+ "("+data[nb].getProduct().getIdProduct() + "x"+ data[nb].getQuantity() + "), ");
+            System.out.println("");
+            i++;
+        }
+        System.out.println("- - - - - - - - - - - - - - - -");
+        
+        crossover();
+        i = 1;
+        for(ArrayList<Integer> list : popList) {
+            System.out.println("Liste de produits numéro " + i + ":");
+            for(Integer nb : list)
+                System.out.printf(nb+ "("+data[nb].getProduct().getIdProduct() + "x"+ data[nb].getQuantity() + "), ");
             System.out.println("");
             i++;
         }
@@ -86,28 +87,76 @@ public class GAColis {
     }
     
     public static void genereration(){
-        popList = new ArrayList<List<Box>>();
-        for(int i=0; i<10; i++){
-            if(i==0) {
-                //On génere un genome via algo basique smart
-                List<Box> smartGenome = basicsmart(false);
-                popList.add(smartGenome);
-            } else {
-                //On en génere 9 full random
-                List<Box> randomGenome = basicsmart(true);
-                popList.add(randomGenome);
-            }
+        data = basicsmart(false);
+        popList = new ArrayList<ArrayList<Integer>>();
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int j=0; j<data.length; j++) list.add(j);
+        popList.add(list);
+                
+        for(int i=0; i<9; i++){
+            ArrayList<Integer> nList = new ArrayList<Integer>(list);
+            Collections.shuffle(nList);
+            popList.add(nList);
         }
     }
     
     public static void evaluation(){
         results = new HashMap<>();
         int i = 0;
-        for(List<Box> genome : popList){
-            int r = Distances.calcDistanceBox(genome, instance.getGraph().getArrivalDepot(), instance.getGraph().getDepartingDepot());
+        for(ArrayList<Integer> genome : popList){
+            ArrayList<ProdQty> products = new ArrayList<>();
+            for(Integer nb : genome)
+                products.add(data[nb]);
+            int r = split(products);
+            //int r = Distances.calcDistanceProducts(products, instance.getGraph().getArrivalDepot(), instance.getGraph().getDepartingDepot());
             results.put(i, r);
             i++;
         }
+    }
+    
+    public static int split(ArrayList<ProdQty> genome){
+        int n = genome.size();
+        Integer V[] = new Integer[n+1];
+        Integer P[] = new Integer[n+1];
+        int W = instance.getWeightMaxBox();
+        int Vol = instance.getVolumeMaxBox();
+        int L = Integer.MAX_VALUE;
+        
+        Location dep = instance.getGraph().getDepartingDepot();
+        Location arr  = instance.getGraph().getArrivalDepot();
+        
+        V[0] = 0;
+        for(int i=1; i<n; i++){
+            V[i] = Integer.MAX_VALUE;
+        }
+        for(int i=1; i<n; i++){
+            int loadW = 0, loadV = 0, cost = 0, j = i;
+            do {
+                loadW += genome.get(i-1).getProduct().getWeight() * genome.get(i-1).getQuantity();
+                loadV += genome.get(i-1).getProduct().getVolume() * genome.get(i-1).getQuantity();
+                if(i == j){
+                    cost = cost + dep.getDistances().get(genome.get(j-1).getProduct().getLoc())
+                            + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
+                } else { //TODO
+                    cost = cost - genome.get(j-2).getProduct().getLoc().getDistances().get(arr)
+                            + genome.get(j-2).getProduct().getLoc().getDistances().get(genome.get(j-1).getProduct().getLoc())
+                            + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
+                }
+                if(loadW<=W && loadV<=Vol && cost<=L){
+                    //System.out.println(V[i-1]);
+                    if(V[i-1] + cost < V[j]){
+                        V[j] = V[i-1]+cost;
+                        P[j] = i-1;
+                    }
+                    j = j+1;
+                }
+            } while(j>n || loadW>W || loadV>Vol ||cost>L);
+        }
+        for(int i=1; i<n; i++){
+            //System.out.println("V:" + V[i] + " P:" + P[i]);
+        }
+        return V[n-1];
     }
     
     public static void selection(){
@@ -125,44 +174,39 @@ public class GAColis {
                 max2 = en;
             }                  
         }
-
-        List<List<Box>> newPopList = new ArrayList<List<Box>>();
+ 
+        List<ArrayList<Integer>> newPopList = new ArrayList<ArrayList<Integer>>();
         newPopList.add(popList.get(max1.getKey()));
         newPopList.add(popList.get(max2.getKey()));
-        popList = new ArrayList<List<Box>>(newPopList);
+        popList = new ArrayList<ArrayList<Integer>>(newPopList);
         
         tempBest = max1.getValue();
     }
     
-    public static List<Box> basicsmart(boolean random){
-        ArrayList<Box> colis = new ArrayList();
-        int idBox = 1, qt = 0;
-        Product p = null;
+    public static void crossover(){
+        ArrayList<Integer> p1 = popList.get(0);
+        ArrayList<Integer> p2 = popList.get(1);
         
-        Box box = new Box(idBox, weightMaxBox, volumeMaxBox, order, 0, 0, instance);
-
+        for(int i=0; i<4; i++) {
+            Map<Integer, ArrayList<Integer>> cs = OX.crossover(p1, p2);
+            popList.add(cs.get(0));
+            popList.add(cs.get(1));
+        }
+    }
+    
+    public static ProdQty[] basicsmart(boolean random){
         List<ProdQty> listPq = order.getProdQtys();
+        
+        int tot = listPq.size();
+
+        ProdQty[] tab = new ProdQty[tot];
         
         if(random) Collections.shuffle(listPq);
         else Collections.sort(listPq);
-        
-        for(ProdQty pq : listPq) {
-            p = pq.getProduct();
-            qt = pq.getQuantity();
 
-            if (box.getVolume() + (p.getVolume() * qt) < volumeMaxBox &&
-                    box.getWeight() + (p.getWeight() * qt) < weightMaxBox) {
-                box.addProduct(p, qt);
-            } else { 
-                colis.add(box);
-                idBox++;
-                box = new Box(idBox, weightMaxBox, volumeMaxBox, order, 0, 0, instance);
-                box.addProduct(p, qt);
-            }
-
+        for(int i=0; i<listPq.size(); i++){
+            tab[i] = listPq.get(i);
         }
-        colis.add(box);
-        return colis;
+        return tab;
     }
-
 }

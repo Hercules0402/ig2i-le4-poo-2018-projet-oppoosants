@@ -1,10 +1,12 @@
 package algogen;
 
+import instance.Produit;
 import java.util.ArrayList;
 import java.util.List;
 import metier.Box;
 import metier.Instance;
 import metier.Order;
+import metier.Product;
 import metier.Trolley;
 
 public class AlgoGen {
@@ -14,9 +16,9 @@ public class AlgoGen {
         List<Box> colis = new ArrayList();
         
         for(Order o : orders){
-            List<Box> newColis = GAColis.run(o, inst); //GA qui opti l'ordre des produits du client en colis (return liste de colis bien remplis)
-            for(Box b : newColis)
-                colis.add(b);
+            List<Product> produits = GAColis.run(o, inst); //GA qui opti l'ordre des produits du client
+            //Découper ces produits en colis (fct split)
+            //Ajouter ces colis a la liste des colis totaux
         }
         
         List<Trolley> tournees = GATournee.run(colis, inst); //GA qui découpe la liste de box en la meilleure tournée
