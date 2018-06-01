@@ -1,3 +1,10 @@
 tr {
     cursor:pointer;
 }
+
+#graphReturnB {
+    position:absolute;
+    z-index:9999;
+    top:90%;
+    left:2%;
+}

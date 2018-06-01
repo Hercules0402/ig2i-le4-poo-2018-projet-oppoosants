@@ -23,6 +23,15 @@
                 }
             break;
 
+            case "getLocsSol" :
+                $idInstance = $_POST["idInstance"]; 
+
+                if(isConnexionOk()) {
+                    $response["status"] = "success";
+                    $response["content"] = getLocsSol($idInstance);
+                }
+            break;
+
             case "getTrolleysSol" :
                 $idInstance = $_POST["idInstance"]; 
 

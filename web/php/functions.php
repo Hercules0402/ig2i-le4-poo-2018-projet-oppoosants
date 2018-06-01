@@ -42,6 +42,31 @@
         return $instances;
     }
 
+    function getLocsSol($idInstance) {
+        $bdd = connect();
+        $loc = array();
+        $locs = array();
+
+        if (!$bdd) return false;
+
+        $reponse = $bdd->query('SELECT * FROM LOCATION where NINSTANCE = '. $idInstance);
+
+        // On affiche chaque entrée une à une
+        while ($donnees = $reponse->fetch()) {
+            $loc["ID"] = $donnees["ID"];
+            $loc["ABSCISSE"] = $donnees["ABSCISSE"];
+            $loc["IDLOCATION"] = $donnees["IDLOCATION"];
+            $loc["NAME"] = $donnees["NAME"];
+            $loc["ORDONNEE"] = $donnees["ORDONNEE"];
+            $loc["NINSTANCE"] = $donnees["NINSTANCE"];
+
+            array_push($locs, $loc);
+            $loc = array();
+        }
+
+        return $locs;
+    }
+
     function getTrolleysSol($idInstance) {
         $bdd = connect();
         $trolley = array();

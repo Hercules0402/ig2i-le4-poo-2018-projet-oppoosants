@@ -1,3 +1,6 @@
+var isGraphic = false;
+var allLocations;
+
 function testConnexion() {
     $.ajax({
         type: "POST",
@@ -10,7 +13,33 @@ function testConnexion() {
     });
 }
 
+function getGraphe(idInstance) {
+    $("#webContent").html("");
+    $("#graphReturnB").show();
+    setAllLocations(idInstance);
+}
+
+function setAllLocations(idInstance) {
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: 'php/request.php',
+        data: { requestType: "getLocsSol", idInstance: idInstance },
+        success : function(result, statut){ 
+            result = JSON.parse(result);
+            allLocations = result["content"];
+            console.log(allLocations);
+            isGraphic = true;
+        },
+        error : function(result, statut) {
+            $("#webContent").html('<br/><br/><hr/><h1 align="center">Erreur : impossible de récupérer les locations</h1><hr/>');
+        }
+    });
+}
+
 function getInstances() {
+    $("#graphReturnB").hide();
+    isGraphic = false;
     $.ajax({
         type: "POST",
         url: 'php/request.php',
@@ -25,15 +54,17 @@ function getInstances() {
             '    <tr>' +
             '        <th>ID</th>' +
             '        <th>Nom</th>' +
+            '        <th>Graphe</th>' +
             '    </tr>' +
             '</thead><tbody>';
             
             for(var i in result["content"]) {
                 var instance = result["content"][i];
                 
-                content += '<tr id="' + instance['ID'] + '" onclick="getTrolleysInInstance(' + instance['ID'] + ')">' +
-                    '<td>Instance n°' + instance['ID'] + '</td>' +
-                    '<td>' + instance['NOM'] + '</td>' +
+                content += '<tr id="' + instance['ID'] + '">' +
+                    '<td onclick="getTrolleysInInstance(' + instance['ID'] + ')">Instance n°' + instance['ID'] + '</td>' +
+                    '<td onclick="getTrolleysInInstance(' + instance['ID'] + ')">' + instance['NOM'] + '</td>' +
+                    '<td><button class="btn btn-outline-dark btn-block" onclick="getGraphe('+ instance['ID'] +');">Afficher le graphe</button></td>' +
                 '</tr>';
             }
 
@@ -198,7 +229,51 @@ function getArbo(idInstance, idTrolley, idColis) {
     return content;
 }
 
+function setup(){
+    createCanvas(windowWidth, windowHeight - 55, WEBGL);
+    $("#defaultCanvas0").hide();
+  }
+  
+function draw(){
+    if (isGraphic) {
+        $("#defaultCanvas0").show();
+        background(100);
+        translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
+
+        var maxSize = getMaxDistance();
+        coeffW = windowWidth/maxSize*0.9;
+        coeffH = windowHeight/maxSize*0.8;
+
+        for(locId in allLocations) {
+            var loc = allLocations[locId];
+            
+            if(loc["NAME"] == "depotStart" || loc["NAME"] == "depotEnd") {
+                fill(color(255,0,0));
+            }
+            else fill(color(255,255,255));
+            
+            ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,5,5);
+        }
+    }
+    else {
+        $("#defaultCanvas0").hide();
+    }
+}
+
+function getMaxDistance() {
+    var maxSize = 0;
+    for(locId in allLocations) {
+        var loc = allLocations[locId];
+
+        if(parseInt(loc["ABSCISSE"]) > maxSize) maxSize = parseInt(loc["ABSCISSE"]);
+        if(parseInt(loc["ORDONNEE"]) > maxSize) maxSize = parseInt(loc["ORDONNEE"]);
+    }
+
+    return maxSize;
+}
+
 $(document).ready(function() {     
+    $("#graphReturnB").hide();
     getInstances();
 });
 
