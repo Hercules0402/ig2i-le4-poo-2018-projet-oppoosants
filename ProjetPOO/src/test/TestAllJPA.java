@@ -21,6 +21,6 @@ public class TestAllJPA {
         inst = sol.lookup();
 
         /*Writer*/
-        Writer w = new Writer(fileName, inst.getTrolleys(), false);
+        Writer.save(fileName, inst, false);
     }
 }
