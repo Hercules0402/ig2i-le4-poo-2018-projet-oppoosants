@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import metier.Instance;
 import metier.Location;
 import metier.Order;
@@ -12,6 +13,8 @@ import metier.ProdQty;
 import metier.Product;
 
 public class GAColis {
+    private final static int CB_CYCLES = 100;
+    
     private static Order order;
     
     private static Instance instance;
@@ -43,14 +46,21 @@ public class GAColis {
         genereration();
         printPopList("Génération population initiale");
         
-        evaluation();
-        printResults("Evaluation");
-        
-        selection();
-        printPopList("Selection");
-        
-        crossover();
-        printPopList("Cross-over");
+        for(int i=1; i<=CB_CYCLES; i++){
+            printCycle(i, CB_CYCLES);
+            
+            evaluation();
+            printResults("Evaluation");
+
+            selection();
+            printPopList("Selection");
+
+            crossover();
+            printPopList("Cross-over");
+
+            mutation();
+            printPopList("Mutation");
+        }
         
         return null;
     }
@@ -84,26 +94,26 @@ public class GAColis {
     }
     
     public static void selection(){
-        Map.Entry<Integer, Integer> max1 = null;
-        Map.Entry<Integer, Integer> max2 = null;
+        Map.Entry<Integer, Integer> min1 = null;
+        Map.Entry<Integer, Integer> min2 = null;
 
         for(Map.Entry<Integer, Integer> en : results.entrySet()){
-            if (max1 == null || en.getValue().compareTo(max1.getValue()) > 0){
-                max1 = en;
+            if (min1 == null || en.getValue().compareTo(min1.getValue()) < 0){
+                min1 = en;
             }                   
         }
         for(Map.Entry<Integer, Integer> en : results.entrySet()){
-            if (en != max1 && (max2 == null || (en.getValue().compareTo(max2.getValue()) >0))) {
-                max2 = en;
+            if (en != min1 && (min2 == null || (en.getValue().compareTo(min2.getValue()) < 0))) {
+                min2 = en;
             }                  
         }
  
         List<ArrayList<Integer>> newPopList = new ArrayList<ArrayList<Integer>>();
-        newPopList.add(popList.get(max1.getKey()));
-        newPopList.add(popList.get(max2.getKey()));
+        newPopList.add(popList.get(min1.getKey()));
+        newPopList.add(popList.get(min2.getKey()));
         popList = new ArrayList<ArrayList<Integer>>(newPopList);
         
-        tempBest = max1.getValue();
+        tempBest = min1.getValue();
     }
     
     public static void crossover(){
@@ -114,6 +124,21 @@ public class GAColis {
             Map<Integer, ArrayList<Integer>> cs = OX.crossover(p1, p2);
             popList.add(cs.get(0));
             popList.add(cs.get(1));
+        }
+    }
+    
+    public static void mutation(){
+        //TODO: Local search as mutation operator
+        for(int i=2; i<10; i++){
+            ArrayList<Integer> list = popList.get(i);
+            for(int j=0; j<5; j++){
+                int pos1 = new Random().nextInt(list.size());
+                int pos2 = new Random().nextInt(list.size());
+                while(pos1 == pos2)
+                    pos2 = new Random().nextInt(list.size());
+                //System.out.println("[DEBUG] Liste " + (i+1) + ": Permutation de l'elmt " + pos1 + "(" + list.get(pos1) + ")" + " et de l'elmt" + pos2+ "(" + list.get(pos2) + ")");
+                Collections.swap(list, pos1, pos2);
+            }
         }
     }
     
@@ -201,8 +226,13 @@ public class GAColis {
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.printf(etape + " : ");
         for (Map.Entry<Integer, Integer> e : results.entrySet()){
-            System.out.printf(e.getKey() + "=" + e.getValue() + ", ");
+            System.out.printf(e.getKey()+1 + "=" + e.getValue() + ", ");
         }
         System.out.println("");
+    }
+    
+    public static void printCycle(int i, int t){
+        System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
+        System.out.println("                     Cycle " + i + "/" + t);
     }
 }
