@@ -49,7 +49,7 @@
 
         if (!$bdd) return false;
 
-        $reponse = $bdd->query('SELECT * FROM LOCATION where NINSTANCE = '. $idInstance);
+        $reponse = $bdd->query('SELECT * FROM LOCATION where NINSTANCE = '. $idInstance  . ' ORDER BY IDLOCATION');
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
@@ -65,6 +65,31 @@
         }
 
         return $locs;
+    }
+
+    function getLightProductsSol($idInstance) {
+        $bdd = connect();
+        $prod = array();
+        $prods = array();
+
+        if (!$bdd) return false;
+
+        $reponse = $bdd->query('SELECT * FROM PRODUCT where NINSTANCE = '. $idInstance);
+
+        // On affiche chaque entrée une à une
+        while ($donnees = $reponse->fetch()) {
+            $prod["ID"] = $donnees["ID"];
+            $prod["IDPRODUCT"] = $donnees["IDPRODUCT"];
+            $prod["VOLUME"] = $donnees["VOLUME"];
+            $prod["WEIGHT"] = $donnees["WEIGHT"];
+            $prod["LOC"] = $donnees["LOC"];
+            $prod["NINSTANCE"] = $donnees["NINSTANCE"];
+
+            array_push($prods, $prod);
+            $prod = array();
+        }
+
+        return $prods;
     }
 
     function getTrolleysSol($idInstance) {
