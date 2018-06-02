@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package algo;
 
 import java.util.ArrayList;
@@ -21,7 +16,6 @@ import util.Writer;
 /**
  * Classe ClarkeAndWright
  * Elle implémente cet algo
- * @author seb
  */
 public class ClarkeAndWright {
     
@@ -183,8 +177,7 @@ public class ClarkeAndWright {
         /*Reader*/
         Instance inst = Reader.read(fileName, false);
         
-        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMaxBox(), inst.getVolumeMaxBox(),inst);
-        inst = sol.lookup();
+        inst = Recherche.run(inst);
         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
         System.out.println(Distances.formatDistance(distance));
         Writer.save(fileName, inst, false);

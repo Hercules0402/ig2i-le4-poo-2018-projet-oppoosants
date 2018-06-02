@@ -11,38 +11,22 @@ import metier.Location;
 import metier.Order;
 import metier.ProdQty;
 import metier.Product;
+import util.Reader;
 
 public class GAColis {
     private final static int CB_CYCLES = 100;
     
     private static Order order;
-    
     private static Instance instance;
-    private static List<Product> products;
-    private static int nbColisMax;
-    private static int weightMaxBox;
-    private static int volumeMaxBox;
-    
-    private static List<ArrayList<Integer>> popList;
-    private static Map<Integer, Integer> results;
-    private static int tempBest;
     
     private static ProdQty[] data;
-    
-    public static List<ArrayList<Integer>> runTest(Order o, Instance inst){
-        GAColis.run(o, inst);
-        return popList;
-    }
+    private static List<ArrayList<Integer>> popList;
+    private static Map<Integer, Integer> results;
     
     public static List<Product> run(Order o, Instance inst){
         GAColis.order = o;
-        
-        instance = inst;
-        products = new ArrayList<>(inst.getProducts());
-        nbColisMax = inst.getNbBoxesTrolley();
-        weightMaxBox = inst.getWeightMaxBox();
-        volumeMaxBox = inst.getVolumeMaxBox();
-    
+        GAColis.instance = inst;
+
         genereration();
         printPopList("Génération population initiale");
         
@@ -112,8 +96,6 @@ public class GAColis {
         newPopList.add(popList.get(min1.getKey()));
         newPopList.add(popList.get(min2.getKey()));
         popList = new ArrayList<ArrayList<Integer>>(newPopList);
-        
-        tempBest = min1.getValue();
     }
     
     public static void crossover(){
@@ -234,5 +216,15 @@ public class GAColis {
     public static void printCycle(int i, int t){
         System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
         System.out.println("                     Cycle " + i + "/" + t);
+    }
+    
+    /**
+     * Main test
+     */
+    
+    public static void main(String[] args) {
+        String fileName = "instance_40000.txt";
+        Instance inst = Reader.read(fileName, false); 
+        List<Product> products = GAColis.run(inst.getOrders().get(0), inst);
     }
 }

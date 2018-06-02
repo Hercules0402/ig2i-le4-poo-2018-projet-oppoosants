@@ -17,8 +17,7 @@ public class TestAllJPA {
         //System.out.println(r);
 
         /*Recherche*/
-        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMaxBox(), inst.getVolumeMaxBox(),inst);
-        inst = sol.lookup();
+        inst = Recherche.run(inst);
 
         /*Writer*/
         Writer.save(fileName, inst, false);

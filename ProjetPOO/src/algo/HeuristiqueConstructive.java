@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import metier.Box;
 import metier.Instance;
-import metier.Product;
 import metier.Trolley;
 import util.Distances;
 import util.Reader;
@@ -81,8 +80,7 @@ public class HeuristiqueConstructive {
         /*Reader*/
         Instance inst = Reader.read(fileName, false);
         
-        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMaxBox(), inst.getVolumeMaxBox(),inst);
-        inst = sol.lookup();
+        inst = Recherche.run(inst);
         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
         System.out.println(Distances.formatDistance(distance));
         Writer.save(fileName, inst, false);

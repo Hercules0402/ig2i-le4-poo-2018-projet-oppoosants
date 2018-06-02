@@ -3,7 +3,6 @@ package algo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import metier.Arc;
 import metier.Order;
 import metier.Box;
 import metier.Instance;
@@ -12,82 +11,30 @@ import metier.Product;
 import metier.Trolley;
 
 /**
- * Classe permettant la recherche d'un itinéraire simple dans la zone de picking.
+ * Algorithme basique permettant la recherche d'un itinéraire simple dans la zone de picking.
  */
 public class Recherche {
+    private static Instance instance;
 
-    //Attributs
-    private List<Order> orderList;
-    private List<Product> productList;
-    private List<Arc> arcsList;
-    private List<Arc> distancesList;
-    private int nbColisMax;
-
-    //Critères poid/volume
-    private int weightMax_box;
-    private int volumeMax_box;
-
-    // Données à déterminer
-    private List<Trolley> trolleyList;
-    private double cout;
-
-    private Instance instance;
-    
-    //Constructeurs
-
-    public Recherche() {
-        orderList = new ArrayList();
-        productList = new ArrayList();
-        this.cout = 0;
-        this.nbColisMax = 0;
-        this.weightMax_box = 0;
-        this.volumeMax_box = 0;
-        this.instance = null;
-    }
-
-    public Recherche(List<Order> orderList, List<Product> productList, int nbColisMax, int weightMax_box, int volumeMax_box, Instance instance) {
-        this();
-        this.orderList = new ArrayList<>(orderList);
-        this.productList = productList;
-        this.nbColisMax = nbColisMax;
-        this.weightMax_box = weightMax_box;
-        this.volumeMax_box = volumeMax_box;
-        this.instance = instance;
-    }
-    
-    // Accesseur
-
-    public double getCout() {
-        return cout;
-    }
-
-    public void setCout(double cout) {
-        this.cout = cout;
-    }
-    
-    public List<Order> getOrderList() {
-        return orderList;
-    }
-
-    public List<Product> getProductList() {
-        return productList;
-    }
-    
-    // Méthodes
-
-    public Instance lookup(){
-        int qt;
+    public static Instance run(Instance inst){
+        Recherche.instance = inst;
+        
+        List<Order> orderList = new ArrayList<>(instance.getOrders());
+        List<Product> productList = new ArrayList<>(instance.getProducts());
+        int nbColisMax = instance.getNbBoxesTrolley();
+        int weightMaxBox = instance.getWeightMaxBox();
+        int volumeMaxBox = instance.getVolumeMaxBox();
+        
+        int idTrolley = 1, idBox = 1, qt;
         Product p = null;
-        int idTrolley = 1;
-        int idBox = 1;
         ArrayList<Trolley> solution = new ArrayList();
 
         // Création d'un chariot pour la première tournée
-        Trolley trolley = new Trolley(idTrolley, nbColisMax, this.instance);
+        Trolley trolley = new Trolley(idTrolley, nbColisMax, instance);
 
         for(Order order : orderList ){
             // Création du premier colis vide pour la commande
-            Box box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0, this.instance);
+            Box box = new Box(idBox, weightMaxBox, volumeMaxBox, order, 0, 0, instance);
 
             //On trie les ProdQty en fonction de la localisation du produit, pour minimiser les distances
             List<ProdQty> listPq = order.getProdQtys();
@@ -99,19 +46,19 @@ public class Recherche {
                 qt = pq.getQuantity();
 
                 // Vérifier que le colis n'est pas plein ou surchargé
-                if (box.getVolume() + (p.getVolume() * qt) < this.volumeMax_box &&
-                        box.getWeight() + (p.getWeight() * qt) < this.weightMax_box) {
+                if (box.getVolume() + (p.getVolume() * qt) < volumeMaxBox &&
+                        box.getWeight() + (p.getWeight() * qt) < weightMaxBox) {
                     box.addProduct(p, qt);
                 } else { //Sinon on met le colis plein dans le chariot et on ajoute un nouveau colis à remplir
                     // Vérifier qu'il y a de la place dans le chariot
                     if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {
                         solution.add(trolley);
                         idTrolley++;
-                        trolley = new Trolley(idTrolley, nbColisMax,this.instance);
+                        trolley = new Trolley(idTrolley, nbColisMax, instance);
                     }
                     trolley.addBox(box);
                     idBox++;
-                    box = new Box(idBox, weightMax_box, volumeMax_box, order, 0, 0,this.instance);
+                    box = new Box(idBox, weightMaxBox, volumeMaxBox, order, 0, 0, instance);
                     box.addProduct(p, qt);
                 }
             }
@@ -119,7 +66,7 @@ public class Recherche {
             if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {
                 solution.add(trolley);
                 idTrolley++;
-                trolley = new Trolley(idTrolley, nbColisMax,this.instance);
+                trolley = new Trolley(idTrolley, nbColisMax, instance);
             }
 
             trolley.addBox(box);
@@ -127,7 +74,7 @@ public class Recherche {
         }
 
         solution.add(trolley);
-        this.instance.setTrolleys(solution);
-        return this.instance;
+        instance.setTrolleys(solution);
+        return instance;
     }
 }

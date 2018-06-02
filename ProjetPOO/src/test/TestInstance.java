@@ -39,8 +39,7 @@ public class TestInstance {
                     copie = copier(instance.toPath(), new File(stockage + instance.getName()).toPath());
                     if (copie) {
                         Instance inst = Reader.read(stockage + instance.getName(), false);
-                        Recherche sol = new Recherche(inst.getOrders(), inst.getProducts(), inst.getNbBoxesTrolley(),inst.getWeightMaxBox(), inst.getVolumeMaxBox(),inst);
-                        inst = sol.lookup();
+                        inst = Recherche.run(inst);
                         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));
                         Writer.save(stockage + instance.getName(), inst, false);
