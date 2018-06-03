@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import metier.Box;
 import metier.Instance;
 import metier.Location;
 import metier.Order;
@@ -14,7 +15,7 @@ import metier.Product;
 import util.Reader;
 
 public class GAColis {
-    private final static int CB_CYCLES = 100;
+    private final static int CB_CYCLES = 1000;
     
     private static Order order;
     private static Instance instance;
@@ -165,12 +166,23 @@ public class GAColis {
                 loadW += genome.get(i-1).getProduct().getWeight() * genome.get(i-1).getQuantity();
                 loadV += genome.get(i-1).getProduct().getVolume() * genome.get(i-1).getQuantity();
                 if(i == j){
-                    cost = cost + dep.getDistances().get(genome.get(j-1).getProduct().getLoc())
+                    cost += dep.getDistances().get(genome.get(j-1).getProduct().getLoc())
                             + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
                 } else { //TODO: Trier par locations
-                    cost = cost - genome.get(j-2).getProduct().getLoc().getDistances().get(arr)
-                            + genome.get(j-2).getProduct().getLoc().getDistances().get(genome.get(j-1).getProduct().getLoc())
-                            + genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
+                    if(!genome.get(j-2).getProduct().getLoc().equals(genome.get(j-1).getProduct().getLoc())) {
+                    //System.out.println("j-2 distances" + genome.get(j-2).getProduct().getLoc());
+                    //System.out.println("j-1" + genome.get(j-1).getProduct().getLoc());
+                    //boolean dedans = genome.get(j-2).getProduct().getLoc().getDistances().containsKey(genome.get(j-1).getProduct().getLoc());
+                    //if(!dedans) System.out.println("PAS DEDANS");
+                        cost -= genome.get(j-2).getProduct().getLoc().getDistances().get(arr);
+                        if(genome.get(j-2).getProduct().getLoc().getDistances().containsKey(genome.get(j-1).getProduct().getLoc()))
+                            cost += genome.get(j-2).getProduct().getLoc().getDistances().get(genome.get(j-1).getProduct().getLoc());
+                        else
+                            cost += genome.get(j-1).getProduct().getLoc().getDistances().get(genome.get(j-2).getProduct().getLoc());
+                        cost += genome.get(j-1).getProduct().getLoc().getDistances().get(arr);
+                    } else {
+                        
+                    }
                 }
                 if(loadW<=W && loadV<=Vol && cost<=L){
                     if(V[i-1] + cost < V[j]){
@@ -179,12 +191,45 @@ public class GAColis {
                     }
                     j = j+1;
                 }
-            } while(j>n || loadW>W || loadV>Vol ||cost>L);
+            } while(j<n && loadW<W && loadV<Vol && cost<L); //until pas whilte
         }
         /*for(int i=1; i<n; i++){
             System.out.println("V:" + V[i] + " P:" + P[i]);
         }*/
+        //List<Box> boxes = extractSolution(P, genome);
+        //System.out.println(boxes);
         return V[n-1];
+    }
+    
+    public static List<Box> extractSolution(Integer[] P, ArrayList<ProdQty> genome){
+        int n = P.length-1;
+        
+        int i;
+        ArrayList<Box> boxes = new ArrayList<>();
+        for(i=1; i<=n; i++){
+            Box box = new Box(i, instance.getWeightMaxBox(), instance.getVolumeMaxBox(), order, 0, 0, instance);
+            boxes.add(box);
+        }
+
+        int t = 0;
+        int j = n-1;
+        do {
+            t++;
+            i = P[j];
+            for(int k=i+1; k<j; k++) {
+                boxes.get(t).addProduct(genome.get(k));
+            }
+            j = i;
+        } while(i!=0);
+        
+        System.out.println(boxes);
+        
+        
+        ArrayList<Box> notEmptyBoxes = new ArrayList<>();
+        for(Box b : boxes)
+            if(!b.getProdQtys().isEmpty())
+                notEmptyBoxes.add(b);
+        return notEmptyBoxes;
     }
     
     /**
