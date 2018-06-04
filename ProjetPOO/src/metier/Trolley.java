@@ -76,6 +76,10 @@ public class Trolley implements Serializable {
         return idTrolley;
     }
 
+    public void setIdTrolley(Integer idTrolley) {
+        this.idTrolley = idTrolley;
+    }
+
     public int getNbColisMax() {
         return nbColisMax;
     }
@@ -94,31 +98,6 @@ public class Trolley implements Serializable {
         return true;
     }
 
-    public boolean addBoxes(Box b) {
-        return this.addBoxesByPos(b, this.boxes.size());
-    }
-
-    private boolean addBoxesByPos(Box b, int pos) {
-        if (b == null) {
-			return false;
-		}
-		if (pos < 0 || pos > this.boxes.size()) {
-			return false;
-		}
-		if (this.nbColisMax < boxes.size() + 1) {
-			return false;
-		}
-
-		this.boxes.add(pos, b);
-		return true;
-    }
-
-    void clear() {
-        for(Box b: this.boxes) {
-            b.clear();
-        }
-    }
-
     public void setBoxes(List<Box> boxes) {
         this.boxes = boxes;
     }
@@ -131,65 +110,12 @@ public class Trolley implements Serializable {
         return true;
     } 
     
-    public boolean addBox2(Box b){
+    public boolean addBoxClarkeAndWright(Box b){
         if (b == null) return false;
         if(this.nbColisMax < this.boxes.size() + 1) return false;
         this.boxes.add(b);
         return true;
     }
-
-    /**
-	 * Permet de calculer le coût d'une fusion.
-	 * @param t TODO
-	 * @return double
-	 */
-	public double coutFusion(Trolley t) {
-		if (t == null) {
-			return Double.MAX_VALUE;
-		}
-		if (this.boxes.isEmpty()) {
-			return Double.MAX_VALUE;
-		}
-		if (t.boxes.isEmpty()) {
-			return Double.MAX_VALUE;
-		}
-		if ((this.boxes.size() + t.getBoxes().size()) > this.nbColisMax) {
-			return Double.MAX_VALUE;
-		}
-
-		Box box1 = this.boxes.get(this.boxes.size() - 1);
-        Box box2 = t.getBoxes().get(0);
-        
-        Location locBox1 = box1.getProdQtys().get(box1.getProdQtys().size() - 1).getProduct().getLoc();
-        Location locBox2 = box2.getProdQtys().get(0).getProduct().getLoc();
-        
-        return locBox1.getDistances().get(locBox2) 
-                - locBox1.getDistances().get(this.ninstance.getGraph().getDepartingDepot())
-                - this.ninstance.getGraph().getDepartingDepot().getDistances().get(locBox2);
-	}
-
-    /**
-	 * Permet la fusion de deux trolleys.
-	 * @param v TODO
-	 * @return boolean
-	 */
-	public boolean fusion(Trolley t) {
-		double coutFusion = this.coutFusion(t);
-		if (coutFusion > (Double.MAX_VALUE - 1)) {
-			return false;
-		}
-        
-		//this.cout += (v.cout + coutFusion);
-		/* (Client c : v.ensClients) {
-			c.changeVehicule(this);
-		}*/
-		/*this.ensClients.addAll(v.ensClients);
-		v.clear();
-		this.nplanning.removeVehicule(v);*/
-        this.boxes.addAll(t.boxes);
-        t.clear();
-		return true;
-	}
 
     @Override
     public int hashCode() {
