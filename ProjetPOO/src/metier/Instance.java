@@ -1,5 +1,6 @@
 package metier;
 
+import algo.IntraTrolleyInfos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -186,18 +187,32 @@ public class Instance implements Serializable{
 		this.graph.clear();
     }
     
-    public boolean deplacementIntraBox() {
-		if (this.graph == null) {
-			return false;
-		}
-		return this.graph.deplacementIntraBox();
+    public boolean deplacementIntraTrolley() {
+		IntraTrolleyInfos intraTrolleyInfos = new IntraTrolleyInfos();
+        for (Trolley t : this.trolleys) {
+            IntraTrolleyInfos tmp = t.deplacementIntraTrolley();
+            if (intraTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
+                intraTrolleyInfos = tmp;
+            }
+        }
+        if (intraTrolleyInfos.getDiffCout() < 0) {
+            return intraTrolleyInfos.doDeplacementIntraTrolley();
+        }
+        return false;
     }
     
-    public boolean echangeIntraBox() {
-		if (this.graph == null) {
-			return false;
+    public boolean echangeIntraTrolley() {
+		IntraTrolleyInfos intraTrolleyInfos = new IntraTrolleyInfos();
+		for (Trolley t : this.trolleys) {
+			IntraTrolleyInfos tmp = t.echangeIntraTrolley();
+			if (intraTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
+				intraTrolleyInfos = tmp;
+			}
 		}
-		return this.graph.echangeIntraBox();
+		if (intraTrolleyInfos.getDiffCout() < 0) {
+			return intraTrolleyInfos.doEchangeIntraTrolley();
+		}
+		return false;
     }
 
     @Override

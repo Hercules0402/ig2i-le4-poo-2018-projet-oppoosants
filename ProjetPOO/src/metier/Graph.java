@@ -122,34 +122,6 @@ public class Graph implements Serializable {
         this.nbVerticesIntersections = 0;
     }
     
-    public boolean deplacementIntraBox() {
-		/*IntraTrolleyInfos intraTrolleyInfos = new IntraTrolleyInfos();
-		for (Vehicule v : this.ensVehicules) {
-			IntraTourneeInfos tmp = v.deplacementIntraVehicule();
-			if (intraTourneeInfos.getDiffCout() > tmp.getDiffCout()) {
-				intraTourneeInfos = tmp;
-			}
-		}
-		if (intraTourneeInfos.getDiffCout() < 0) {
-			return intraTourneeInfos.doDeplacementIntraTournee();
-		}*/
-		return false;
-	}
-
-	public boolean echangeIntraBox() {
-		/*IntraTourneeInfos intraTourneeInfos = new IntraTourneeInfos();
-		for (Vehicule v : this.ensVehicules) {
-			IntraTourneeInfos tmp = v.echangeIntraVehicule();
-			if (intraTourneeInfos.getDiffCout() > tmp.getDiffCout()) {
-				intraTourneeInfos = tmp;
-			}
-		}
-		if (intraTourneeInfos.getDiffCout() < 0) {
-			return intraTourneeInfos.doEchangeIntraTournee();
-		}*/
-		return false;
-    }
-
     @Override
     public int hashCode() {
         int hash = 3;

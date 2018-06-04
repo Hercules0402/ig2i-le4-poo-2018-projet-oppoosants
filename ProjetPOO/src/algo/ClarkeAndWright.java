@@ -116,12 +116,13 @@ public class ClarkeAndWright {
                 this.economies.add(eco);
             }
         }
-
+        //for(Economie e:economies) System.out.println(e);
         // Tri décroissant des ensembles de couples de trolleys par coût de fusion
         Collections.sort(this.economies,new Comparator<Economie>(){
             @Override
             public int compare(Economie o1, Economie o2) {
-                return o1.gain > o2.gain ? -1 : 1;
+                if(o1.gain == o2.gain) return 0;
+                else return o1.gain > o2.gain ? -1 : 1;
             }
         });
     }
@@ -190,6 +191,7 @@ public class ClarkeAndWright {
         Collections.sort(t.getBoxes(),new Comparator<Box>(){
             @Override
             public int compare(Box o1, Box o2) {
+                if(o1.getIdBox() == o2.getIdBox()) return 0;
                 return o1.getIdBox() < o2.getIdBox() ? -1 : 1;
             }
         });

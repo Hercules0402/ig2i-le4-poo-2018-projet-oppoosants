@@ -123,6 +123,15 @@ public class Location implements Serializable, Comparable<Location> {
             return false;
         }
     }
+    
+    public double getDistanceTo(Location loc) {
+        if (this.getDistances().containsKey(loc)) {
+            return this.getDistances().get(loc);
+        }
+        else {
+            return Double.MAX_VALUE;
+        }
+    }
 
     @Override
     public int hashCode() {

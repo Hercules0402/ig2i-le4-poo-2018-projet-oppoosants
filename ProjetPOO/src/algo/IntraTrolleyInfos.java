@@ -1,30 +1,30 @@
 package algo;
 
-import metier.Box;
+import metier.Trolley;
 
 public class IntraTrolleyInfos {
     
-    private Box box;
+    private Trolley trolley;
 	private int oldPosition;
 	private int newPosition;
 	private double diffCout;
 
 	public IntraTrolleyInfos() {
-		this.box = null;
+		this.trolley = null;
 		this.oldPosition = -1;
 		this.newPosition = -1;
 		this.diffCout = Double.MAX_VALUE;
 	}
 
-	public IntraTrolleyInfos(Box box, int oldPosition, int newPosition, double diffCout) {
-		this.box = box;
+	public IntraTrolleyInfos(Trolley trolley, int oldPosition, int newPosition, double diffCout) {
+		this.trolley = trolley;
 		this.oldPosition = oldPosition;
 		this.newPosition = newPosition;
 		this.diffCout = diffCout;
 	}
 
 	public IntraTrolleyInfos(IntraTrolleyInfos intraTourneeInfos) {
-		this.box = intraTourneeInfos.box;
+		this.trolley = intraTourneeInfos.trolley;
 		this.oldPosition = intraTourneeInfos.oldPosition;
 		this.newPosition = intraTourneeInfos.newPosition;
 		this.diffCout = intraTourneeInfos.diffCout;
@@ -38,10 +38,10 @@ public class IntraTrolleyInfos {
 			return false;
 		}
 
-		if (this.box == null) {
+		if (this.trolley == null) {
 			return false;
 		} else {
-			return this.box.doDeplacementIntraTrolley(this);
+			return this.trolley.doDeplacementIntraTrolley(this);
 		}
 	}
 
@@ -53,15 +53,15 @@ public class IntraTrolleyInfos {
 			return false;
 		}
 
-		if (this.box == null) {
+		if (this.trolley == null) {
 			return false;
 		} else {
-			return this.box.doEchangeIntraTrolley(this);
+			return this.trolley.doEchangeIntraTrolley(this);
 		}
 	}
 
-	public Box getBox() {
-		return box;
+	public Trolley getTrolley() {
+		return trolley;
 	}
 
 	public int getOldPosition() {
@@ -75,4 +75,11 @@ public class IntraTrolleyInfos {
 	public double getDiffCout() {
 		return diffCout;
     }
+
+    @Override
+    public String toString() {
+        return "IntraTrolleyInfos{" + "trolley=" + trolley.getIdTrolley() + ", oldPosition=" + oldPosition + ", newPosition=" + newPosition + ", diffCout=" + diffCout + '}';
+    }
+    
+    
 }

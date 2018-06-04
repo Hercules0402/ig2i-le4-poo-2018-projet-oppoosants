@@ -10,7 +10,7 @@ import util.Writer;
 
 public class TestClarkeAndWright {
     public static void main(String[] args) {
-        String fileName = "instance_0116_131940_Z2.txt";
+        String fileName = "instance_0606_136178_Z1.txt";//instance_0116_131940_Z2
 
         Instance inst = Reader.read(fileName, false);
         
