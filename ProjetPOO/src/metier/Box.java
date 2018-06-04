@@ -134,7 +134,7 @@ public class Box implements Serializable {
     }
 
     public void addProduct(ProdQty pq) {
-        System.out.println("Produit " + pq.getProduct().getIdProduct() + " ajouté a la box " + this.getIdBox());
+        //System.out.println("Produit " + pq.getProduct().getIdProduct() + " ajouté a la box " + this.getIdBox());
         addProduct(pq.getProduct(), pq.getQuantity());
     }
     

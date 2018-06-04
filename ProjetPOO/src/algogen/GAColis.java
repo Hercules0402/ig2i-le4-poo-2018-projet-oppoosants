@@ -15,7 +15,7 @@ import metier.Product;
 import util.Reader;
 
 public class GAColis {
-    private final static int CB_CYCLES = 1000;
+    private final static int CB_CYCLES = 2;
     
     private static Order order;
     private static Instance instance;
@@ -58,9 +58,13 @@ public class GAColis {
         for(int j=0; j<data.length; j++) list.add(j);
         popList.add(list);
                 
-        for(int i=0; i<9; i++){
-            ArrayList<Integer> nList = new ArrayList<Integer>(list);
-            Collections.shuffle(nList);
+        for(int i=2; i<11; i++){ //On génére les 9 suivants
+            ArrayList<Integer> nList = new ArrayList<Integer>(list);  
+            //On interverti 2par2, puis 3par3, puis NparN
+            for(int k=0; k<i; k++)
+                for(int j=0; j<nList.size()-(3*i); j=j+3*i)
+                    Collections.swap(nList, i+k+j, 2*i+k+j);
+
             popList.add(nList);
         }
     }
@@ -162,7 +166,7 @@ public class GAColis {
         }
         for(int i=1; i<n; i++){
             int loadW = 0, loadV = 0, cost = 0, j = i;
-            do {
+            while(j<n && loadW<W && loadV<Vol && cost<L) {
                 loadW += genome.get(i-1).getProduct().getWeight() * genome.get(i-1).getQuantity();
                 loadV += genome.get(i-1).getProduct().getVolume() * genome.get(i-1).getQuantity();
                 if(i == j){
@@ -191,12 +195,13 @@ public class GAColis {
                     }
                     j = j+1;
                 }
-            } while(j<n && loadW<W && loadV<Vol && cost<L); //until pas whilte
+                //System.out.println(loadW + "<" + W + " et " + loadV + "<" + Vol);
+            }
         }
         /*for(int i=1; i<n; i++){
             System.out.println("V:" + V[i] + " P:" + P[i]);
         }*/
-        //List<Box> boxes = extractSolution(P, genome);
+        List<Box> boxes = extractSolution(P, genome);
         //System.out.println(boxes);
         return V[n-1];
     }
@@ -222,13 +227,23 @@ public class GAColis {
             j = i;
         } while(i!=0);
         
-        System.out.println(boxes);
-        
-        
         ArrayList<Box> notEmptyBoxes = new ArrayList<>();
         for(Box b : boxes)
             if(!b.getProdQtys().isEmpty())
                 notEmptyBoxes.add(b);
+        
+        //System.out.println(notEmptyBoxes);
+        //System.out.println(notEmptyBoxes.size());
+        for(int k=1; k<P.length-1; k++){
+            System.out.printf(P[k] + ", ");
+        }
+        System.out.println("");
+        for(Box b: notEmptyBoxes){
+            for(ProdQty pq: b.getProdQtys())
+                System.out.printf(pq.getProduct().getLoc().getIdLocation()+", ");
+            System.out.printf(" | ");
+        }    
+        System.out.println("");
         return notEmptyBoxes;
     }
     
