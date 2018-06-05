@@ -151,32 +151,6 @@ public class Box implements Serializable {
         ProdQty newPq = new ProdQty(p, qt);
         prodQtys.add(newPq);
     }
-    
-    public boolean doEchangeIntraTrolley(IntraTrolleyInfos intraTrolleyInfos) {
-		/*Client c1 = (Client) ensClients.get(intraTourneeInfos.getOldPosition());
-		Client c2 = (Client) ensClients.get(intraTourneeInfos.getNewPosition());
-
-		this.setCout(this.getCout() + intraTourneeInfos.getDiffCout());
-		this.getNplanning().setCout(this.getNplanning().getCout()
-				+ intraTourneeInfos.getDiffCout());
-
-		if (this.addClientByPos(c1, intraTourneeInfos.getNewPosition())
-				&& this.addClientByPos(c2,intraTourneeInfos.getOldPosition())) {
-			return true;
-		} else {
-			return false;
-		}*/
-        return true;
-    }
-    
-    public boolean doDeplacementIntraTrolley(IntraTrolleyInfos intraTrolleyInfos) {
-		/*Client c = (Client) ensClients.get(intraTourneeInfos.getOldPosition());
-		this.setCout(this.getCout() + intraTourneeInfos.getDiffCout());
-		this.getNplanning().setCout(this.getNplanning().getCout() + intraTourneeInfos.getDiffCout());
-
-		return this.addClientByPos(c, intraTourneeInfos.getNewPosition());*/
-        return true;
-    }
 
     @Override
     public int hashCode() {
