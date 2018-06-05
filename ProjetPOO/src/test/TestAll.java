@@ -16,7 +16,7 @@ public class TestAll {
         String fileName = "instance_40000.txt";
 
         /*Reader*/
-        Instance inst = Reader.read(fileName, true); 
+        Instance inst = Reader.read(fileName, false); 
         /*for(Location l : r.getLocations()) {
             System.out.printf(l.getName() + " vers :");
             for (Map.Entry<Location, Integer> e : l.getDistances().entrySet()){
@@ -31,7 +31,7 @@ public class TestAll {
         System.out.println(Distances.formatDistance(distance));
         
         /*Writer*/
-        Writer.save(fileName, inst, true);
+        Writer.save(fileName, inst, false);
 
         /*Checker*/
         String[] name = {""};

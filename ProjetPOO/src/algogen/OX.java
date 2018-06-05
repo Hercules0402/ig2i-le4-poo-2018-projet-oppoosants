@@ -14,6 +14,9 @@ public class OX {
         int r1 = new Random().nextInt(size);
         int r2 = new Random().nextInt(size-1);
 
+        while(r1 == r2)
+            r2 = new Random().nextInt(size-1);
+        
         int i = Math.min(r1, r2);
         int j = Math.max(r1, r2);
 

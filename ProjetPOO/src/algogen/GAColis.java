@@ -11,20 +11,20 @@ import metier.Instance;
 import metier.Location;
 import metier.Order;
 import metier.ProdQty;
-import metier.Product;
 import util.Reader;
 
 public class GAColis {
     private final static int CB_CYCLES = 2;
+    private final static boolean DEBUG = false;
     
-    private static Order order;
     private static Instance instance;
+    private static Order order;
     
     private static ProdQty[] data;
     private static List<ArrayList<Integer>> popList;
     private static Map<Integer, Integer> results;
     
-    public static List<Product> run(Order o, Instance inst){
+    public static List<Box> run(Order o, Instance inst){
         GAColis.order = o;
         GAColis.instance = inst;
 
@@ -59,7 +59,7 @@ public class GAColis {
         popList.add(list);
                 
         for(int i=2; i<11; i++){ //On génére les 9 suivants
-            ArrayList<Integer> nList = new ArrayList<Integer>(list);  
+            ArrayList<Integer> nList = new ArrayList<>(list);  
             //On interverti 2par2, puis 3par3, puis NparN
             for(int k=0; k<i; k++)
                 for(int j=0; j<nList.size()-(3*i); j=j+3*i)
@@ -252,6 +252,7 @@ public class GAColis {
      */
     
     public static void printPopList(String etape){
+        if(DEBUG != true) return;
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.println(etape + " : ");
         int i = 1;
@@ -265,6 +266,7 @@ public class GAColis {
     }
     
     public static void printResults(String etape){
+        if(DEBUG != true) return;
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.printf(etape + " : ");
         for (Map.Entry<Integer, Integer> e : results.entrySet()){
@@ -285,6 +287,6 @@ public class GAColis {
     public static void main(String[] args) {
         String fileName = "instance_40000.txt";
         Instance inst = Reader.read(fileName, false); 
-        List<Product> products = GAColis.run(inst.getOrders().get(0), inst);
+        GAColis.run(inst.getOrders().get(0), inst);
     }
 }

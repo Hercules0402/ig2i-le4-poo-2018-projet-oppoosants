@@ -93,8 +93,13 @@ public class Trolley implements Serializable {
     }
 
     public boolean addBox(Box p) {
-        if(this.nbColisMax < boxes.size() + 1) return false;
+        //System.out.println("Ajout coli " + p.getIdBox() + " dans " + this.getIdTrolley());
+        if(this.nbColisMax < boxes.size() + 1) {
+            //System.out.println("Pas reussi");
+            return false;
+        }
         boxes.add(p);
+        //System.out.println("Reussi");
         return true;
     }
 
