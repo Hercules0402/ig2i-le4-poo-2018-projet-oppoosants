@@ -8,3 +8,17 @@ tr {
     top:90%;
     left:2%;
 }
+
+#toggleLocations {
+    position:absolute;
+    z-index:9999;
+    top:90%;
+    left:10%;
+}
+
+#popup {
+    padding: 5px;
+    position: absolute;
+    display: none;
+}
+

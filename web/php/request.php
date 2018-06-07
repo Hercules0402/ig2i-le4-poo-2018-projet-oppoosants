@@ -32,6 +32,15 @@
                 }
             break;
 
+            case "getTabSol" :
+                $idInstance = $_POST["idInstance"]; 
+
+                if(isConnexionOk()) {
+                    $response["status"] = "success";
+                    $response["content"] = getTabSol($idInstance);
+                }
+            break;
+
             case "getLightProductsSol" :
             $idInstance = $_POST["idInstance"]; 
 
@@ -52,19 +61,21 @@
 
             case "getBoxesSol":
                 $idTrolley = $_POST["idTrolley"];
+                $idInstance = $_POST["idInstance"];
 
-                if(isConnexionOk() && isset($idTrolley)) {
+                if(isConnexionOk() && isset($idTrolley) && isset($idInstance)) {
                     $response["status"] = "success";
-                    $response["content"] = getBoxesSol($idTrolley);
+                    $response["content"] = getBoxesSol($idTrolley, $idInstance);
                 }
             break;
 
             case "getProductsSol":
                 $idBox = $_POST["idBox"];
+                $idInstance = $_POST["idInstance"];
 
-                if(isConnexionOk() && isset($idBox)) {
+                if(isConnexionOk() && isset($idBox) && isset($idInstance)) {
                     $response["status"] = "success";
-                    $response["content"] = getProductsSol($idBox);
+                    $response["content"] = getProductsSol($idBox, $idInstance);
                 }
             break;
 

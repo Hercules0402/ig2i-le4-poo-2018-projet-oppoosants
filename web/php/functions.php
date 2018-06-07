@@ -115,14 +115,13 @@
         return $trolleys;
     }
 
-    function getBoxesSol($idTrolley) {
+    function getBoxesSol($idTrolley, $idInstance) {
         $bdd = connect();
         $box = array();
         $boxes = array();
 
         if (!$bdd) return false;
-
-        $reponse = $bdd->query('SELECT * FROM BOX INNER JOIN TROLLEY_BOX ON TROLLEY_BOX.boxes_ID = BOX.ID WHERE TROLLEY_BOX.Trolley_ID = ' . $idTrolley);
+        $reponse = $bdd->query('SELECT * FROM BOX INNER JOIN TROLLEY_BOX ON TROLLEY_BOX.boxes_ID = BOX.ID WHERE TROLLEY_BOX.Trolley_ID = ' . $idTrolley   . ' AND BOX.NINSTANCE = ' . $idInstance);
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
@@ -140,7 +139,7 @@
         return $boxes;
     }
 
-    function getProductsSol($idBox) {
+    function getProductsSol($idBox, $idInstance) {
         $bdd = connect();
         $product = array();
         $products = array();
@@ -153,11 +152,16 @@
         PRODUCT.WEIGHT as we,
         PRODUCT.NINSTANCE as ninst,
         PRODUCT.LOC as loc,
+        LOCATION.ABSCISSE as loc_abs,
+        LOCATION.ORDONNEE as loc_ordo,
+        LOCATION.IDLOCATION as loc_id,
+        LOCATION.NAME as loc_name,
         PRODQTY.QUANTITY as qt FROM PRODUCT 
-        JOIN PRODQTY ON PRODUCT.IDPRODUCT = PRODQTY.PRODUCT_ID 
+        JOIN PRODQTY ON PRODUCT.ID = PRODQTY.PRODUCT_ID 
         JOIN BOX_PRODQTY ON BOX_PRODQTY.prodQtys_ID = PRODQTY.ID
         JOIN BOX ON BOX.ID = BOX_PRODQTY.Box_ID
-        WHERE BOX_PRODQTY.Box_ID = ' . $idBox);
+        JOIN LOCATION ON LOCATION.IDLOCATION = PRODUCT.LOC
+        WHERE BOX_PRODQTY.Box_ID = ' . $idBox . ' AND LOCATION.NINSTANCE = ' . $idInstance);
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
@@ -168,10 +172,25 @@
             $product["NINSTANCE"] = $donnees["ninst"];
             $product["LOC"] = $donnees["loc"];
             $product["QUANTITY"] = $donnees["qt"];
+            $product["LOC_ABSCISSE"] = $donnees["loc_abs"];
+            $product["LOC_ORDONNEE"] = $donnees["loc_ordo"];
+            $product["LOC_ID"] = $donnees["loc_id"];
+            $product["LOC_NAME"] = $donnees["loc_name"];            
             array_push($products, $product);
             $product = array();
         }
 
         return $products;
+    }
+
+    function getTabSol($idInstance) {
+        $trolleys = getTrolleysSol($idInstance);
+        foreach($trolleys as &$trolley) {
+            $trolley["BOXES"] = getBoxesSol($trolley["ID"],$idInstance);
+            foreach($trolley["BOXES"] as &$box) {
+                $box["PRODUCTS"] = getProductsSol($box["IDBOX"],$idInstance);
+            }
+        }
+        return $trolleys;
     }
 ?>

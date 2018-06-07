@@ -1,8 +1,12 @@
 var isGraphic = false;
 var allLocations;
 var allProducts;
-var allPoints = [];
+var allPoints;
 var drawed = false;
+var displayLocations = false;
+var pointSize = 5;
+var idCurrentInstance;
+var tabSolution;
 
 function testConnexion() {
     $.ajax({
@@ -16,20 +20,42 @@ function testConnexion() {
     });
 }
 
-function getGraphe(idInstance) {
-    $("#webContent").html("");
-    $("#graphReturnB").show();
-    setAllLocations(idInstance);
-    setAllProducts(idInstance);
-    isGraphic = true;
-}
-
-function setAllLocations(idInstance) {
+function setTabSolution() {
     $.ajax({
         type: "POST",
         async: false,
         url: 'php/request.php',
-        data: { requestType: "getLocsSol", idInstance: idInstance },
+        data: { requestType: "getTabSol", idInstance: idCurrentInstance },
+        success : function(result, statut){ 
+            result = JSON.parse(result);
+            console.log(result);
+            tabSolution = result["content"];
+        },
+        error : function(result, statut) {
+            $("#webContent").html('<br/><br/><hr/><h1 align="center">Erreur : impossible de récupérer les produits/locations</h1><hr/>');
+        }
+    });
+}
+
+function getGraphe(idInstance) {
+    idCurrentInstance = idInstance;
+    $("#webContent").html("");
+    $("#graphReturnB").show();
+    $("#toggleLocations").show();
+    $("#mainNavbar").hide();
+    allPoints = [];
+    setAllLocations();
+    setAllProducts();
+    setTabSolution();
+    isGraphic = true;
+}
+
+function setAllLocations() {
+    $.ajax({
+        type: "POST",
+        async: false,
+        url: 'php/request.php',
+        data: { requestType: "getLocsSol", idInstance: idCurrentInstance },
         success : function(result, statut){ 
             result = JSON.parse(result);
             allLocations = result["content"];
@@ -40,12 +66,12 @@ function setAllLocations(idInstance) {
     });
 }
 
-function setAllProducts(idInstance) {
+function setAllProducts() {
     $.ajax({
         type: "POST",
         async: false,
         url: 'php/request.php',
-        data: { requestType: "getLightProductsSol", idInstance: idInstance },
+        data: { requestType: "getLightProductsSol", idInstance: idCurrentInstance },
         success : function(result, statut){ 
             result = JSON.parse(result);
             allProducts = result["content"];
@@ -58,6 +84,8 @@ function setAllProducts(idInstance) {
 
 function getInstances() {
     $("#graphReturnB").hide();
+    $("#toggleLocations").hide();
+    $("#mainNavbar").show();
     isGraphic = false;
     drawed = false;
 
@@ -68,7 +96,7 @@ function getInstances() {
         success : function(result, statut){ 
             result = JSON.parse(result);
             //console.log(result);
-            var content = '<br/><div class="row"><div align="center" class="col-md-12"><h1>Menu des solutions</h1>';
+            var content = '<br/><br/><br/><div class="row"><div align="center" class="col-md-12"><h1>Menu des solutions</h1>';
 
             content += '<table id="table_instances" class="display">' +
             '<thead>' +
@@ -112,7 +140,6 @@ function getTrolleysInInstance(idInstance) {
             '        <th>Nom</th>' +
             '        <th>ID Trolley</th>' +
             '        <th>Nb colis max</th>' +
-            '        <th>N° Instance</th>' +
             '    </tr>' +
             '</thead><tbody>';
             
@@ -123,7 +150,6 @@ function getTrolleysInInstance(idInstance) {
                     '<td>Trolley n°' + trolley['ID'] + '</td>' +
                     '<td>' + trolley['IDTROLLEY'] + '</td>' +
                     '<td>' + trolley['NBCOLISMAX'] + '</td>' +
-                    '<td>' + trolley['NINSTANCE'] + '</td>' +
                 '</tr>';
             }
 
@@ -139,7 +165,7 @@ function getProductsInBox(idInstance, idBox, idTrolley) {
     $.ajax({
         type: "POST",
         url: 'php/request.php',
-        data: { requestType: "getProductsSol", idBox: idBox },
+        data: { requestType: "getProductsSol", idBox: idBox, idInstance: idInstance },
         success : function(result, statut){ 
             result = JSON.parse(result);
             //console.log(result);
@@ -152,9 +178,10 @@ function getProductsInBox(idInstance, idBox, idTrolley) {
             '        <th>ID Product</th>' +
             '        <th>Volume</th>' +
             '        <th>Poids</th>' +
-            '        <th>Location</th>' +
-            '        <th>N° Instance</th>' +
             '        <th>Quantité</th>' +
+            '        <th>Nom location produit</th>' +
+            '        <th>X loc produit</th>' +
+            '        <th>Y loc produit</th>' +            
             '    </tr>' +
             '</thead><tbody>';
             
@@ -166,9 +193,10 @@ function getProductsInBox(idInstance, idBox, idTrolley) {
                     '<td>' + product['IDPRODUCT'] + '</td>' +
                     '<td>' + product['VOLUME'] + '</td>' +
                     '<td>' + product['WEIGHT'] + '</td>' +
-                    '<td>' + product['LOC'] + '</td>' +
-                    '<td>' + product['NINSTANCE'] + '</td>' +
                     '<td>' + product['QUANTITY'] + '</td>' +
+                    '<td>' + product['LOC_NAME'] + '</td>' +
+                    '<td>' + product['LOC_ABSCISSE'] + '</td>' +
+                    '<td>' + product['LOC_ORDONNEE'] + '</td>' +
                 '</tr>';
             }
 
@@ -183,7 +211,7 @@ function getBoxesInTrolley(idInstance, idTrolley) {
     $.ajax({
         type: "POST",
         url: 'php/request.php',
-        data: { requestType: "getBoxesSol", idTrolley: idTrolley },
+        data: { requestType: "getBoxesSol", idTrolley: idTrolley, idInstance: idInstance },
         success : function(result, statut){ 
             result = JSON.parse(result);
             //console.log(result);
@@ -198,7 +226,6 @@ function getBoxesInTrolley(idInstance, idTrolley) {
             '        <th>Ratio Volume/Volume max</th>' +
             '        <th>Poids</th>' +
             '        <th>Ratio Poids/Poids max</th>' +
-            '        <th>NInstance</th>' +
             '        <th>ID Order</th>' +
             '    </tr>' +
             '</thead><tbody>';
@@ -212,7 +239,6 @@ function getBoxesInTrolley(idInstance, idTrolley) {
                     '<td>' + ((box['VOLUME'] / 92160)*100).toFixed(2) + '%</td>' +
                     '<td>' + box['WEIGHT'] + '</td>' +
                     '<td>' + ((box['WEIGHT'] / 12000)*100).toFixed(2) + '%</td>' +
-                    '<td>' + box['NINSTANCE'] + '</td>' +
                     '<td>' + box['ORDER_ID'] + '</td>' +
                 '</tr>';
             }
@@ -249,21 +275,77 @@ function getArbo(idInstance, idTrolley, idColis) {
     return content;
 }
 
+function genPointContent(point, typeOfPoint) {
+    var content = "";
+
+    switch(typeOfPoint) {
+        case("Location") :
+        case("Dépôt") :
+            content += "Nom : " + point["NAME"] + "<br/>";
+            content += "Abscisse : " + point["ABSCISSE"] + "<br/>";
+            content += "Ordonnée : " + point["ORDONNEE"];
+        break;
+
+        case("Product") :
+            content += "Identifiant : " + point["IDPRODUCT"] + "<br/>";
+            content += "Volume : " + point["VOLUME"] + "<br/>";
+            content += "Poids : " + point["WEIGHT"];
+        break;
+
+        default: 
+            content += "Erreur de récupération des données";
+        break;
+    }
+
+    return content;
+}
+
+function toggleLocations() {
+    if(displayLocations) {
+        $('#toggleLocationsC').prop('checked', false);
+    }
+    else {
+        $('#toggleLocationsC').prop('checked', true);
+    }
+
+    redraw();
+    isGraphic = false;
+    drawed = false;
+    getGraphe(idCurrentInstance);
+    displayLocations = !displayLocations;
+}
+
 function setup(){
-    createCanvas(windowWidth, windowHeight - 55, WEBGL);
+    createCanvas(windowWidth, windowHeight, WEBGL);
     $("#defaultCanvas0").hide();
 
-    /*$("#defaultCanvas0").mousemove(function(e) {
+    $("#defaultCanvas0").mousemove(function(e) {
+        var x, y, point, typeOfPoint;
+        $("#popup").hide();
+
         for(p in allPoints) {
-            if(p == 0) $("#graphReturnB").html("Cherche : " + allPoints[p][0] + " " + allPoints[p][1] + " " + e.pageX-55 + " " + e.pageY-55);
-            if (parseInt(allPoints[p][0] + windowWidth*0.05 - 3) < e.pageX && 
-                parseInt(allPoints[p][0] + windowWidth*0.05 + 3) > e.pageX &&
-                parseInt(allPoints[p][1] + windowHeight*0.1 - 3) < e.pageY - 55 &&
-                parseInt(allPoints[p][1] + windowHeight*0.1 + 3) > e.pageY - 55) {
-                $("#graphReturnB").html("Touché : " + allPoints[p][0] + " " + allPoints[p][1]);
+            x = parseInt(allPoints[p][0]);
+            y = parseInt(allPoints[p][1]);
+            point = allPoints[p][2];
+            typeOfPoint = allPoints[p][3];
+
+            if (parseInt(x + windowWidth*0.05 - pointSize/2) < e.pageX && 
+                parseInt(x + windowWidth*0.05 + pointSize/2) > e.pageX &&
+                parseInt(y + windowHeight*0.1 - pointSize/2) < e.pageY &&
+                parseInt(y + windowHeight*0.1 + pointSize/2) > e.pageY) {
+                
+                $("#popup").show();
+                $("#popup").css("top", y + "px");
+                $("#popup").css("left", x + 80 + "px");
+                $("#popup").html(
+                    '<div class="card">' +
+                    '    <div class="card-header">Point ' + typeOfPoint +' (' + x +','+ y + ')</div>' +
+                    '    <div class="card-body">' + genPointContent(point, typeOfPoint) + '</div> ' +
+                    '</div>'
+                );
             }
         }
-    });*/
+    });
   }
   
 function draw(){
@@ -277,9 +359,10 @@ function draw(){
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
     
-            placeLocations(coeffW, coeffH);
+            if(displayLocations) placeLocations(coeffW, coeffH);
             placeProducts(coeffW, coeffH);
-    
+            placeDepots(coeffW, coeffH);
+            drawLiaisons(coeffW, coeffH); 
             //console.log(allPoints);
             drawed = true;
         }
@@ -289,32 +372,73 @@ function draw(){
     }
 }
 
+
+function drawLiaisons(coeffW, coeffH) {
+    var lastLocProduct = false;
+    var tempLoc = false;
+
+    tabSolution.forEach(function(trolley) {
+        stroke(color(getRandomInt(256),getRandomInt(256),getRandomInt(256)));
+        trolley["BOXES"].forEach(function(box) {
+            box["PRODUCTS"].forEach(function(product){
+                allLocations.forEach(function(loc){
+                    console.log(product["LOC"] + " " + loc["IDLOCATION"]);
+                    if(loc["IDLOCATION"] == product["LOC"]) {
+                        tempLoc = loc;
+                    }
+                });
+                if(!lastLocProduct) {
+                    line(0, 0, parseInt(tempLoc["ABSCISSE"])*coeffW, parseInt(tempLoc["ORDONNEE"])*coeffH);
+                }
+                else {
+                    line(parseInt(tempLoc["ABSCISSE"])*coeffW, parseInt(tempLoc["ORDONNEE"])*coeffH, parseInt(lastLocProduct["ABSCISSE"])*coeffW, parseInt(lastLocProduct["ORDONNEE"])*coeffH);
+                }
+                lastLocProduct = tempLoc;
+                tempLoc = false;
+            });
+            line(0, 0, parseInt(lastLocProduct["ABSCISSE"])*coeffW, parseInt(lastLocProduct["ORDONNEE"])*coeffH);
+            lastProduct = false;
+        });
+    });
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 function placeLocations(coeffW, coeffH) {
     //var colorInc = 0;
 
     for(locId in allLocations) {
         var loc = allLocations[locId];
 
+        if(loc["NAME"] != "depotStart" && loc["NAME"] != "depotEnd") {
+            fill(color(255,255,255));
+                    
+            //console.log(colorInc + " " + (255/allLocations.length));
+            //fill(color(colorInc, colorInc, colorInc));
+            //colorInc += (255/allLocations.length);
+            
+            ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,pointSize,pointSize);
+            allPoints.push([parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH, loc, "Location"]);
+        }
+    }
+}
+
+function placeDepots(coeffW, coeffH) {
+    for(locId in allLocations) {
+        var loc = allLocations[locId];
+
         if(loc["NAME"] == "depotStart" || loc["NAME"] == "depotEnd") {
             fill(color(255,0,0));
-            var typeOfPoint = "depot";
+            ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,pointSize,pointSize);
+            allPoints.push([parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH, loc, "Dépôt"]);
         }
-        else {
-            fill(color(255,255,255));
-            var typeOfPoint = "location";
-        }
-        
-        //console.log(colorInc + " " + (255/allLocations.length));
-        //fill(color(colorInc, colorInc, colorInc));
-        //colorInc += (255/allLocations.length);
-        
-        ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,10,10, loc);
-        allPoints.push([parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH, loc, typeOfPoint]);
     }
 }
 
 function placeProducts(coeffW, coeffH) {
-    var colorInc = 0;
+    //var colorInc = 0;
 
     for(prodId in allProducts) {
         var prod = allProducts[prodId];
@@ -331,11 +455,14 @@ function placeProducts(coeffW, coeffH) {
             }
         }
 
-        fill(color(0,colorInc,0));
-        colorInc += (255/allProducts.length);
+        fill(color(0,255,0));
+        //colorInc += (255/allProducts.length);
 
-        var pd = ellipse(abs*coeffW, ord*coeffH,10,10);
-        allPoints.push([abs*coeffW,ord*coeffH, prod,"product"], pd);
+        /*noFill();
+        strokeWeight(0.01);
+        stroke(255,0,0);*/
+        ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
+        allPoints.push([abs*coeffW,ord*coeffH, prod,"Product"]);
         
     }
 }
@@ -350,10 +477,6 @@ function getMaxDistance() {
     }
 
     return maxSize;
-}
-
-function mousePressed() {
-    
 }
 
 $(document).ready(function() {     
