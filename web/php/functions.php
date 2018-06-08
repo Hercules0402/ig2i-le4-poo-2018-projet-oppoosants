@@ -49,7 +49,7 @@
 
         if (!$bdd) return false;
 
-        $reponse = $bdd->query('SELECT * FROM LOCATION where NINSTANCE = '. $idInstance  . ' ORDER BY IDLOCATION');
+        $reponse = $bdd->query('SELECT * FROM LOCATION where NINSTANCE = '. $idInstance);
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
@@ -121,7 +121,7 @@
         $boxes = array();
 
         if (!$bdd) return false;
-        $reponse = $bdd->query('SELECT * FROM BOX INNER JOIN TROLLEY_BOX ON TROLLEY_BOX.boxes_ID = BOX.ID WHERE TROLLEY_BOX.Trolley_ID = ' . $idTrolley   . ' AND BOX.NINSTANCE = ' . $idInstance);
+        $reponse = $bdd->query('SELECT * FROM BOX JOIN TROLLEY_BOX ON TROLLEY_BOX.boxes_ID = BOX.ID WHERE TROLLEY_BOX.Trolley_ID = ' . $idTrolley   . ' AND BOX.NINSTANCE = ' . $idInstance);
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
@@ -146,7 +146,7 @@
 
         if (!$bdd) return false;
 
-        $reponse = $bdd->query('SELECT DISTINCT PRODUCT.ID as id,
+        $reponse = $bdd->query('SELECT PRODUCT.ID as id,
         PRODUCT.IDPRODUCT as idP,
         PRODUCT.VOLUME as vol,
         PRODUCT.WEIGHT as we,
@@ -157,15 +157,16 @@
         LOCATION.IDLOCATION as loc_id,
         LOCATION.NAME as loc_name,
         PRODQTY.QUANTITY as qt FROM PRODUCT 
-        JOIN PRODQTY ON PRODUCT.ID = PRODQTY.PRODUCT_ID 
-        JOIN BOX_PRODQTY ON BOX_PRODQTY.prodQtys_ID = PRODQTY.ID
-        JOIN BOX ON BOX.ID = BOX_PRODQTY.Box_ID
-        JOIN LOCATION ON LOCATION.IDLOCATION = PRODUCT.LOC
-        WHERE BOX_PRODQTY.Box_ID = ' . $idBox . ' AND LOCATION.NINSTANCE = ' . $idInstance);
+        JOIN PRODQTY ON PRODUCT.ID = PRODQTY.Product_ID
+        JOIN BOX_PRODQTY ON BOX_PRODQTY.prodQtys_ID = PRODQTY.ID 
+        JOIN BOX ON BOX.ID = BOX_PRODQTY.Box_ID 
+		JOIN LOCATION ON LOCATION.ID = PRODUCT.LOC 
+        WHERE BOX.ID = ' . $idBox . ' AND PRODUCT.NINSTANCE = ' . $idInstance);
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
             $product["ID"] = $donnees["id"];
+            //echo $product["ID"] . " + ";
             $product["IDPRODUCT"] = $donnees["idP"];
             $product["VOLUME"] = $donnees["vol"];
             $product["WEIGHT"] = $donnees["we"];
@@ -179,7 +180,7 @@
             array_push($products, $product);
             $product = array();
         }
-
+        
         return $products;
     }
 
@@ -188,7 +189,7 @@
         foreach($trolleys as &$trolley) {
             $trolley["BOXES"] = getBoxesSol($trolley["ID"],$idInstance);
             foreach($trolley["BOXES"] as &$box) {
-                $box["PRODUCTS"] = getProductsSol($box["IDBOX"],$idInstance);
+                $box["PRODUCTS"] = getProductsSol($box["ID"],$idInstance);
             }
         }
         return $trolleys;

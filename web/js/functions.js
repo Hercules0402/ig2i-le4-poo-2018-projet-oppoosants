@@ -382,8 +382,8 @@ function drawLiaisons(coeffW, coeffH) {
         trolley["BOXES"].forEach(function(box) {
             box["PRODUCTS"].forEach(function(product){
                 allLocations.forEach(function(loc){
-                    console.log(product["LOC"] + " " + loc["IDLOCATION"]);
-                    if(loc["IDLOCATION"] == product["LOC"]) {
+                    //console.log(product["LOC"] + " " + loc["IDLOCATION"]);
+                    if(loc["ID"] == product["LOC"]) {
                         tempLoc = loc;
                     }
                 });
