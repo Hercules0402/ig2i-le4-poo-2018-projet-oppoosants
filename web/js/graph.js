@@ -1,24 +1,4 @@
 /**
- * Fonction permettant de récupérer l'arborescence complète de chaque solution.
- */
-function setTabSolution() {
-    $.ajax({
-        type: "POST",
-        async: false,
-        url: 'php/request.php',
-        data: { requestType: "getTabSol", idInstance: idCurrentInstance },
-        success : function(result, statut){ 
-            result = JSON.parse(result);
-            console.log(result);
-            tabSolution = result["content"];
-        },
-        error : function(result, statut) {
-            $("#webContent").html('<br/><br/><hr/><h1 align="center">Erreur : impossible de récupérer les produits/locations</h1><hr/>');
-        }
-    });
-}
-
-/**
  * Fonction permettant de récupérer la liste des locations de l'entrepôt.
  */
 function setAllLocations() {
@@ -307,7 +287,6 @@ function getMaxDistance() {
  * @param {*} idInstance 
  */
 function getGraphe(idInstance) {
-    idCurrentInstance = idInstance;
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
@@ -315,6 +294,6 @@ function getGraphe(idInstance) {
     allPoints = [];
     setAllLocations();
     setAllProducts();
-    setTabSolution();
+    setTabSolution(idInstance);
     isGraphic = true;
 }
