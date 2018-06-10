@@ -1,9 +1,8 @@
-package test;
+package algogen;
 
 import java.io.File;
 import util.Reader;
 import algo.Recherche;
-import algogen.GATournee;
 import metier.Instance;
 import util.CopyPaste;
 import util.Distances;

@@ -15,7 +15,7 @@ import util.Reader;
 import util.Writer;
 
 public class GATournee {
-    private final static int CB_CYCLES = 1000;
+    private static int CB_CYCLES = 5000;
     private final static int LOG_LEVEL = 0; //0: None, 1: Cycles, 2: All
     
     private static Instance instance;
@@ -28,6 +28,11 @@ public class GATournee {
     private static List<Box> boxes;
     
     private static ArrayList<Trolley> tempBest;
+    
+    public static ArrayList<Trolley> runx(Instance inst, int x){
+        CB_CYCLES = x;
+        return run(inst);
+    }
 
     public static ArrayList<Trolley> run(Instance inst){
         instance = inst;
@@ -139,14 +144,26 @@ public class GATournee {
         ArrayList<Trolley> p2 = popList.get(1);
         
         List<Integer> l1 = new ArrayList();
-        for(Trolley t : p1)
+        int rab = -1;
+        for(Trolley t : p1){
             for(Box b : t.getBoxes())
                 l1.add(b.getIdBox());
+            for(int i=1; i<(t.getNbColisMax()-t.getBoxes().size()+1); i++) {
+                l1.add(rab);
+                rab--;
+            }
+        }
         
+        rab = -1;
         List<Integer> l2 = new ArrayList();
-        for(Trolley t : p2)
+        for(Trolley t : p2){
             for(Box b : t.getBoxes())
                 l2.add(b.getIdBox());
+            for(int i=1; i<(t.getNbColisMax()-t.getBoxes().size()+1); i++) {
+                l2.add(rab);
+                rab--;
+            }
+        }
         
         for(int i=0; i<4; i++) {
             Map<Integer, ArrayList<Integer>> cs = OX.crossover(l1, l2);
@@ -159,20 +176,28 @@ public class GATournee {
             ArrayList<Trolley> c2 = new ArrayList();
             Trolley trolley1 = new Trolley(id1, instance.getNbBoxesTrolley(), instance);
             Trolley trolley2 = new Trolley(id2, instance.getNbBoxesTrolley(), instance);
+            
+            int place1 = 0, place2 = 0;
             for(int j=0; j<nl1.size(); j++){
-                if(trolley1.getBoxes().size() >= instance.getNbBoxesTrolley()) {
+                if(place1 >= instance.getNbBoxesTrolley()) {
                     id1++;
                     c1.add(trolley1);
                     trolley1 = new Trolley(id1, instance.getNbBoxesTrolley(), instance);
+                    place1 = 0;
                 }
-                trolley1.addBox(boxes.get(nl1.get(j)-1));
+                if(nl1.get(j)-1 >= 0)
+                    trolley1.addBox(boxes.get(nl1.get(j)-1));
+                place1++;
                 
-                if(trolley2.getBoxes().size() >= instance.getNbBoxesTrolley()) {
+                if(place2 >= instance.getNbBoxesTrolley()) {
                     id2++;
                     c2.add(trolley2);
                     trolley2 = new Trolley(id2, instance.getNbBoxesTrolley(), instance);
+                    place2 = 0;
                 }
-                trolley2.addBox(boxes.get(nl2.get(j)-1));
+                if(nl2.get(j)-1 >= 0)
+                    trolley2.addBox(boxes.get(nl2.get(j)-1));
+                 place2++;
             }
             c1.add(trolley1);
             c2.add(trolley2);
@@ -339,20 +364,6 @@ public class GATournee {
         String fileName = "instance_40000.txt";
         Instance inst = Reader.read(fileName, false); 
         inst = Recherche.run(inst);
-        
-        /*ArrayList<Trolley> bestTournee = new ArrayList<>();
-        int bestResult = Integer.MAX_VALUE;
-        for(int i=0; i<1; i++){
-            ArrayList<Trolley> tournees = GATournee.run(inst);
-            
-            int r = Distances.calcDistance(tournees, inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
-            System.out.println("RES : " + r);
-            if(r<bestResult){
-                bestResult = r;
-                bestTournee = tournees;
-            }
-        }
-        inst.setTrolleys(bestTournee);*/
         
         ArrayList<Trolley> tournees = GATournee.run(inst);
         inst.setTrolleys(tournees);
