@@ -15,7 +15,7 @@ import util.Reader;
 
 public class GAColis {
     private final static int CB_CYCLES = 2;
-    private final static boolean DEBUG = false;
+    private final static int LOG_LEVEL = 0; //0: None, 1: Cycles, 2: All
     
     private static Instance instance;
     private static Order order;
@@ -252,7 +252,7 @@ public class GAColis {
      */
     
     public static void printPopList(String etape){
-        if(DEBUG != true) return;
+        if(LOG_LEVEL < 2) return;
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.println(etape + " : ");
         int i = 1;
@@ -266,7 +266,7 @@ public class GAColis {
     }
     
     public static void printResults(String etape){
-        if(DEBUG != true) return;
+        if(LOG_LEVEL < 2) return;
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.printf(etape + " : ");
         for (Map.Entry<Integer, Integer> e : results.entrySet()){
@@ -276,6 +276,7 @@ public class GAColis {
     }
     
     public static void printCycle(int i, int t){
+        if(LOG_LEVEL < 1) return;
         System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
         System.out.println("                     Cycle " + i + "/" + t);
     }
