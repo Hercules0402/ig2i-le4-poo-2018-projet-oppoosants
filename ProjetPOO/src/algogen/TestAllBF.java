@@ -10,6 +10,11 @@ import util.Writer;
 
 public class TestAllBF {
 
+    /**
+     * Permet de tester la fonction BFGA pour toutes les instances les unes après les autres.
+     * @param args
+     * @throws Exception 
+     */
     public static void main(String[] args) throws Exception {
         String base = "../instances/";//10
         String stockage = "./testInstance/";

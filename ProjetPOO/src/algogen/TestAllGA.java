@@ -10,8 +10,13 @@ import util.Writer;
 
 public class TestAllGA {
 
+    /**
+     * Permet de tester l'algorithme GATournee pour toutes les instances les unes après les autres.
+     * @param args
+     * @throws Exception 
+     */
     public static void main(String[] args) throws Exception {
-        String base = "../instances/";//10
+        String base = "../instances/";
         String stockage = "./testInstance/";
 
         File baseDossier = new File(base);

@@ -8,6 +8,12 @@ import java.util.Map;
 import java.util.Random;
 
 public class OX {
+    /**
+     * Permet de croisser deux génomes en deux points aléatoires.
+     * @param p1 Prenier genome
+     * @param p2 Second genome
+     * @return Map contenant 2 genomes issus d'un croissement des deux fournis
+     */
     public static Map<Integer, ArrayList<Integer>> crossover(final List<Integer> p1, final List<Integer> p2) {
         int size = p1.size();
 
