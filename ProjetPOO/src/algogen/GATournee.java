@@ -16,7 +16,7 @@ import util.Writer;
 
 public class GATournee {
     private final static int CB_CYCLES = 1000;
-    private final static boolean DEBUG = false;
+    private final static int LOG_LEVEL = 0; //0: None, 1: Cycles, 2: All
     
     private static Instance instance;
     private static Location dep;
@@ -78,13 +78,26 @@ public class GATournee {
                 nTrolleys.add(dd);
             }        
             
-            for(int j=0; j<5; j++){ 
+            for(int j=0; j<4; j++){ 
                 int p1 = new Random().nextInt(tot - 1) + 1;
                 int p2 = new Random().nextInt(tot - 1) + 1;
                 while(p1 == p2)
                     p2 = new Random().nextInt(tot - 1) + 1;
                 nTrolleys = swapBoxes(nTrolleys, p1, p2);
             }
+           
+            for(int j=0; j<5; j++){ 
+                int val = new Random().nextInt(nTrolleys.size());
+                if(nTrolleys.get(val).getBoxes().size() == nTrolleys.get(val).getNbColisMax()){
+                    int rand  = new Random().nextInt(nTrolleys.get(val).getBoxes().size());
+                    int p1 = nTrolleys.get(val).getBoxes().get(rand).getIdBox();
+                    int p2 = new Random().nextInt(tot) + 1;
+                    while(p1 == p2)
+                        p2 = new Random().nextInt(tot) + 1;
+                    nTrolleys = moveBox(nTrolleys, p1, p2);
+                }
+            }
+
             popList.add(nTrolleys);
         }
     }
@@ -179,6 +192,18 @@ public class GATournee {
                     p2 = new Random().nextInt(tot - 1) + 1;
                 swapBoxes(popList.get(i), p1, p2);
             }
+            
+            for(int j=0; j<3; j++){ 
+                int val = new Random().nextInt(popList.get(i).size());
+                if(popList.get(i).get(val).getBoxes().size() == popList.get(i).get(val).getNbColisMax()){
+                    int rand  = new Random().nextInt(popList.get(i).get(val).getBoxes().size());
+                    int p1 = popList.get(i).get(val).getBoxes().get(rand).getIdBox();
+                    int p2 = new Random().nextInt(tot) + 1;
+                    while(p1 == p2)
+                        p2 = new Random().nextInt(tot) + 1;
+                    moveBox(popList.get(i), p1, p2);
+                }
+            }
         }
     }
     
@@ -220,12 +245,49 @@ public class GATournee {
         return sol;
     }
     
+    public static ArrayList<Trolley> moveBox(ArrayList<Trolley> sol, int idBox1, int idBox2){
+        Trolley t1 = null;
+        Box b1 = null;  
+        Trolley t2 = null;
+        Box b2 = null;
+        
+        int pos = 0;
+        
+        for(Trolley t : sol){
+            for(Box b : t.getBoxes()){
+                if(b.getIdBox() == idBox1) {
+                    b1 = b;
+                    t1 = t;
+                }
+                if(b.getIdBox() == idBox2) {
+                    b2 = b;
+                    t2 = t;
+                }
+            }
+        }
+
+        if(t2.getBoxes().size() == t2.getNbColisMax()) {
+            //System.out.println("[ERREUR] Trolley complet");
+            return sol;
+        } else {
+            //System.out.println("go move " + idBox1 + " a la pos " + (idBox2+1));
+        }
+        
+        pos = t2.getBoxes().indexOf(b2)+1;
+        
+        t1.getBoxes().remove(b1);
+
+        t2.getBoxes().add(pos, b1);
+        
+        return sol;
+    }
+    
     /**
      * Fonctions d'affichages
      */
 
     public static void printPopList(String etape){
-        if(DEBUG != true) return;
+        if(LOG_LEVEL < 2) return;
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.println(etape + " : ");
         int i = 1, j =1;
@@ -245,7 +307,7 @@ public class GATournee {
     }
     
     public static void printResults(String etape){
-        if(DEBUG != true) return;
+        if(LOG_LEVEL < 2) return;
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.printf(etape + " : ");
         for (Map.Entry<Integer, Integer> e : results.entrySet()){
@@ -255,6 +317,7 @@ public class GATournee {
     }
     
     public static void printBest(){
+        if(LOG_LEVEL < 1) return;
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.println("Meilleur actuel : ");
         int r = Distances.calcDistance(tempBest, dep, arr);
@@ -263,6 +326,7 @@ public class GATournee {
     }
     
     public static void printCycle(int i, int t){
+        if(LOG_LEVEL < 1) return;
         System.out.println("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-");
         System.out.println("                     Cycle " + i + "/" + t);
     }
@@ -276,9 +340,23 @@ public class GATournee {
         Instance inst = Reader.read(fileName, false); 
         inst = Recherche.run(inst);
         
+        /*ArrayList<Trolley> bestTournee = new ArrayList<>();
+        int bestResult = Integer.MAX_VALUE;
+        for(int i=0; i<1; i++){
+            ArrayList<Trolley> tournees = GATournee.run(inst);
+            
+            int r = Distances.calcDistance(tournees, inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
+            System.out.println("RES : " + r);
+            if(r<bestResult){
+                bestResult = r;
+                bestTournee = tournees;
+            }
+        }
+        inst.setTrolleys(bestTournee);*/
+        
         ArrayList<Trolley> tournees = GATournee.run(inst);
         inst.setTrolleys(tournees);
-        
+          
         /*Writer*/
         Writer.save(fileName, inst, false);
 
