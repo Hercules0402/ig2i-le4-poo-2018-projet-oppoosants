@@ -1,5 +1,6 @@
 package metier;
 
+import algo.InterTrolleyInfos;
 import algo.IntraTrolleyInfos;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -211,6 +212,39 @@ public class Instance implements Serializable{
 		}
 		if (intraTrolleyInfos.getDiffCout() < 0) {
 			return intraTrolleyInfos.doEchangeIntraTrolley();
+		}
+		return false;
+    }
+    
+    public boolean deplacementInterTrolley() {
+		InterTrolleyInfos interTrolleyInfos = new InterTrolleyInfos();
+        for (Trolley t1 : this.trolleys) {
+            for (Trolley t2 : this.trolleys) {
+                if (t1 == t2) continue;
+                InterTrolleyInfos tmp = t1.deplacementInterTrolley(t2);
+                if (interTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
+                    interTrolleyInfos = tmp;
+                }
+            }            
+        }
+        if (interTrolleyInfos.getDiffCout() < 0) {
+            return interTrolleyInfos.doDeplacementInterTrolley();
+        }
+        return false;
+    }
+
+    public boolean echangeInterTrolley() {
+		InterTrolleyInfos interTrolleyInfos = new InterTrolleyInfos();
+		for (Trolley t1 : this.trolleys) {
+            for (Trolley t2 : this.trolleys) {
+                InterTrolleyInfos tmp = t1.echangeInterTrolley(t2);
+                if (interTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
+                    interTrolleyInfos = tmp;
+                }
+            }			
+		}
+		if (interTrolleyInfos.getDiffCout() < 0) {
+			return interTrolleyInfos.doEchangeInterTrolley();
 		}
 		return false;
     }

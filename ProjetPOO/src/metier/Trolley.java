@@ -1,5 +1,6 @@
 package metier;
 
+import algo.InterTrolleyInfos;
 import algo.IntraTrolleyInfos;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -135,8 +136,7 @@ public class Trolley implements Serializable {
 			for (int pos = 1; pos < nbBoxes; pos++) {
 				if (pos != posBox) {
 					IntraTrolleyInfos intraInfosNew = this.evaluerDeplacement(this.boxes.get(i),pos);
-                    System.out.println(intraInfosNew);
-					if (intraInfosNew.getDiffCout() < intraInfos.getDiffCout()) {
+                    if (intraInfosNew.getDiffCout() < intraInfos.getDiffCout()) {
 						intraInfos = new IntraTrolleyInfos(intraInfosNew);
 					}
 				}
@@ -361,6 +361,214 @@ public class Trolley implements Serializable {
 	}
 
     /**
+	 * Retourne les infos sur le déplacment inter entre deux trolleys.
+     * @param t
+	 * @return InterTrolleyInfos
+	 */
+    public InterTrolleyInfos deplacementInterTrolley(Trolley t) {
+        InterTrolleyInfos interInfos = new InterTrolleyInfos();
+        int nbBoxes1 = this.boxes.size();
+        int nbBoxes2 = t.boxes.size();
+		for (int i = 0; i < nbBoxes1; i++) {
+			int posBox = i;
+			for (int pos = 1; pos < nbBoxes2; pos++) {
+				//if (pos != posBox) {
+				InterTrolleyInfos interInfosNew = this.evaluerDeplacementInter(this.boxes.get(i),pos,t);
+                if (interInfosNew.getDiffCout() < interInfos.getDiffCout()) {
+                    interInfos = new InterTrolleyInfos(interInfosNew);
+				}
+				//}
+			}
+		}
+		return interInfos;
+    }
+
+    /**
+	 * Retourne les données représentant l'évaluation du déplacement d'une box entre deux trolleys.
+	 * @param b
+	 * @param newPosition
+     * @param t
+	 * @return InterTrolleyInfos
+	 */
+	private InterTrolleyInfos evaluerDeplacementInter(Box b, int newPosition,Trolley t) {
+        int positionActu = this.boxes.indexOf(b);
+		double diffCout = this.calculerDeltaCoutDeplacementInter(positionActu, newPosition, t);
+        
+		return new InterTrolleyInfos(this,t,positionActu,newPosition,diffCout);
+	}
+
+    /**
+	 * Permet de calculer le coût delta représentant le déplacment d'une box.
+	 * @param oldPosition
+	 * @param newPosition
+     * @param t
+	 * @return double
+	 */
+	public double calculerDeltaCoutDeplacementInter(int oldPosition, int newPosition, Trolley t) {
+		if (oldPosition < 0 || oldPosition > this.boxes.size()) {
+			return Double.MAX_VALUE;
+		}
+
+		if (newPosition < 0 || newPosition > t.boxes.size()) {
+			return Double.MAX_VALUE;
+		}
+
+		Location prev1 = this.ninstance.getGraph().getDepartingDepot();
+		Location prev2 = t.ninstance.getGraph().getDepartingDepot();
+		Location next1 = this.ninstance.getGraph().getDepartingDepot();
+		Location next2 = t.ninstance.getGraph().getDepartingDepot();
+
+        List<ProdQty> prodQtys = this.boxes.get(oldPosition).getProdQtys();
+        List<ProdQty> prodQtysBis = t.boxes.get(newPosition).getProdQtys();
+		
+        Location l1_start = prodQtys.get(0).getProduct().getLoc();
+        Location l1_end = prodQtys.get(prodQtys.size() - 1).getProduct().getLoc();
+		Location l2_start = prodQtysBis.get(0).getProduct().getLoc();
+        Location l2_end = prodQtysBis.get(prodQtysBis.size() - 1).getProduct().getLoc();
+
+		if (oldPosition > 0) {
+            List<ProdQty> prodQtysBisTer = this.boxes.get(oldPosition - 1).getProdQtys();
+			prev1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
+		}
+		if (newPosition > 0) {
+            List<ProdQty> prodQtysQuater = t.boxes.get(newPosition - 1).getProdQtys();
+			prev2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
+		}
+
+		if (oldPosition < this.boxes.size() - 1) {
+            List<ProdQty> prodQtysQuinquies = this.boxes.get(oldPosition + 1).getProdQtys();
+			next1 = prodQtysQuinquies.get(0).getProduct().getLoc();
+		}
+		if (newPosition < this.boxes.size() - 1) {
+			List<ProdQty> prodQtysSixies = t.boxes.get(newPosition + 1).getProdQtys();
+			next2 = prodQtysSixies.get(0).getProduct().getLoc();
+		}
+
+		double previousDistance = 0;
+
+		if (oldPosition < newPosition) {
+			if (!prev1.equals(next1) || !prev2.equals(next2)) {
+				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+						+ l2_end.getDistanceTo(next2);
+			}
+			return prev1.getDistanceTo(next1) + l2_end.getDistanceTo(l1_start)
+					+ l1_end.getDistanceTo(next2) - previousDistance;
+		} else {
+			if (!prev1.equals(next1) || !prev2.equals(next2)) {
+				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+						+ prev2.getDistanceTo(l2_start);
+			}
+			return prev2.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
+					+ prev1.getDistanceTo(next1) - previousDistance;
+		}
+	}
+
+    /**
+	 * Retourne les infos sur l'échange inter d'une box.
+     * @param t
+	 * @return InterTrolleyInfos
+	 */
+    public InterTrolleyInfos echangeInterTrolley(Trolley t) {
+		InterTrolleyInfos interInfos = new InterTrolleyInfos();
+		int nbBoxes1 = this.boxes.size();
+        int nbBoxes2 = t.boxes.size();
+		for (int l1 = 0; l1 < nbBoxes1; l1++) {
+			for (int l2 = 0; l2 < nbBoxes2; l2++) {
+				//if (l1 != l2) {
+				InterTrolleyInfos interInfosNew = this.evaluerEchangeInter(l1,l2,t);
+				if (interInfosNew.getDiffCout() < interInfos.getDiffCout()) {
+					interInfos = new InterTrolleyInfos(interInfosNew);
+				}
+				//}
+			}
+		}
+		return interInfos;
+	}
+
+    /**
+	 * Retourne les données représentant l'évaluation de l'échange de 2 boxes de deux trolleys.
+	 * @param posBox1
+	 * @param posBox2
+     * @param t
+	 * @return InterTrolleyInfos
+	 */
+	private InterTrolleyInfos evaluerEchangeInter(int posBox1, int posBox2, Trolley t) {
+		double diffCout = this.calculerDeltaCoutEchangeInter(posBox1, posBox2, t);
+		return new InterTrolleyInfos(this,t,posBox1,posBox2,diffCout);
+	}
+
+    /**
+	 * Permet de calculer le coût delta représentant l'échange de deux boxes.
+	 * @param posBox1
+	 * @param posBox2
+     * @param t
+	 * @return double
+	 */
+	public double calculerDeltaCoutEchangeInter(int posBox1, int posBox2, Trolley t) {
+		if (posBox1 < 0 || posBox1 > this.boxes.size()) {
+			return Double.MAX_VALUE;
+		}
+
+		if (posBox2 < 0 || posBox2 > t.boxes.size()) {
+			return Double.MAX_VALUE;
+		}
+
+		Location prev1 = this.ninstance.getGraph().getDepartingDepot();
+		Location prev2 = t.ninstance.getGraph().getDepartingDepot();
+		Location next1 = this.ninstance.getGraph().getDepartingDepot();
+		Location next2 = t.ninstance.getGraph().getDepartingDepot();
+		
+        List<ProdQty> prodQtys = this.boxes.get(posBox1).getProdQtys();
+        List<ProdQty> prodQtysBis = t.boxes.get(posBox2).getProdQtys();
+		
+        Location l1_start = prodQtys.get(0).getProduct().getLoc();
+		Location l1_end = prodQtys.get(prodQtys.size() - 1).getProduct().getLoc();
+        Location l2_start = prodQtysBis.get(0).getProduct().getLoc();
+		Location l2_end = prodQtysBis.get(prodQtysBis.size() - 1).getProduct().getLoc();
+
+		if (posBox1 > 0) {
+			List<ProdQty> prodQtysBisTer = this.boxes.get(posBox1 - 1).getProdQtys();
+			prev1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
+		}
+		if (posBox2 > 0) {
+			List<ProdQty> prodQtysQuater = t.boxes.get(posBox2 - 1).getProdQtys();
+			prev2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
+		}
+
+		if (posBox1 < this.boxes.size() - 1) {
+			List<ProdQty> prodQtysQuinquies = this.boxes.get(posBox1 + 1).getProdQtys();
+			next1 = prodQtysQuinquies.get(0).getProduct().getLoc();
+		}
+		if (posBox2 < t.boxes.size() - 1) {
+			List<ProdQty> prodQtysSixies = this.boxes.get(posBox2 + 1).getProdQtys();
+			next2 = prodQtysSixies.get(0).getProduct().getLoc();
+		}
+
+		double previousDistance = 0;
+
+		if (posBox1 == (posBox2 - 1) || (posBox1 + 1) == posBox2
+				|| posBox2 == (posBox1 - 1) || (posBox2 + 1) == posBox1) {
+
+			if (!prev1.equals(next1) || !prev2.equals(next2)) {
+				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
+						+ l2_end.getDistanceTo(next2);
+			}
+
+			return prev1.getDistanceTo(l2_start) + l2_end.getDistanceTo(l1_start)
+					+ l1_end.getDistanceTo(next2) - previousDistance;
+		} else {
+
+			if (!prev1.equals(next1) || !prev2.equals(next2)) {
+				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+						+ prev2.getDistanceTo(l2_start) + l2_end.getDistanceTo(next2);
+			}
+
+			return prev1.getDistanceTo(l2_start) + l2_end.getDistanceTo(next1)
+					+ prev2.getDistanceTo(l1_start) + l1_end.getDistanceTo(next2) - previousDistance;
+		}
+	}
+    
+    /**
 	 * Méthode exécutant le déplacement qui permet d’améliorer le plus la
 	 * solution courante.
 	 * @param intraTrolleyInfos
@@ -383,6 +591,35 @@ public class Trolley implements Serializable {
 
 		if (this.addBoxByPos(b1, intraTrolleyInfos.getNewPosition())
 				&& this.addBoxByPos(b2,intraTrolleyInfos.getOldPosition())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+    /**
+	 * Méthode exécutant le déplacement entre deux trolleys qui permet d’améliorer le plus la
+	 * solution courante.
+	 * @param interTrolleyInfos
+	 * @return boolean
+	 */
+	public boolean doDeplacementInterTrolley(InterTrolleyInfos interTrolleyInfos) {
+        Box b = this.boxes.get(interTrolleyInfos.getOldPosition());
+		return interTrolleyInfos.getNewTrolley().addBoxByPos(b, interTrolleyInfos.getNewPosition());
+	}
+
+    /**
+	 * Méthode exécutant l'échange inter qui permet d’améliorer le plus la
+	 * solution courante.
+	 * @param interTrolleyInfos
+	 * @return boolean
+	 */
+	public boolean doEchangeInterTrolley(InterTrolleyInfos interTrolleyInfos) {
+		Box b1 = this.boxes.get(interTrolleyInfos.getOldPosition());
+		Box b2 = interTrolleyInfos.getNewTrolley().boxes.get(interTrolleyInfos.getNewPosition());
+
+		if (this.addBoxByPos(b1, interTrolleyInfos.getNewPosition())
+				&& this.addBoxByPos(b2,interTrolleyInfos.getOldPosition())) {
 			return true;
 		} else {
 			return false;
