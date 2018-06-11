@@ -1,3 +1,6 @@
+var firstDraw = true;
+var colors = ['#ff9900','#00cc00','#0066cc','#ff00ff','#ffff00','#00ffcc'];//Orange,Vert,Bleu,Fushia,Jaune,Cyan
+
 /**
  * Fonction permettant de récupérer la liste des locations de l'entrepôt.
  */
@@ -47,11 +50,18 @@ function toggleLocations() {
         $('#toggleLocationsC').prop('checked', true);
     }
 
+    resetGraph();
+    displayLocations = !displayLocations;
+}
+
+/**
+ * Permet de redessiner le graph.
+ */
+function resetGraph() {
     redraw();
     isGraphic = false;
     drawed = false;
     getGraphe(idCurrentInstance);
-    displayLocations = !displayLocations;
 }
 
 /**
@@ -112,11 +122,13 @@ function draw(){
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
     
-            if(displayLocations) placeLocations();
-            placeProducts();
-            placeDepots();
-            drawLiaisons(); 
+            if(displayLocations) placeLocations(coeffW, coeffH);
+            //placeProducts(coeffW, coeffH);
+            placeDepots(coeffW, coeffH);
+            //drawLiaisons(coeffW, coeffH); 
             //console.log(allPoints);
+            
+            drawProductsFromTrolley(coeffW, coeffH);
             drawed = true;
         }
     }
@@ -242,6 +254,58 @@ function getMaxDistance() {
 }
 
 /**
+* Fonction permettant de remplir le bouton de selection des trolleys utilisés dans une solution.
+*/
+function setupTrolleySelection() {
+    $('#trolleySelection').empty();
+    for (var i = 0; i < tabSolution.length; i++){
+        $('#trolleySelection').append($('<option>', {
+            value: i,
+            text: 'Instance '+tabSolution[i].NINSTANCE+"/Trolley "+tabSolution[i].IDTROLLEY
+        }));
+    }
+}
+
+/**
+ * Fonction permettant de dessiner les produits d'un trolley, avec une couleur identique s'il est issu du même box.
+ * @param {*} coeffW 
+ * @param {*} coeffH 
+ */
+function drawProductsFromTrolley(coeffW, coeffH) {
+    
+    //console.log(tabSolution);
+    var abs = 0;
+    var ord = 0;
+    var color;
+    var selectedTrolleyID = $("#trolleySelection" ).val();
+    
+    //Récupère les boxes correspondantes au trolley sélectionné
+    var boxes = tabSolution[selectedTrolleyID].BOXES;
+    $('#boxSelection').empty();
+
+    //Lecture des produits pour chacunes des boxes (une couleur est générée pour chaque box)
+    for (var j = 0; j < boxes.length; j++){
+
+        var box = boxes[j].PRODUCTS;
+        color = colors[j];
+        
+        $('#boxSelection').append($('<span>', {
+            class: 'badge badge-primary',
+            text: 'Box ID: '+boxes[j].IDBOX+' (Order: '+boxes[j].ORDER_ID+')',
+            style: 'background-color:'+color+';'
+        }));
+        
+        //Positionnement des produits avec leur coordonnées et couleur respectives
+        for (var k = 0; k < box.length; k++){
+            abs = parseInt(box[k].LOC_ABSCISSE);
+            ord = parseInt(box[k].LOC_ORDONNEE);
+            fill(color);
+            ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
+        }
+    }
+}
+
+/**
  * Fonction d'initalisation du graph associé à l'ID d'une instance.
  * @param {*} idInstance 
  */
@@ -249,8 +313,13 @@ function getGraphe(idInstance) {
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
-    $("#mainNavbar").hide();
+    $("#trolleySelection").show();
+    $("#boxSelection").show();
     setTabSolution(idInstance);
     setAllLocations();
     isGraphic = true;
+    if (firstDraw) {
+        setupTrolleySelection();//doit être appellée qu'à l'initialisation du graph
+        firstDraw = false;
+    }
 }
