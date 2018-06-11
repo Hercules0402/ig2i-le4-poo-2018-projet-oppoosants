@@ -18,50 +18,16 @@ function setAllLocations() {
 }
 
 /**
- * Fonction permettant de récupérer la liste des produits.
- */
-function setAllProducts() {
-    $.ajax({
-        type: "POST",
-        async: false,
-        url: 'php/request.php',
-        data: { requestType: "getLightProductsSol", idInstance: idCurrentInstance },
-        success : function(result, statut){ 
-            result = JSON.parse(result);
-            allProducts = result["content"];
-        },
-        error : function(result, statut) {
-            $("#webContent").html('<br/><br/><hr/><h1 align="center">Erreur : impossible de récupérer les produits/locations</h1><hr/>');
-        }
-    });
-}
-
-/**
  * Définit le contenu de la tooltip à afficher en fonction du type de point selectionné.
  * @param {*} point 
  * @param {*} typeOfPoint 
  */
-function genPointContent(point, typeOfPoint) {
+function genPointContent(p) {
     var content = "";
 
-    switch(typeOfPoint) {
-        case("Location") :
-        case("Dépôt") :
-            content += "Nom : " + point["NAME"] + "<br/>";
-            content += "Abscisse : " + point["ABSCISSE"] + "<br/>";
-            content += "Ordonnée : " + point["ORDONNEE"];
-        break;
-
-        case("Product") :
-            content += "Identifiant : " + point["IDPRODUCT"] + "<br/>";
-            content += "Volume : " + point["VOLUME"] + "<br/>";
-            content += "Poids : " + point["WEIGHT"];
-        break;
-
-        default: 
-            content += "Erreur de récupération des données";
-        break;
-    }
+    content += "Identifiant : " + p["IDPRODUCT"] + "<br/>";
+    content += "Volume : " + p["VOLUME"] + "<br/>";
+    content += "Poids : " + p["WEIGHT"];
 
     return content;
 }
@@ -95,28 +61,29 @@ function setup(){
         var x, y, point, typeOfPoint;
         $("#popup").hide();
 
-        for(p in allPoints) {
-            x = parseInt(allPoints[p][0]);
-            y = parseInt(allPoints[p][1]);
-            point = allPoints[p][2];
-            typeOfPoint = allPoints[p][3];
+        tabSolution.forEach(function(trolley) {
+            trolley["BOXES"].forEach(function(box) {
+                box["PRODUCTS"].forEach(function(p) {
+                    x = parseInt(p["LOC_ABSCISSE"]);
+                    y = parseInt(p["LOC_ORDONNEE"]);
+                    if (parseInt((x * coeffW) + windowWidth*0.05 - pointSize/2) < e.pageX && 
+                        parseInt((x * coeffW) + windowWidth*0.05 + pointSize/2) > e.pageX &&
+                        parseInt((y * coeffH) + windowHeight*0.1 - pointSize/2) < e.pageY &&
+                        parseInt((y * coeffH) + windowHeight*0.1 + pointSize/2) > e.pageY) {
 
-            if (parseInt(x + windowWidth*0.05 - pointSize/2) < e.pageX && 
-                parseInt(x + windowWidth*0.05 + pointSize/2) > e.pageX &&
-                parseInt(y + windowHeight*0.1 - pointSize/2) < e.pageY &&
-                parseInt(y + windowHeight*0.1 + pointSize/2) > e.pageY) {
-                
-                $("#popup").show();
-                $("#popup").css("top", y + "px");
-                $("#popup").css("left", x + 80 + "px");
-                $("#popup").html(
-                    '<div class="card">' +
-                    '    <div class="card-header">Point ' + typeOfPoint +' (' + x +','+ y + ')</div>' +
-                    '    <div class="card-body">' + genPointContent(point, typeOfPoint) + '</div> ' +
-                    '</div>'
-                );
-            }
-        }
+                        $("#popup").show();
+                        $("#popup").css("top", (y * coeffH) + "px");
+                        $("#popup").css("left", (x * coeffW) + 80 + "px");
+                        $("#popup").html(
+                            '<div class="card">' +
+                            '    <div class="card-header">Point Produit (' + x +','+ y + ')</div>' +
+                            '    <div class="card-body">' + genPointContent(p) + '</div> ' +
+                            '</div>'
+                        );
+                    }
+                });
+            });
+        });
     });
   }
 
@@ -134,10 +101,10 @@ function draw(){
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
     
-            if(displayLocations) placeLocations(coeffW, coeffH);
-            placeProducts(coeffW, coeffH);
-            placeDepots(coeffW, coeffH);
-            drawLiaisons(coeffW, coeffH); 
+            if(displayLocations) placeLocations();
+            placeProducts();
+            placeDepots();
+            drawLiaisons(); 
             //console.log(allPoints);
             drawed = true;
         }
@@ -152,30 +119,22 @@ function draw(){
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function drawLiaisons(coeffW, coeffH) {
-    var lastLocProduct = false;
-    var tempLoc = false;
+function drawLiaisons() {
+    var lastProduct = false;
 
     tabSolution.forEach(function(trolley) {
         stroke(color(getRandomInt(256),getRandomInt(256),getRandomInt(256)));
         trolley["BOXES"].forEach(function(box) {
-            box["PRODUCTS"].forEach(function(product){
-                allLocations.forEach(function(loc){
-                    //console.log(product["LOC"] + " " + loc["IDLOCATION"]);
-                    if(loc["ID"] == product["LOC"]) {
-                        tempLoc = loc;
-                    }
-                });
-                if(!lastLocProduct) {
-                    line(0, 0, parseInt(tempLoc["ABSCISSE"])*coeffW, parseInt(tempLoc["ORDONNEE"])*coeffH);
+            box["PRODUCTS"].forEach(function(p){
+                if(!lastProduct) {
+                    line(0, 0, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
                 }
                 else {
-                    line(parseInt(tempLoc["ABSCISSE"])*coeffW, parseInt(tempLoc["ORDONNEE"])*coeffH, parseInt(lastLocProduct["ABSCISSE"])*coeffW, parseInt(lastLocProduct["ORDONNEE"])*coeffH);
+                    line(parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
                 }
-                lastLocProduct = tempLoc;
-                tempLoc = false;
+                lastProduct = p;
             });
-            line(0, 0, parseInt(lastLocProduct["ABSCISSE"])*coeffW, parseInt(lastLocProduct["ORDONNEE"])*coeffH);
+            line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
             lastProduct = false;
         });
     });
@@ -194,7 +153,7 @@ function getRandomInt(max) {
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function placeLocations(coeffW, coeffH) {
+function placeLocations() {
     //var colorInc = 0;
 
     for(locId in allLocations) {
@@ -208,7 +167,6 @@ function placeLocations(coeffW, coeffH) {
             //colorInc += (255/allLocations.length);
             
             ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,pointSize,pointSize);
-            allPoints.push([parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH, loc, "Location"]);
         }
     }
 }
@@ -218,14 +176,13 @@ function placeLocations(coeffW, coeffH) {
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function placeDepots(coeffW, coeffH) {
+function placeDepots() {
     for(locId in allLocations) {
         var loc = allLocations[locId];
 
         if(loc["NAME"] == "depotStart" || loc["NAME"] == "depotEnd") {
             fill(color(255,0,0));
             ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,pointSize,pointSize);
-            allPoints.push([parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH, loc, "Dépôt"]);
         }
     }
 }
@@ -235,34 +192,21 @@ function placeDepots(coeffW, coeffH) {
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function placeProducts(coeffW, coeffH) {
-    //var colorInc = 0;
+function placeProducts() {
+    var abs = 0;
+    var ord = 0;
 
-    for(prodId in allProducts) {
-        var prod = allProducts[prodId];
-        var abs = 0;
-        var ord = 0;
+    tabSolution.forEach(function(trolley) {
+        trolley["BOXES"].forEach(function(box) {
+            box["PRODUCTS"].forEach(function(p) {
+                abs = parseInt(p["LOC_ABSCISSE"]);
+                ord = parseInt(p["LOC_ORDONNEE"]);
 
-        for(locId in allLocations) {
-            var loc = allLocations[locId];
-            
-            if(loc["ID"] == prod["LOC"]) {
-                //console.log(prod["LOC"] + " " + locId + " " + parseInt(loc["ABSCISSE"]) + ":" + parseInt(loc["ORDONNEE"]));
-                abs = parseInt(loc["ABSCISSE"]);
-                ord = parseInt(loc["ORDONNEE"]);
-            }
-        }
-
-        fill(color(0,255,0));
-        //colorInc += (255/allProducts.length);
-
-        /*noFill();
-        strokeWeight(0.01);
-        stroke(255,0,0);*/
-        ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
-        allPoints.push([abs*coeffW,ord*coeffH, prod,"Product"]);
-        
-    }
+                fill(color(0,255,0));
+                ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
+            });
+        });
+    });
 }
 
 /**
@@ -272,12 +216,14 @@ function placeProducts(coeffW, coeffH) {
  */
 function getMaxDistance() {
     var maxSize = 0;
-    for(locId in allLocations) {
-        var loc = allLocations[locId];
-
-        if(parseInt(loc["ABSCISSE"]) > maxSize) maxSize = parseInt(loc["ABSCISSE"]);
-        if(parseInt(loc["ORDONNEE"]) > maxSize) maxSize = parseInt(loc["ORDONNEE"]);
-    }
+    tabSolution.forEach(function(trolley) {
+        trolley["BOXES"].forEach(function(box) {
+            box["PRODUCTS"].forEach(function(p) {
+                if(parseInt(p["LOC_ABSCISSE"]) > maxSize) maxSize = parseInt(p["LOC_ABSCISSE"]);
+                if(parseInt(p["LOC_ORDONNEE"]) > maxSize) maxSize = parseInt(p["LOC_ORDONNEE"]);
+            });
+        });
+    });
 
     return maxSize;
 }
@@ -291,9 +237,7 @@ function getGraphe(idInstance) {
     $("#graphReturnB").show();
     $("#toggleLocations").show();
     $("#mainNavbar").hide();
-    allPoints = [];
-    setAllLocations();
-    setAllProducts();
     setTabSolution(idInstance);
+    setAllLocations();
     isGraphic = true;
 }

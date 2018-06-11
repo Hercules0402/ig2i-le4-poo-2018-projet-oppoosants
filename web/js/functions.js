@@ -1,13 +1,3 @@
-var isGraphic = false;
-var allLocations;
-var allProducts;
-var allPoints;
-var drawed = false;
-var displayLocations = false;
-var pointSize = 5;
-var idCurrentInstance;
-var tabSolution;
-
 /**
  * Fonction permettant de tester la connexion au serveur.
  */
@@ -192,7 +182,7 @@ function getBoxesInTrolley(idInstance, idTrolley) {
  * @param {*} idColis 
  */
 function getArbo(idInstance, idTrolley, idColis) {
-    var content = '<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item active"><a href="#" onclick="getInstances()">Accueil</a></li>';
+    var content = '<nav aria-label="breadcrumb" class="mtop"><ol class="breadcrumb"><li class="breadcrumb-item active"><a href="#" onclick="getInstances()">Accueil</a></li>';
 
     if (idInstance != null && idTrolley == null && idColis == null) {
         content += '<li class="breadcrumb-item active"><a href="#" onclick="getTrolleysInInstance('+ idInstance +')">Instance n°'+ idInstance +'</a></li>';
