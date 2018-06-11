@@ -13,6 +13,7 @@ function setAllLocations() {
         success : function(result, statut){ 
             result = JSON.parse(result);
             allLocations = result["content"];
+            instanceID = idCurrentInstance;
         },
         error : function(result, statut) {
             $("#webContent").html('<br/><br/><hr/><h1 align="center">Erreur : impossible de récupérer les produits/locations</h1><hr/>');
@@ -121,11 +122,19 @@ function draw(){
             var maxSize = getMaxDistance();
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
+
+            var selectedTrolleyID = $("#trolleySelection" ).val();
     
             if(displayLocations) placeLocations();
-            drawLiaisonsFromTrolley(); 
             placeDepots();
-            drawProductsFromTrolley();
+            if (selectedTrolleyID == tabSolution.length) {
+                //Affichage de tous les trolleys
+                drawLiaisonsFromInstance();
+                drawProductsFromInstance();
+            } else {
+                drawLiaisonsFromTrolley(selectedTrolleyID);
+                drawProductsFromTrolley(selectedTrolleyID);
+            }
             drawed = true;
         }
     }
@@ -139,15 +148,13 @@ function draw(){
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function drawProductsFromTrolley() {
+function drawProductsFromTrolley(selectedTrolleyID) {
     
-    //console.log(tabSolution);
     stroke(0);
     var abs = 0;
     var ord = 0;
     var color;
-    var selectedTrolleyID = $("#trolleySelection" ).val();
-    
+    console.log(selectedTrolleyID);
     //Récupère les boxes correspondantes au trolley sélectionné
     var boxes = tabSolution[selectedTrolleyID].BOXES;
     $('#boxSelection').empty();
@@ -157,13 +164,13 @@ function drawProductsFromTrolley() {
 
         var box = boxes[j].PRODUCTS;
         color = colors[j];
-        
+            
         $('#boxSelection').append($('<span>', {
             class: 'badge badge-primary',
             text: 'Box ID: '+boxes[j].IDBOX+' (Order: '+boxes[j].ORDER_ID+')',
             style: 'background-color:'+color+';'
         }));
-        
+            
         //Positionnement des produits avec leur coordonnées et couleur respectives
         for (var k = 0; k < box.length; k++){
             abs = parseInt(box[k].LOC_ABSCISSE);
@@ -175,17 +182,56 @@ function drawProductsFromTrolley() {
 }
 
 /**
- * Fonction permettant de dessiner le parcours des trolleys pour une instance donnée.
+ * Fonction permettant de dessiner les produits de tous les trolleys, avec une couleur identique s'il est issu du même trolley.
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function drawLiaisonsFromTrolley() {
-    var lastProduct = false;
-    var selectedTrolleyID = $("#trolleySelection" ).val();
-    var trolley = tabSolution[selectedTrolleyID];
+function drawProductsFromInstance() {
+    
+    stroke(0);
+    $('#boxSelection').empty();
+    var abs = 0;
+    var ord = 0;
+    var color;
+    
+    for (var f = 0; f < tabSolution.length; f++){
+        //Récupère les trolleys correspondantes à l'instance sélectionnée
+        var boxes = tabSolution[f].BOXES;
+        color = colors[f];
 
-    stroke(color(255,255,255));
-    trolley["BOXES"].forEach(function(box) {
+        $('#boxSelection').append($('<span>', {
+            class: 'badge badge-primary',
+            text: 'Trolley ID: '+tabSolution[f].IDTROLLEY,
+            style: 'background-color:'+color+';'
+        }));
+
+        //Lecture des produits pour chacunes des trolleys (une couleur est générée pour chaque trolley)
+        for (var j = 0; j < boxes.length; j++){
+
+            var box = boxes[j].PRODUCTS;
+
+            //Positionnement des produits avec leur coordonnées et couleur respectives
+            for (var k = 0; k < box.length; k++){
+                abs = parseInt(box[k].LOC_ABSCISSE);
+                ord = parseInt(box[k].LOC_ORDONNEE);
+                fill(color);
+                ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
+            }
+        }
+    }
+}
+
+/**
+ * Fonction permettant de dessiner le parcours des boxes pour un trolley donné.
+ * @param {*} coeffW 
+ * @param {*} coeffH 
+ */
+function drawLiaisonsFromTrolley(selectedTrolleyID) {
+    var lastProduct = false;
+    var boxes = tabSolution[selectedTrolleyID].BOXES;
+    for (var j = 0; j < boxes.length; j++){
+        box = boxes[j];
+        stroke(color(colors[j]));
         box["PRODUCTS"].forEach(function(p){
             if(!lastProduct) {
                 line(0, 0, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
@@ -197,7 +243,34 @@ function drawLiaisonsFromTrolley() {
         });
         line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
         lastProduct = false;
-    });
+    }
+}
+
+/**
+ * Fonction permettant de dessiner le parcours des trolleys pour une instance donnée.
+ * @param {*} coeffW 
+ * @param {*} coeffH 
+ */
+function drawLiaisonsFromInstance() {
+    var lastProduct = false;var trolley;
+
+    for (var j = 0; j < tabSolution.length; j++){
+        trolley = tabSolution[j];
+        stroke(color(colors[j]));
+        trolley["BOXES"].forEach(function(box) {
+            box["PRODUCTS"].forEach(function(p){
+                if(!lastProduct) {
+                    line(0, 0, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
+                }
+                else {
+                    line(parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
+                }
+                lastProduct = p;
+            });
+            line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
+            lastProduct = false;
+        });
+    }
 }
 
 /**
@@ -272,14 +345,20 @@ function getMaxDistance() {
 /**
 * Fonction permettant de remplir le bouton de selection des trolleys utilisés dans une solution.
 */
-function setupTrolleySelection() {
+function setupTrolleySelection(idInstance) {
     $('#trolleySelection').empty();
-    for (var i = 0; i < tabSolution.length; i++){
+    var size = tabSolution.length;
+    for (var i = 0; i < size; i++){
         $('#trolleySelection').append($('<option>', {
             value: i,
             text: 'Instance '+tabSolution[i].NINSTANCE+"/Trolley "+tabSolution[i].IDTROLLEY
         }));
     }
+    //Option d'affichage de tous les trolleys
+    $('#trolleySelection').append($('<option>', {
+        value: size,
+        text: 'Instance '+idInstance+"/All Trolleys"
+    }));
 }
 
 /**
@@ -296,7 +375,7 @@ function getGraphe(idInstance) {
     setAllLocations();
     isGraphic = true;
     if (firstDraw) {
-        setupTrolleySelection();//doit être appellée qu'à l'initialisation du graph
+        setupTrolleySelection(idInstance);//doit être appellée qu'à l'initialisation du graph
         firstDraw = false;
     }
 }

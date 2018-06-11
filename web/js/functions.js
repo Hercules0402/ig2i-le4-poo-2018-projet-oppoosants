@@ -220,7 +220,7 @@ function setTabSolution(idInstance) {
             data: { requestType: "getTabSol", idInstance: idInstance },
             success : function(result, statut){ 
                 result = JSON.parse(result);
-                console.log(result);
+                //console.log(result);
                 tabSolution = result["content"];
                 idCurrentInstance = idInstance;
             },
