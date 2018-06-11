@@ -22,7 +22,7 @@ import util.Writer;
  * @author Lucas
  */
 public class GATournee {
-    private static int CB_CYCLES = 5000; //Nombre de générations
+    private static int CB_CYCLES = 500; //Nombre de générations
     private final static int LOG_LEVEL = 0; //Niveau de logs: 0: None, 1: Cycles, 2: All
     
     private static Instance instance;
@@ -106,7 +106,9 @@ public class GATournee {
             }       
             
             int tot = boxes.size();
-            for(int j=0; j<4; j++){  //On réalise 4 déplacement aléatoires entre deux boites
+            //On calcule le nombre d'échanges que l'on va faire proportionnellement à la quantité de colis (ex: 4 pour une instance de 20)
+            float nbSwitch = (float) tot/5; 
+            for(int j=0; j<(int) nbSwitch; j++){  //On réalise les échanges aléatoires entre deux boites
                 int p1 = new Random().nextInt(tot - 1) + 1;
                 int p2 = new Random().nextInt(tot - 1) + 1;
                 while(p1 == p2) //Si p1 et p2 sont les mêmes, on retire p2 jusqu'a ce qu'ils ne le soient plus
@@ -114,7 +116,9 @@ public class GATournee {
                 nTrolleys = swapBoxes(nTrolleys, p1, p2);
             }
            
-            for(int j=0; j<5; j++){ //On réalise 5 tentatives de déplacement d'une boite aléatoire vers une autre tournée
+            //On calcule le nombre de déplacements que l'on va faire proportionnellement à la quantité de colis (ex: 5 pour une instance de 20)
+            float nbMove = (float) tot/4;
+            for(int j=0; j<(int) nbMove; j++){ //On réalise les tentatives de déplacements d'une boite aléatoire vers une autre tournée
                 int val = new Random().nextInt(nTrolleys.size()); //On sélectionne une tournée au hasard
                 if(nTrolleys.get(val).getBoxes().size() == nTrolleys.get(val).getNbColisMax()){ //Si elle est complete
                     int rand  = new Random().nextInt(nTrolleys.get(val).getBoxes().size()); //On sélectionne un colis de cette tournée au hasard
@@ -262,7 +266,8 @@ public class GATournee {
     public static void mutation(){
         int tot = boxes.size();
         for(int i=2; i<10; i++){ //Sur les genomes 2 à 10 (tous sauf les 2 meilleurs que l'on garde tel quels)
-            for(int j=0; j<2; j++){ //On réalise 2 déplacement aléatoires entre deux boites
+            //float nbSwitch = (float) tot/10;
+            for(int j=0; j<1; j++){ //On réalise 1 échange aléatoire entre deux boites
                 int p1 = new Random().nextInt(tot - 1) + 1;
                 int p2 = new Random().nextInt(tot - 1) + 1;
                 while(p1 == p2) //Si p1 et p2 sont les mêmes, on retire p2 jusqu'a ce qu'ils ne le soient plus
@@ -270,7 +275,8 @@ public class GATournee {
                 swapBoxes(popList.get(i), p1, p2);
             }
             
-            for(int j=0; j<3; j++){ //On réalise 3 tentatives de déplacement d'une boite aléatoire vers une autre tournée
+            //float nbMove = (float) tot/7;
+            for(int j=0; j<2; j++){ //On réalise 2 tentatives de déplacement d'une boite aléatoire vers une autre tournée
                 int val = new Random().nextInt(popList.get(i).size()); //On sélectionne une tournée au hasard
                 if(popList.get(i).get(val).getBoxes().size() == popList.get(i).get(val).getNbColisMax()){ //Si elle est complete
                     int rand  = new Random().nextInt(popList.get(i).get(val).getBoxes().size()); //On sélectionne un colis de cette tournée au hasard
