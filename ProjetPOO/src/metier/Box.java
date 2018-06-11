@@ -99,6 +99,10 @@ public class Box implements Serializable {
         return order;
     }
 
+    public void setIdBox(Integer idBox) {
+        this.idBox = idBox;
+    }
+
     public void setProdQtys(List<ProdQty> prodQtys) {
         this.prodQtys = prodQtys;
     }
@@ -150,6 +154,34 @@ public class Box implements Serializable {
         }
         ProdQty newPq = new ProdQty(p, qt);
         prodQtys.add(newPq);
+    }
+
+    public boolean addProducts(List<ProdQty> prodQtys){
+        if (prodQtys == null) return false;
+        for(ProdQty pq : this.prodQtys){
+            this.addProduct(pq);
+        }
+        return true;
+    }
+    
+    public boolean addProductClarkeAndWright(ProdQty pq) {
+        Product p = pq.getProduct();
+        int qt = pq.getQuantity();
+        
+        if (pq == null) return false;
+        
+        this.weight += p.getWeight() * qt;
+        this.volume += p.getVolume() * qt;
+        for(ProdQty prq : prodQtys){
+            if(prq.getProduct().equals(p)){
+                prq.setQuantity(prq.getQuantity() + qt);
+                return true;
+            }
+        }
+            
+        ProdQty newPq = new ProdQty(p, qt);
+        prodQtys.add(newPq);
+        return true;
     }
 
     @Override

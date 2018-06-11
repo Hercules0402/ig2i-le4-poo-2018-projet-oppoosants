@@ -1,6 +1,5 @@
 package algo;
 
-import java.util.ArrayList;
 import metier.Instance;
 import metier.Trolley;
 import util.Distances;
@@ -86,8 +85,7 @@ public class RechercheLocale {
         }
         
         ClarkeAndWright cwa = new ClarkeAndWright(inst);
-        cwa.run();
-        inst = cwa.getNewInstance();
+        inst = cwa.run();
         
         //Writer.save(fileName, inst, false);
         
@@ -102,6 +100,6 @@ public class RechercheLocale {
         //Writer.save(fileName, inst, false);
         
         distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
-        System.out.println(Distances.formatDistance(distance));        
+        System.out.println(Distances.formatDistance(distance));
     }
 }

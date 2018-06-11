@@ -37,8 +37,7 @@ public class TestAllCwa {
                         }
 
                         ClarkeAndWright cwa = new ClarkeAndWright(inst);
-                        cwa.run();
-                        inst = cwa.getNewInstance();
+                        inst = cwa.run();
                         
                         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));

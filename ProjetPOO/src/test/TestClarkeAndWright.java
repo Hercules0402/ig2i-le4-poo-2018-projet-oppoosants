@@ -24,8 +24,7 @@ public class TestClarkeAndWright {
         }
         
         ClarkeAndWright cwa = new ClarkeAndWright(inst);
-        cwa.run();
-        inst = cwa.getNewInstance();
+        inst = cwa.run();
         
         Writer.save(fileName, inst, false);
         
