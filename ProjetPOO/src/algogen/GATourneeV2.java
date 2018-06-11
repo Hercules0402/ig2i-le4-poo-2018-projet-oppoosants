@@ -2,9 +2,14 @@ package algogen;
 
 import algo.Recherche;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import metier.Box;
 import metier.Instance;
@@ -17,13 +22,14 @@ import util.Writer;
 /**
  * Classe contenant l'algorithme génétique pour les tournées.
  * Permettant d'optimiser tous les colis dans des tournées.
- * Cet algorithme à une population de 10 genomes, chaque génération uniquement
- * les 2 meilleurs sont gardés, et l'on recrée 8 genomes issus des croissements des 2 meilleurs.
+ * Cet algorithme possède une population de 20 genomes, chaque génération 20 nouveaux
+ * genomes sont crées à partir des 20 meilleurs, avec un coefficient linéaire ou exponentiel
+ * (plus le genome est bon, plus il a de chances de se reproduire)
  * @author Lucas
  */
-public class GATournee {
-    private static int CB_CYCLES = 5000; //Nombre de générations
-    private final static int LOG_LEVEL = 0; //Niveau de logs: 0: None, 1: Cycles, 2: All
+public class GATourneeV2 {
+    private static int CB_CYCLES = 1000; //Nombre de générations
+    private final static int LOG_LEVEL = 2; //Niveau de logs: 0: None, 1: Cycles, 2: All
     
     private static Instance instance;
     private static Location dep; 
@@ -95,7 +101,7 @@ public class GATournee {
             for(Box b : t.getBoxes())
                 boxes.add(b);
         
-        for(int i=0; i<9; i++){ //On génére les 9 genomes suivants
+        for(int i=0; i<39; i++){ //On génére les 39 genomes suivants
             //On crée une nouvelle liste de tournées, auquel on ajoute toutes les tournées 
             //(pas opti mais seul moyen trouvé pour casser complétement les références)
             ArrayList<Trolley> nTrolleys = new ArrayList<>();
@@ -106,7 +112,7 @@ public class GATournee {
             }       
             
             int tot = boxes.size();
-            for(int j=0; j<4; j++){  //On réalise 4 déplacement aléatoires entre deux boites
+            for(int j=0; j<60; j++){  //On réalise 60 déplacement aléatoires entre deux boites
                 int p1 = new Random().nextInt(tot - 1) + 1;
                 int p2 = new Random().nextInt(tot - 1) + 1;
                 while(p1 == p2) //Si p1 et p2 sont les mêmes, on retire p2 jusqu'a ce qu'ils ne le soient plus
@@ -114,7 +120,7 @@ public class GATournee {
                 nTrolleys = swapBoxes(nTrolleys, p1, p2);
             }
            
-            for(int j=0; j<5; j++){ //On réalise 5 tentatives de déplacement d'une boite aléatoire vers une autre tournée
+            for(int j=0; j<60; j++){ //On réalise 60 tentatives de déplacement d'une boite aléatoire vers une autre tournée
                 int val = new Random().nextInt(nTrolleys.size()); //On sélectionne une tournée au hasard
                 if(nTrolleys.get(val).getBoxes().size() == nTrolleys.get(val).getNbColisMax()){ //Si elle est complete
                     int rand  = new Random().nextInt(nTrolleys.get(val).getBoxes().size()); //On sélectionne un colis de cette tournée au hasard
@@ -141,76 +147,110 @@ public class GATournee {
             results.put(i, r); //On met les résultats dans la Map
             i++;
         }
+        results = sortByComparator(results);
+    }
+    
+    static class MyComparator implements Comparator<Entry<Integer, Integer>> {
+        public int compare(Entry<Integer, Integer> o1, Entry<Integer, Integer> o2) {
+            return o1.getValue().compareTo(o2.getValue());
+        }
+    }
+    
+    public static Map<Integer, Integer> sortByComparator(Map<Integer, Integer> unsortMap) {
+        List<Entry<Integer, Integer>> list = new LinkedList<Entry<Integer, Integer>>(unsortMap.entrySet());
+
+        Collections.sort(list, new MyComparator());
+
+        Map<Integer, Integer> sortedMap = new LinkedHashMap<Integer, Integer>();
+        for (Entry<Integer, Integer> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
     }
     
     /**
      * Permet de sélectionner les deux meilleurs génomes de la population.
      */
     public static void selection(){
-        Map.Entry<Integer, Integer> min1 = null;
-        Map.Entry<Integer, Integer> min2 = null;
-
-        //On récupère dans les résultat le meilleur genome min1
-        for(Map.Entry<Integer, Integer> en : results.entrySet()){
-            if (min1 == null || en.getValue().compareTo(min1.getValue()) < 0){
-                min1 = en;
-            }                   
-        }
-        //On récupère dans les résultat le second meilleur genome min2
-        for(Map.Entry<Integer, Integer> en : results.entrySet()){
-            if (en != min1 && (min2 == null || (en.getValue().compareTo(min2.getValue()) < 0))) {
-                min2 = en;
-            }                  
-        }
- 
-        //On crée une nouvelle liste de population, auquel on ajoute ces 2 meilleurs résultats
         List<ArrayList<Trolley>> newPopList = new ArrayList<ArrayList<Trolley>>();
-        newPopList.add(popList.get(min1.getKey()));
-        newPopList.add(popList.get(min2.getKey()));
-        //On sauvegarde le meilleur résultat pour pouvoir l'afficher facilement a tout moment
-        tempBest = popList.get(min1.getKey());
-        //On remplace la liste de pop actuelle, par la nouvelle crée juste au desssus
+        HashMap newResults = new HashMap<Integer,Integer>();
+        int i=0;
+        for (Map.Entry<Integer,Integer> e : results.entrySet()) {
+            if(i>=20) break;
+            if(i==0) tempBest = popList.get(e.getKey());
+            newPopList.add(popList.get(e.getKey()));
+            newResults.put(i, e.getValue());
+            i++;
+        }
+        results = newResults;
         popList = new ArrayList<ArrayList<Trolley>>(newPopList);
+    }
+    
+    public static int getLinearRandomNumber(int maxSize){
+        int randomMultiplier = maxSize * (maxSize + 1) / 2;
+        Random r=new Random();
+        int randomInt = r.nextInt(randomMultiplier);
+
+        int linearRandomNumber = 0;
+        for(int i=maxSize; randomInt >= 0; i--){
+            randomInt -= i;
+            linearRandomNumber++;
+        }
+
+        return linearRandomNumber-1;
+    }
+    
+    public static int getExponentialRandomNumber(int maxSize){
+        Random r = new Random();
+        double d = Math.log(1-r.nextDouble())/(-maxSize);
+        int res = (int) Math.round(d*maxSize);
+        return res;
     }
     
     /**
      * Permet d'effectuer des croissements entre les 2 meilleurs genomes.
      */
     public static void crossover(){
-        ArrayList<Trolley> p1 = popList.get(0); //On récupere le premier genome (meilleur)
-        ArrayList<Trolley> p2 = popList.get(1); //On récupere le deuxieme genome (2nd meilleur)
-        
-        //On va convertir notre liste de colis en une liste d'entiers étant les id des colis
-        //pour pouvoir utiliser la fonction d'OrderedCrossover (OX).
-        List<Integer> l1 = new ArrayList();
-        int rab = -1;
-        for(Trolley t : p1){
-            for(Box b : t.getBoxes())
-                l1.add(b.getIdBox());
-            //Si la tournée n'est pas remplie de colis au max, on ajoute des ids négatifs
-            //pour que les tournées non completes soient gardées au croissement
-            //et non pas qu'elles soit remplies au max par les colis normallement situés dans la tournée suivante.
-            for(int i=1; i<(t.getNbColisMax()-t.getBoxes().size()+1); i++) {
-                l1.add(rab);
-                rab--;
-            }
-        }
-        
-        //De même pour le second genome
-        rab = -1;
-        List<Integer> l2 = new ArrayList();
-        for(Trolley t : p2){
-            for(Box b : t.getBoxes())
-                l2.add(b.getIdBox());
-            for(int i=1; i<(t.getNbColisMax()-t.getBoxes().size()+1); i++) {
-                l2.add(rab);
-                rab--;
-            }
-        }
-        
         //Pour creer 8 nouveaux genomes, on fait appel 4 fois à la fonction CrossOver
         //qui va retourner 2 mélanges des 2 génomes passés en paramètres, qu'on ajoute à la liste de population
-        for(int i=0; i<4; i++) {
+        for(int i=0; i<10; i++) {
+            int r1 = getExponentialRandomNumber(20);
+            int r2 = getExponentialRandomNumber(20);
+            while(r1 == r2) 
+                r2 = getExponentialRandomNumber(20);
+            //System.out.println("Crossover entre la " + r1 + " et la " + r2);
+
+            ArrayList<Trolley> p1 = popList.get(r1); //On récupere le premier genome (meilleur)
+            ArrayList<Trolley> p2 = popList.get(r2); //On récupere le deuxieme genome (2nd meilleur)
+            
+            //On va convertir notre liste de colis en une liste d'entiers étant les id des colis
+            //pour pouvoir utiliser la fonction d'OrderedCrossover (OX).
+            List<Integer> l1 = new ArrayList();
+            int rab = -1;
+            for(Trolley t : p1){
+                for(Box b : t.getBoxes())
+                    l1.add(b.getIdBox());
+                //Si la tournée n'est pas remplie de colis au max, on ajoute des ids négatifs
+                //pour que les tournées non completes soient gardées au croissement
+                //et non pas qu'elles soit remplies au max par les colis normallement situés dans la tournée suivante.
+                for(int j=1; j<(t.getNbColisMax()-t.getBoxes().size()+1); j++) {
+                    l1.add(rab);
+                    rab--;
+                }
+            }
+
+            //De même pour le second genome
+            rab = -1;
+            List<Integer> l2 = new ArrayList();
+            for(Trolley t : p2){
+                for(Box b : t.getBoxes())
+                    l2.add(b.getIdBox());
+                for(int j=1; j<(t.getNbColisMax()-t.getBoxes().size()+1); j++) {
+                    l2.add(rab);
+                    rab--;
+                }
+            }
+
             Map<Integer, ArrayList<Integer>> cs = OX.crossover(l1, l2);
            
             ArrayList<Integer> nl1  = cs.get(0);
@@ -261,8 +301,8 @@ public class GATournee {
      */
     public static void mutation(){
         int tot = boxes.size();
-        for(int i=2; i<10; i++){ //Sur les genomes 2 à 10 (tous sauf les 2 meilleurs que l'on garde tel quels)
-            for(int j=0; j<2; j++){ //On réalise 2 déplacement aléatoires entre deux boites
+        for(int i=2; i<40; i++){ //Sur les genomes 2 à 10 (tous sauf les 2 meilleurs que l'on garde tel quels)
+            for(int j=0; j<20; j++){ //On réalise 1 déplacement aléatoires entre deux boites
                 int p1 = new Random().nextInt(tot - 1) + 1;
                 int p2 = new Random().nextInt(tot - 1) + 1;
                 while(p1 == p2) //Si p1 et p2 sont les mêmes, on retire p2 jusqu'a ce qu'ils ne le soient plus
@@ -270,7 +310,7 @@ public class GATournee {
                 swapBoxes(popList.get(i), p1, p2);
             }
             
-            for(int j=0; j<3; j++){ //On réalise 3 tentatives de déplacement d'une boite aléatoire vers une autre tournée
+            for(int j=0; j<30; j++){ //On réalise 2 tentatives de déplacement d'une boite aléatoire vers une autre tournée
                 int val = new Random().nextInt(popList.get(i).size()); //On sélectionne une tournée au hasard
                 if(popList.get(i).get(val).getBoxes().size() == popList.get(i).get(val).getNbColisMax()){ //Si elle est complete
                     int rand  = new Random().nextInt(popList.get(i).get(val).getBoxes().size()); //On sélectionne un colis de cette tournée au hasard
@@ -442,17 +482,17 @@ public class GATournee {
     //FONCTION DE TEST
     
     /**
-     * Permet de tester GATournee.
+     * Permet de tester GATourneeV2.
      * En executant l'algorithme sur une instance, et en la passant au checker.
      * @param args 
      */
     public static void main(String[] args) {
         /*Reader*/
-        String fileName = "instance_40000.txt";
+        String fileName = "instance_0606_136178_Z1.txt";
         Instance inst = Reader.read(fileName, false); 
         inst = Recherche.run(inst);
         
-        ArrayList<Trolley> tournees = GATournee.run(inst);
+        ArrayList<Trolley> tournees = GATourneeV2.run(inst);
         inst.setTrolleys(tournees);
           
         /*Writer*/
