@@ -11,8 +11,8 @@ public class InterTrolleyInfos {
 	private double diffCout;
 
 	public InterTrolleyInfos() {
-		this.oldTrolley = null;
-        this.newTrolley = null;
+		this.oldTrolley = new Trolley();
+        this.newTrolley = new Trolley();
 		this.oldPosition = -1;
 		this.newPosition = -1;
 		this.diffCout = Double.MAX_VALUE;

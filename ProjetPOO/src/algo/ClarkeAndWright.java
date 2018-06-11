@@ -64,7 +64,7 @@ public class ClarkeAndWright {
     // Méthodes
 
     /**
-     * Permet de déterminer le coût d'une fusino entre deux trolley.
+     * Permet de déterminer le coût d'une fusion entre deux trolleys.
      * @param t1
      * @param t2
      * @return double
@@ -92,7 +92,7 @@ public class ClarkeAndWright {
     }
 
     /**
-     * Permet de créer une tournée pour chaque client, calculer le gain de 
+     * Permet de créer une tournée pour chaque box, calculer le gain de 
      * celle-ci, d'ajouter la paire de tournées dans notre tableau d'économie et
      * trié dans l'ordre défini le gain notre tableau d'économie.
      */
@@ -116,7 +116,6 @@ public class ClarkeAndWright {
                 this.economies.add(eco);
             }
         }
-        //for(Economie e:economies) System.out.println(e);
         // Tri décroissant des ensembles de couples de trolleys par coût de fusion
         Collections.sort(this.economies,new Comparator<Economie>(){
             @Override
@@ -201,16 +200,18 @@ public class ClarkeAndWright {
      * Permet de récupérer l'instance.
      * @return Instance
      */
-    public Instance getNewInstance() {
+    private Instance getNewInstance() {
         this.instance.setTrolleys(new ArrayList<>(trolleys));
         return this.instance;
     }
 
     /**
      * Permet de lancer l'algo.
+     * @return 
      */
-    public void run() {
+    public Instance run() {
         this.initialiserCWA();
         this.fusion();
+        return this.getNewInstance();
     }    
 }

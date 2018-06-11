@@ -47,6 +47,7 @@ public class Trolley implements Serializable {
 	private Instance ninstance;
 
     public Trolley() {
+        this.idTrolley = -1;
         this.boxes = new ArrayList<>();
     }
 
@@ -135,7 +136,7 @@ public class Trolley implements Serializable {
 			int posBox = i;
 			for (int pos = 1; pos < nbBoxes; pos++) {
 				if (pos != posBox) {
-					IntraTrolleyInfos intraInfosNew = this.evaluerDeplacement(this.boxes.get(i),pos);
+					IntraTrolleyInfos intraInfosNew = this.evaluerDeplacement(this.boxes.get(i),pos);                    
                     if (intraInfosNew.getDiffCout() < intraInfos.getDiffCout()) {
 						intraInfos = new IntraTrolleyInfos(intraInfosNew);
 					}
@@ -165,10 +166,10 @@ public class Trolley implements Serializable {
 	public IntraTrolleyInfos echangeIntraTrolley() {
 		IntraTrolleyInfos intraInfos = new IntraTrolleyInfos();
 		int nbBoxes = this.boxes.size();
-		for (int l1 = 0; l1 < nbBoxes; l1++) {
-			for (int l2 = 0; l2 < nbBoxes; l2++) {
-				if (l1 != l2) {
-					IntraTrolleyInfos intraInfosNew = this.evaluerEchange(l1,l2);
+		for (int b1 = 0; b1 < nbBoxes; b1++) {
+			for (int b2 = 0; b2 < nbBoxes; b2++) {
+				if (b1 != b2) {
+					IntraTrolleyInfos intraInfosNew = this.evaluerEchange(b1,b2);
 					if (intraInfosNew.getDiffCout() < intraInfos.getDiffCout()) {
 						intraInfos = new IntraTrolleyInfos(intraInfosNew);
 					}
@@ -240,8 +241,8 @@ public class Trolley implements Serializable {
 			return Double.MAX_VALUE;
 		}
 
-		Location prev1 = this.ninstance.getGraph().getDepartingDepot();
-		Location prev2 = this.ninstance.getGraph().getDepartingDepot();
+		Location prec1 = this.ninstance.getGraph().getDepartingDepot();
+		Location prec2 = this.ninstance.getGraph().getDepartingDepot();
 		Location next1 = this.ninstance.getGraph().getDepartingDepot();
 		Location next2 = this.ninstance.getGraph().getDepartingDepot();
 
@@ -255,11 +256,11 @@ public class Trolley implements Serializable {
 
 		if (oldPosition > 0) {
             List<ProdQty> prodQtysBisTer = this.boxes.get(oldPosition - 1).getProdQtys();
-			prev1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
+			prec1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
 		}
 		if (newPosition > 0) {
             List<ProdQty> prodQtysQuater = this.boxes.get(newPosition - 1).getProdQtys();
-			prev2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
+			prec2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
 		}
 
 		if (oldPosition < this.boxes.size() - 1) {
@@ -274,19 +275,19 @@ public class Trolley implements Serializable {
 		double previousDistance = 0;
 
 		if (oldPosition < newPosition) {
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
 						+ l2_end.getDistanceTo(next2);
 			}
-			return prev1.getDistanceTo(next1) + l2_end.getDistanceTo(l1_start)
+			return prec1.getDistanceTo(next1) + l2_end.getDistanceTo(l1_start)
 					+ l1_end.getDistanceTo(next2) - previousDistance;
 		} else {
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
-						+ prev2.getDistanceTo(l2_start);
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+						+ prec2.getDistanceTo(l2_start);
 			}
-			return prev2.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
-					+ prev1.getDistanceTo(next1) - previousDistance;
+			return prec2.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
+					+ prec1.getDistanceTo(next1) - previousDistance;
 		}
 	}
 
@@ -305,8 +306,8 @@ public class Trolley implements Serializable {
 			return Double.MAX_VALUE;
 		}
 
-		Location prev1 = this.ninstance.getGraph().getDepartingDepot();
-		Location prev2 = this.ninstance.getGraph().getDepartingDepot();
+		Location prec1 = this.ninstance.getGraph().getDepartingDepot();
+		Location prec2 = this.ninstance.getGraph().getDepartingDepot();
 		Location next1 = this.ninstance.getGraph().getDepartingDepot();
 		Location next2 = this.ninstance.getGraph().getDepartingDepot();
 		
@@ -320,11 +321,11 @@ public class Trolley implements Serializable {
 
 		if (posBox1 > 0) {
 			List<ProdQty> prodQtysBisTer = this.boxes.get(posBox1 - 1).getProdQtys();
-			prev1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
+			prec1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
 		}
 		if (posBox2 > 0) {
 			List<ProdQty> prodQtysQuater = this.boxes.get(posBox2 - 1).getProdQtys();
-			prev2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
+			prec2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
 		}
 
 		if (posBox1 < this.boxes.size() - 1) {
@@ -341,22 +342,22 @@ public class Trolley implements Serializable {
 		if (posBox1 == (posBox2 - 1) || (posBox1 + 1) == posBox2
 				|| posBox2 == (posBox1 - 1) || (posBox2 + 1) == posBox1) {
 
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
 						+ l2_end.getDistanceTo(next2);
 			}
 
-			return prev1.getDistanceTo(l2_start) + l2_end.getDistanceTo(l1_start)
+			return prec1.getDistanceTo(l2_start) + l2_end.getDistanceTo(l1_start)
 					+ l1_end.getDistanceTo(next2) - previousDistance;
 		} else {
 
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
-						+ prev2.getDistanceTo(l2_start) + l2_end.getDistanceTo(next2);
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+						+ prec2.getDistanceTo(l2_start) + l2_end.getDistanceTo(next2);
 			}
 
-			return prev1.getDistanceTo(l2_start) + l2_end.getDistanceTo(next1)
-					+ prev2.getDistanceTo(l1_start) + l1_end.getDistanceTo(next2) - previousDistance;
+			return prec1.getDistanceTo(l2_start) + l2_end.getDistanceTo(next1)
+					+ prec2.getDistanceTo(l1_start) + l1_end.getDistanceTo(next2) - previousDistance;
 		}
 	}
 
@@ -372,12 +373,10 @@ public class Trolley implements Serializable {
 		for (int i = 0; i < nbBoxes1; i++) {
 			int posBox = i;
 			for (int pos = 1; pos < nbBoxes2; pos++) {
-				//if (pos != posBox) {
 				InterTrolleyInfos interInfosNew = this.evaluerDeplacementInter(this.boxes.get(i),pos,t);
                 if (interInfosNew.getDiffCout() < interInfos.getDiffCout()) {
                     interInfos = new InterTrolleyInfos(interInfosNew);
 				}
-				//}
 			}
 		}
 		return interInfos;
@@ -413,8 +412,8 @@ public class Trolley implements Serializable {
 			return Double.MAX_VALUE;
 		}
 
-		Location prev1 = this.ninstance.getGraph().getDepartingDepot();
-		Location prev2 = t.ninstance.getGraph().getDepartingDepot();
+		Location prec1 = this.ninstance.getGraph().getDepartingDepot();
+		Location prec2 = t.ninstance.getGraph().getDepartingDepot();
 		Location next1 = this.ninstance.getGraph().getDepartingDepot();
 		Location next2 = t.ninstance.getGraph().getDepartingDepot();
 
@@ -428,11 +427,11 @@ public class Trolley implements Serializable {
 
 		if (oldPosition > 0) {
             List<ProdQty> prodQtysBisTer = this.boxes.get(oldPosition - 1).getProdQtys();
-			prev1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
+			prec1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
 		}
 		if (newPosition > 0) {
             List<ProdQty> prodQtysQuater = t.boxes.get(newPosition - 1).getProdQtys();
-			prev2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
+			prec2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
 		}
 
 		if (oldPosition < this.boxes.size() - 1) {
@@ -447,19 +446,19 @@ public class Trolley implements Serializable {
 		double previousDistance = 0;
 
 		if (oldPosition < newPosition) {
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
 						+ l2_end.getDistanceTo(next2);
 			}
-			return prev1.getDistanceTo(next1) + l2_end.getDistanceTo(l1_start)
+			return prec1.getDistanceTo(next1) + l2_end.getDistanceTo(l1_start)
 					+ l1_end.getDistanceTo(next2) - previousDistance;
 		} else {
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
-						+ prev2.getDistanceTo(l2_start);
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+						+ prec2.getDistanceTo(l2_start);
 			}
-			return prev2.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
-					+ prev1.getDistanceTo(next1) - previousDistance;
+			return prec2.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
+					+ prec1.getDistanceTo(next1) - previousDistance;
 		}
 	}
 
@@ -513,8 +512,8 @@ public class Trolley implements Serializable {
 			return Double.MAX_VALUE;
 		}
 
-		Location prev1 = this.ninstance.getGraph().getDepartingDepot();
-		Location prev2 = t.ninstance.getGraph().getDepartingDepot();
+		Location prec1 = this.ninstance.getGraph().getDepartingDepot();
+		Location prec2 = t.ninstance.getGraph().getDepartingDepot();
 		Location next1 = this.ninstance.getGraph().getDepartingDepot();
 		Location next2 = t.ninstance.getGraph().getDepartingDepot();
 		
@@ -528,11 +527,11 @@ public class Trolley implements Serializable {
 
 		if (posBox1 > 0) {
 			List<ProdQty> prodQtysBisTer = this.boxes.get(posBox1 - 1).getProdQtys();
-			prev1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
+			prec1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
 		}
 		if (posBox2 > 0) {
 			List<ProdQty> prodQtysQuater = t.boxes.get(posBox2 - 1).getProdQtys();
-			prev2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
+			prec2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
 		}
 
 		if (posBox1 < this.boxes.size() - 1) {
@@ -549,22 +548,22 @@ public class Trolley implements Serializable {
 		if (posBox1 == (posBox2 - 1) || (posBox1 + 1) == posBox2
 				|| posBox2 == (posBox1 - 1) || (posBox2 + 1) == posBox1) {
 
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
 						+ l2_end.getDistanceTo(next2);
 			}
 
-			return prev1.getDistanceTo(l2_start) + l2_end.getDistanceTo(l1_start)
+			return prec1.getDistanceTo(l2_start) + l2_end.getDistanceTo(l1_start)
 					+ l1_end.getDistanceTo(next2) - previousDistance;
 		} else {
 
-			if (!prev1.equals(next1) || !prev2.equals(next2)) {
-				previousDistance = prev1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
-						+ prev2.getDistanceTo(l2_start) + l2_end.getDistanceTo(next2);
+			if (!prec1.equals(next1) || !prec2.equals(next2)) {
+				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
+						+ prec2.getDistanceTo(l2_start) + l2_end.getDistanceTo(next2);
 			}
 
-			return prev1.getDistanceTo(l2_start) + l2_end.getDistanceTo(next1)
-					+ prev2.getDistanceTo(l1_start) + l1_end.getDistanceTo(next2) - previousDistance;
+			return prec1.getDistanceTo(l2_start) + l2_end.getDistanceTo(next1)
+					+ prec2.getDistanceTo(l1_start) + l1_end.getDistanceTo(next2) - previousDistance;
 		}
 	}
     
@@ -575,7 +574,7 @@ public class Trolley implements Serializable {
 	 * @return boolean
 	 */
 	public boolean doDeplacementIntraTrolley(IntraTrolleyInfos intraTrolleyInfos) {
-        Box b = this.boxes.get(intraTrolleyInfos.getOldPosition());
+        Box b = this.boxes.get(intraTrolleyInfos.getOldPosition());;
 		return this.addBoxByPos(b, intraTrolleyInfos.getNewPosition());
 	}
 
@@ -637,7 +636,6 @@ public class Trolley implements Serializable {
 			return false;
 		}
 
-		double deltaCout = calculerDeltaCout(b, pos);
 		this.boxes.add(pos, b);
 		return true;
     }

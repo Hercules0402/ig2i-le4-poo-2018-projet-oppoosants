@@ -10,7 +10,7 @@ public class IntraTrolleyInfos {
 	private double diffCout;
 
 	public IntraTrolleyInfos() {
-		this.trolley = null;
+		this.trolley = new Trolley();
 		this.oldPosition = -1;
 		this.newPosition = -1;
 		this.diffCout = Double.MAX_VALUE;
@@ -76,10 +76,14 @@ public class IntraTrolleyInfos {
 		return diffCout;
     }
 
+    /*@Override
+    public String toString() {
+        return "IntraTrolleyInfos{" + "trolley=" + trolley.getIdTrolley() + ", oldPosition=" + oldPosition + ", newPosition=" + newPosition + ", diffCout=" + diffCout + '}';
+    }*/
+
     @Override
     public String toString() {
         return "IntraTrolleyInfos{" + "trolley=" + trolley.getIdTrolley() + ", oldPosition=" + oldPosition + ", newPosition=" + newPosition + ", diffCout=" + diffCout + '}';
     }
-    
     
 }
