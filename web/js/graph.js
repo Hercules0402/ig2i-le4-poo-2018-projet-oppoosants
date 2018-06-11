@@ -198,6 +198,8 @@ function placeLocations() {
  * @param {*} coeffH 
  */
 function placeDepots() {
+    stroke(0);
+    
     for(locId in allLocations) {
         var loc = allLocations[locId];
 
