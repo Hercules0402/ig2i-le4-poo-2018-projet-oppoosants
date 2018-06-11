@@ -22,13 +22,17 @@ function setAllLocations() {
  * @param {*} point 
  * @param {*} typeOfPoint 
  */
-function genPointContent(p) {
+function genPointContent(points) {
     var content = "";
+    var point;
 
-    content += "Identifiant : " + p["IDPRODUCT"] + "<br/>";
-    content += "Volume : " + p["VOLUME"] + "<br/>";
-    content += "Poids : " + p["WEIGHT"];
-
+    for(idP in points) {
+        p = points[idP];
+        content += "Récupéré par le trolley " + p[2]["IDTROLLEY"] + ', box ' + p[1]["IDBOX"] + '<br/>';
+        content += "Identifiant : " + p[0]["IDPRODUCT"] + " - Volume/u : " + p[0]["VOLUME"] + " - Poids/u : " + p[0]["WEIGHT"] + " - Qt : " + p[0]["QUANTITY"];
+        if(idP < points.length - 1) content += '<hr/>';
+    
+    }
     return content;
 }
 
@@ -59,6 +63,8 @@ function setup(){
 
     $("#defaultCanvas0").mousemove(function(e) {
         var x, y, point, typeOfPoint;
+        var touchedP = [];
+        var touched = false;
         $("#popup").hide();
 
         tabSolution.forEach(function(trolley) {
@@ -71,19 +77,24 @@ function setup(){
                         parseInt((y * coeffH) + windowHeight*0.1 - pointSize/2) < e.pageY &&
                         parseInt((y * coeffH) + windowHeight*0.1 + pointSize/2) > e.pageY) {
 
-                        $("#popup").show();
-                        $("#popup").css("top", (y * coeffH) + "px");
-                        $("#popup").css("left", (x * coeffW) + 80 + "px");
-                        $("#popup").html(
-                            '<div class="card">' +
-                            '    <div class="card-header">Point Produit (' + x +','+ y + ')</div>' +
-                            '    <div class="card-body">' + genPointContent(p) + '</div> ' +
-                            '</div>'
-                        );
+                        touchedP.push([p, box, trolley]);
+                        touched = true;
                     }
                 });
             });
         });
+
+        if(touched) {
+            $("#popup").show();
+            $("#popup").css("top", (y * coeffH) + "px");
+            $("#popup").css("left", (x * coeffW) + 80 + "px");
+            $("#popup").html(
+                '<div class="card">' +
+                '    <div class="card-header">Point Produit (' + x +','+ y + ')</div>' +
+                '    <div class="card-body">' + genPointContent(touchedP) + '</div> ' +
+                '</div>'
+            );
+        }
     });
   }
 
@@ -155,6 +166,7 @@ function getRandomInt(max) {
  */
 function placeLocations() {
     //var colorInc = 0;
+    stroke(0);
 
     for(locId in allLocations) {
         var loc = allLocations[locId];
@@ -195,7 +207,8 @@ function placeDepots() {
 function placeProducts() {
     var abs = 0;
     var ord = 0;
-
+    stroke(0);
+    
     tabSolution.forEach(function(trolley) {
         trolley["BOXES"].forEach(function(box) {
             box["PRODUCTS"].forEach(function(p) {
