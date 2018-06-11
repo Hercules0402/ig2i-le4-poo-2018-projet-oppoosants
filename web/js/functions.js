@@ -20,6 +20,8 @@ function getInstances() {
     $("#graphReturnB").hide();
     $("#toggleLocations").hide();
     $("#mainNavbar").show();
+    $("#trolleySelection").hide();
+    $("#boxSelection").hide();
     isGraphic = false;
     drawed = false;
 
