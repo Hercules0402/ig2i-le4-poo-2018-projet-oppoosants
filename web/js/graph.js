@@ -141,10 +141,6 @@ function draw(){
             var selectedTrolleyID = $("#trolleySelection" ).val();
     
             if(displayLocations) placeLocations();
-<<<<<<< HEAD
-=======
-            if(displayLines) drawLiaisonsFromTrolley(); 
->>>>>>> 4fae3a0ec008f88f5105df811cdee9b4aa7e1889
             placeDepots();
             if (selectedTrolleyID == tabSolution.length) {
                 //Affichage de tous les trolleys
