@@ -19,6 +19,7 @@ function testConnexion() {
 function getInstances() {
     $("#graphReturnB").hide();
     $("#toggleLocations").hide();
+    $("#toggleLines").hide();
     $("#mainNavbar").show();
     $("#trolleySelection").hide();
     $("#boxSelection").hide();

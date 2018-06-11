@@ -55,6 +55,21 @@ function toggleLocations() {
 }
 
 /**
+ * Affiche ou cache les locations relatives au graph.
+ */
+function toggleLines() {
+    if(displayLines) {
+        $('#toggleLinesC').prop('checked', false);
+    }
+    else {
+        $('#toggleLinesC').prop('checked', true);
+    }
+
+    resetGraph();
+    displayLines = !displayLines;
+}
+
+/**
  * Permet de redessiner le graph.
  */
 function resetGraph() {
@@ -123,7 +138,7 @@ function draw(){
             coeffH = windowHeight/maxSize*0.8;
     
             if(displayLocations) placeLocations();
-            drawLiaisonsFromTrolley(); 
+            if(displayLines) drawLiaisonsFromTrolley(); 
             placeDepots();
             drawProductsFromTrolley();
             drawed = true;
@@ -290,6 +305,7 @@ function getGraphe(idInstance) {
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
+    $("#toggleLines").show();
     $("#trolleySelection").show();
     $("#boxSelection").show();
     setTabSolution(idInstance);
