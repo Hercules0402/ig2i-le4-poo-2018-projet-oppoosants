@@ -123,8 +123,8 @@ function draw(){
             coeffH = windowHeight/maxSize*0.8;
     
             if(displayLocations) placeLocations();
-            drawLiaisons(); 
-            placeDepots()
+            drawLiaisonsFromTrolley(); 
+            placeDepots();
             drawProductsFromTrolley();
             drawed = true;
         }
@@ -135,28 +135,68 @@ function draw(){
 }
 
 /**
+ * Fonction permettant de dessiner les produits d'un trolley, avec une couleur identique s'il est issu du même box.
+ * @param {*} coeffW 
+ * @param {*} coeffH 
+ */
+function drawProductsFromTrolley() {
+    
+    //console.log(tabSolution);
+    stroke(0);
+    var abs = 0;
+    var ord = 0;
+    var color;
+    var selectedTrolleyID = $("#trolleySelection" ).val();
+    
+    //Récupère les boxes correspondantes au trolley sélectionné
+    var boxes = tabSolution[selectedTrolleyID].BOXES;
+    $('#boxSelection').empty();
+
+    //Lecture des produits pour chacunes des boxes (une couleur est générée pour chaque box)
+    for (var j = 0; j < boxes.length; j++){
+
+        var box = boxes[j].PRODUCTS;
+        color = colors[j];
+        
+        $('#boxSelection').append($('<span>', {
+            class: 'badge badge-primary',
+            text: 'Box ID: '+boxes[j].IDBOX+' (Order: '+boxes[j].ORDER_ID+')',
+            style: 'background-color:'+color+';'
+        }));
+        
+        //Positionnement des produits avec leur coordonnées et couleur respectives
+        for (var k = 0; k < box.length; k++){
+            abs = parseInt(box[k].LOC_ABSCISSE);
+            ord = parseInt(box[k].LOC_ORDONNEE);
+            fill(color);
+            ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
+        }
+    }
+}
+
+/**
  * Fonction permettant de dessiner le parcours des trolleys pour une instance donnée.
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function drawLiaisons() {
+function drawLiaisonsFromTrolley() {
     var lastProduct = false;
+    var selectedTrolleyID = $("#trolleySelection" ).val();
+    var trolley = tabSolution[selectedTrolleyID];
 
-    tabSolution.forEach(function(trolley) {
-        stroke(color(getRandomInt(256),getRandomInt(256),getRandomInt(256)));
-        trolley["BOXES"].forEach(function(box) {
-            box["PRODUCTS"].forEach(function(p){
-                if(!lastProduct) {
-                    line(0, 0, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
-                }
-                else {
-                    line(parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
-                }
-                lastProduct = p;
-            });
-            line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
-            lastProduct = false;
+    stroke(color(255,255,255));
+    trolley["BOXES"].forEach(function(box) {
+        box["PRODUCTS"].forEach(function(p){
+            if(!lastProduct) {
+                line(0, 0, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
+            }
+            else {
+                line(parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH, parseInt(p["LOC_ABSCISSE"])*coeffW, parseInt(p["LOC_ORDONNEE"])*coeffH);
+            }
+            lastProduct = p;
         });
+        line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
+        lastProduct = false;
     });
 }
 
@@ -199,7 +239,7 @@ function placeLocations() {
  */
 function placeDepots() {
     stroke(0);
-    
+
     for(locId in allLocations) {
         var loc = allLocations[locId];
 
@@ -239,46 +279,6 @@ function setupTrolleySelection() {
             value: i,
             text: 'Instance '+tabSolution[i].NINSTANCE+"/Trolley "+tabSolution[i].IDTROLLEY
         }));
-    }
-}
-
-/**
- * Fonction permettant de dessiner les produits d'un trolley, avec une couleur identique s'il est issu du même box.
- * @param {*} coeffW 
- * @param {*} coeffH 
- */
-function drawProductsFromTrolley() {
-    
-    //console.log(tabSolution);
-    stroke(0);
-    var abs = 0;
-    var ord = 0;
-    var color;
-    var selectedTrolleyID = $("#trolleySelection" ).val();
-    
-    //Récupère les boxes correspondantes au trolley sélectionné
-    var boxes = tabSolution[selectedTrolleyID].BOXES;
-    $('#boxSelection').empty();
-
-    //Lecture des produits pour chacunes des boxes (une couleur est générée pour chaque box)
-    for (var j = 0; j < boxes.length; j++){
-
-        var box = boxes[j].PRODUCTS;
-        color = colors[j];
-        
-        $('#boxSelection').append($('<span>', {
-            class: 'badge badge-primary',
-            text: 'Box ID: '+boxes[j].IDBOX+' (Order: '+boxes[j].ORDER_ID+')',
-            style: 'background-color:'+color+';'
-        }));
-        
-        //Positionnement des produits avec leur coordonnées et couleur respectives
-        for (var k = 0; k < box.length; k++){
-            abs = parseInt(box[k].LOC_ABSCISSE);
-            ord = parseInt(box[k].LOC_ORDONNEE);
-            fill(color);
-            ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
-        }
     }
 }
 
