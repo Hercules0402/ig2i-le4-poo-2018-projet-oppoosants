@@ -140,14 +140,16 @@ function draw(){
 
             var selectedTrolleyID = $("#trolleySelection" ).val();
     
-            if(displayLocations) placeLocations();
+            if(displayLocations) placeLocations(); 
             placeDepots();
             if (selectedTrolleyID == tabSolution.length) {
                 //Affichage de tous les trolleys
-                drawLiaisonsFromInstance();
+                if(displayLines)
+                    drawLiaisonsFromInstance();
                 drawProductsFromInstance();
             } else {
-                drawLiaisonsFromTrolley(selectedTrolleyID);
+                if(displayLines)
+                    drawLiaisonsFromTrolley(selectedTrolleyID);
                 drawProductsFromTrolley(selectedTrolleyID);
             }
             drawed = true;
