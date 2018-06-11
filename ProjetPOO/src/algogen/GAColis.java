@@ -261,14 +261,14 @@ public class GAColis {
 
         int t = 0;
         int j = n-1;
-        do {
+        while(i!=0) {
             t++;
             i = P[j];
             for(int k=i+1; k<j; k++) {
                 boxes.get(t).addProduct(genome.get(k));
             }
             j = i;
-        } while(i!=0);
+        }
         
         ArrayList<Box> notEmptyBoxes = new ArrayList<>(); //On recrée une liste de colis non vides
         for(Box b : boxes) //Pour chaque colis 
@@ -280,6 +280,7 @@ public class GAColis {
             System.out.printf(" | ");
         }    
         System.out.println("");*/
+        //check(notEmptyBoxes);
         return notEmptyBoxes;
     }
     
@@ -332,6 +333,28 @@ public class GAColis {
     }
     
     //FONCTION DE TEST
+    
+    public static void check(List<Box> list){
+        boolean errors = false;
+        for(Box b : list){
+            int W = instance.getWeightMaxBox();
+            int V = instance.getVolumeMaxBox();
+            int loadW = 0, loadV = 0;
+            for(ProdQty pq : b.getProdQtys()){
+                loadW += pq.getProduct().getWeight() * pq.getQuantity();
+                loadV += pq.getProduct().getVolume() * pq.getQuantity();
+            }
+            if(loadW > W) {
+                System.out.println("[CHECK] Erreur de poids du colis " + b.getIdBox() + "(" + loadW + " > " + W + ")");
+                errors = true;
+            }
+            if(loadV > V) {
+                System.out.println("[CHECK] Erreur de volume du colis " + b.getIdBox() + "(" + loadV + " > " + V + ")");
+                errors = true;
+            }
+        }
+        System.out.println("[CHECK] Liste de colis " + (errors ? "invalide" : "valide"));
+    }
     
     /**
      * Permet de tester GAColis.
