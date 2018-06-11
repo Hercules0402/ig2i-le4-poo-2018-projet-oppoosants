@@ -122,13 +122,10 @@ function draw(){
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
     
-            if(displayLocations) placeLocations(coeffW, coeffH);
-            //placeProducts(coeffW, coeffH);
-            placeDepots(coeffW, coeffH);
-            //drawLiaisons(coeffW, coeffH); 
-            //console.log(allPoints);
-            
-            drawProductsFromTrolley(coeffW, coeffH);
+            if(displayLocations) placeLocations();
+            drawLiaisons(); 
+            placeDepots()
+            drawProductsFromTrolley();
             drawed = true;
         }
     }
@@ -212,29 +209,6 @@ function placeDepots() {
 }
 
 /**
- * Dessine les produits de l'entrepôt sur le graph.
- * @param {*} coeffW 
- * @param {*} coeffH 
- */
-function placeProducts() {
-    var abs = 0;
-    var ord = 0;
-    stroke(0);
-    
-    tabSolution.forEach(function(trolley) {
-        trolley["BOXES"].forEach(function(box) {
-            box["PRODUCTS"].forEach(function(p) {
-                abs = parseInt(p["LOC_ABSCISSE"]);
-                ord = parseInt(p["LOC_ORDONNEE"]);
-
-                fill(color(0,255,0));
-                ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
-            });
-        });
-    });
-}
-
-/**
  * Récupère la distance maximale à parcourir.
  * @param {*} coeffW 
  * @param {*} coeffH 
@@ -271,9 +245,10 @@ function setupTrolleySelection() {
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
-function drawProductsFromTrolley(coeffW, coeffH) {
+function drawProductsFromTrolley() {
     
     //console.log(tabSolution);
+    stroke(0);
     var abs = 0;
     var ord = 0;
     var color;
