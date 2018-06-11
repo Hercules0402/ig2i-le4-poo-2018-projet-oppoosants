@@ -56,6 +56,21 @@ function toggleLocations() {
 }
 
 /**
+ * Affiche ou cache les locations relatives au graph.
+ */
+function toggleLines() {
+    if(displayLines) {
+        $('#toggleLinesC').prop('checked', false);
+    }
+    else {
+        $('#toggleLinesC').prop('checked', true);
+    }
+
+    resetGraph();
+    displayLines = !displayLines;
+}
+
+/**
  * Permet de redessiner le graph.
  */
 function resetGraph() {
@@ -126,6 +141,10 @@ function draw(){
             var selectedTrolleyID = $("#trolleySelection" ).val();
     
             if(displayLocations) placeLocations();
+<<<<<<< HEAD
+=======
+            if(displayLines) drawLiaisonsFromTrolley(); 
+>>>>>>> 4fae3a0ec008f88f5105df811cdee9b4aa7e1889
             placeDepots();
             if (selectedTrolleyID == tabSolution.length) {
                 //Affichage de tous les trolleys
@@ -369,6 +388,7 @@ function getGraphe(idInstance) {
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
+    $("#toggleLines").show();
     $("#trolleySelection").show();
     $("#boxSelection").show();
     setTabSolution(idInstance);
