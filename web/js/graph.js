@@ -75,9 +75,11 @@ function toggleLines() {
  */
 function togglePoint() {
     if(displayPoint) {
+        $('#togglePointC').prop('checked', true);
         startPoint();
     }
     else {
+        $('#togglePointC').prop('checked', false);
         movingPState = "end";
     }
 
@@ -94,6 +96,14 @@ function resetGraph() {
     isGraphic = false;
     drawed = false;
     getGraphe(idCurrentInstance);
+}
+
+function resetGraphAndPoint() {
+    movingPState = "end";
+    displayPoint = false;
+    $('#togglePointC').prop('checked', false);
+
+    resetGraph();
 }
 
 /**
@@ -148,35 +158,31 @@ function setup(){
 function draw(){
     if (isGraphic) {
         $("#defaultCanvas0").show();
+
         if(!drawed) {
             var maxSize = getMaxDistance();
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
             calcItineraireTrolley();
 
-            var selectedTrolleyID = $("#trolleySelection" ).val();
-    
-            if(displayLocations) placeLocations(); 
-            placeDepots();
-            if (selectedTrolleyID == tabSolution.length) {
-                //Affichage de tous les trolleys
-                if(displayLines)
-                    drawLiaisonsFromInstance();
-                drawProductsFromInstance();
-            } else {
-                if(displayLines)
-                    drawLiaisonsFromTrolley(selectedTrolleyID);
-                drawProductsFromTrolley(selectedTrolleyID);
-            }
             drawed = true;
         }
+
         background(100);
         translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
     
-        if(displayLocations) placeLocations();
-        if(displayLines) drawLiaisonsFromTrolley(); 
+        var selectedTrolleyID = $("#trolleySelection" ).val();
+
+        if(displayLocations) placeLocations(); 
         placeDepots();
-        drawProductsFromTrolley();
+        if (selectedTrolleyID == tabSolution.length) {
+            //Affichage de tous les trolleys
+            if(displayLines) drawLiaisonsFromInstance();
+            drawProductsFromInstance();
+        } else {
+            if(displayLines) drawLiaisonsFromTrolley(selectedTrolleyID);
+            drawProductsFromTrolley(selectedTrolleyID);
+        }
 
         processMovingP();
     }
@@ -273,7 +279,6 @@ function drawProductsFromTrolley(selectedTrolleyID) {
     var abs = 0;
     var ord = 0;
     var color;
-    console.log(selectedTrolleyID);
     //Récupère les boxes correspondantes au trolley sélectionné
     var boxes = tabSolution[selectedTrolleyID].BOXES;
     $('#boxSelection').empty();
@@ -395,18 +400,34 @@ function drawLiaisonsFromInstance() {
 function calcItineraireTrolley() {
     var lastProduct = false;
     var selectedTrolleyID = $("#trolleySelection" ).val();
-    var trolley = tabSolution[selectedTrolleyID];
-
+    
     pointsOrder = [];
     pointsOrder.push([0,0]);
 
-    stroke(color(255,255,255));
-    trolley["BOXES"].forEach(function(box) {
-        box["PRODUCTS"].forEach(function(p){
-            pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
+    if (selectedTrolleyID != tabSolution.length) {
+        var trolley = tabSolution[selectedTrolleyID];
+
+        stroke(color(255,255,255));
+        trolley["BOXES"].forEach(function(box) {
+            box["PRODUCTS"].forEach(function(p){
+                pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
+            });
+            pointsOrder.push([0,0]);
         });
-        pointsOrder.push([0,0]);
-    });
+    }
+    else {
+        var trolley = tabSolution[selectedTrolleyID];
+
+        stroke(color(255,255,255));
+        tabSolution.forEach(function(trolley) {
+            trolley["BOXES"].forEach(function(box) {
+                box["PRODUCTS"].forEach(function(p){
+                    pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
+                });
+                pointsOrder.push([0,0]);
+            });
+        });      
+    }
 }
 
 /**
