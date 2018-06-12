@@ -1,5 +1,4 @@
 var firstDraw = true;
-var colors = ['#ff9900','#00cc00','#0066cc','#ff00ff','#ffff00','#00ffcc'];//Orange,Vert,Bleu,Fushia,Jaune,Cyan
 
 /**
  * Fonction permettant de récupérer la liste des locations de l'entrepôt.
@@ -21,6 +20,41 @@ function setAllLocations() {
     });
 }
 
+function generateTabColors(length) {
+    var colors = [];
+
+    var r = 0, g = 0, b = 0;
+    var rPassed = false, gPassed = false;
+
+    var inc = parseInt((255*3) / length);
+    for(i = 0; i < length; i++) {
+        if(r < 256 && !rPassed) {
+            r += inc;
+        }
+        else if (g < 256 && !gPassed) {
+            g += inc;
+        }
+        else {
+            b += inc;
+        }
+
+        if(r > 255) {
+            g += r - 255;
+            r = 0;
+            rPassed = true;
+        }
+
+        if(g > 255) {
+            b += g - 255;
+            g = 0;
+            gPassed = true;
+        }
+        
+        colors.push(color(r, g, b));
+    }
+
+    return colors;
+}
 /**
  * Définit le contenu de la tooltip à afficher en fonction du type de point selectionné.
  * @param {*} point 
@@ -283,6 +317,8 @@ function drawProductsFromTrolley(selectedTrolleyID) {
     var boxes = tabSolution[selectedTrolleyID].BOXES;
     $('#boxSelection').empty();
 
+    colors = generateTabColors(boxes.length);
+
     //Lecture des produits pour chacunes des boxes (une couleur est générée pour chaque box)
     for (var j = 0; j < boxes.length; j++){
 
@@ -317,7 +353,8 @@ function drawProductsFromInstance() {
     var abs = 0;
     var ord = 0;
     var color;
-    
+    var colors = generateTabColors(tabSolution.length);
+
     for (var f = 0; f < tabSolution.length; f++){
         //Récupère les trolleys correspondantes à l'instance sélectionnée
         var boxes = tabSolution[f].BOXES;
@@ -353,6 +390,8 @@ function drawProductsFromInstance() {
 function drawLiaisonsFromTrolley(selectedTrolleyID) {
     var lastProduct = false;
     var boxes = tabSolution[selectedTrolleyID].BOXES;
+    var colors = generateTabColors(boxes.length);
+
     for (var j = 0; j < boxes.length; j++){
         box = boxes[j];
         stroke(color(colors[j]));
@@ -377,6 +416,7 @@ function drawLiaisonsFromTrolley(selectedTrolleyID) {
  */
 function drawLiaisonsFromInstance() {
     var lastProduct = false;var trolley;
+    colors = generateTabColors(tabSolution.length);
 
     for (var j = 0; j < tabSolution.length; j++){
         trolley = tabSolution[j];
@@ -514,7 +554,7 @@ function setupTrolleySelection(idInstance) {
     //Option d'affichage de tous les trolleys
     $('#trolleySelection').append($('<option>', {
         value: size,
-        text: 'Instance '+idInstance+"/All Trolleys"
+        text: 'Instance '+ idInstance +"/All Trolleys"
     }));
 }
 
@@ -523,6 +563,7 @@ function setupTrolleySelection(idInstance) {
  * @param {*} idInstance 
  */
 function getGraphe(idInstance) {
+    if (idInstance != idCurrentInstance) firstDraw = true;
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
