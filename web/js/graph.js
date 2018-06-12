@@ -70,6 +70,22 @@ function toggleLines() {
 }
 
 /**
+ * Affiche ou cache le point bougeant qui représente le trolley parcourant l'entrepôt.
+ */
+function togglePoint() {
+    if(displayPoint) {
+        startPoint();
+    }
+    else {
+        movingPState = "end";
+    }
+
+    resetGraph();
+    displayPoint = !displayPoint;
+}
+
+
+/**
  * Permet de redessiner le graph.
  */
 function resetGraph() {
@@ -87,7 +103,7 @@ function setup(){
     $("#defaultCanvas0").hide();
 
     $("#defaultCanvas0").mousemove(function(e) {
-        var x, y, point, typeOfPoint;
+        var x, y, lastX, lastY, point, typeOfPoint;
         var touchedP = [];
         var touched = false;
         $("#popup").hide();
@@ -95,14 +111,16 @@ function setup(){
         tabSolution.forEach(function(trolley) {
             trolley["BOXES"].forEach(function(box) {
                 box["PRODUCTS"].forEach(function(p) {
-                    x = parseInt(p["LOC_ABSCISSE"]);
-                    y = parseInt(p["LOC_ORDONNEE"]);
-                    if (parseInt((x * coeffW) + windowWidth*0.05 - pointSize/2) < e.pageX && 
-                        parseInt((x * coeffW) + windowWidth*0.05 + pointSize/2) > e.pageX &&
-                        parseInt((y * coeffH) + windowHeight*0.1 - pointSize/2) < e.pageY &&
-                        parseInt((y * coeffH) + windowHeight*0.1 + pointSize/2) > e.pageY) {
+                    x = parseInt(p["LOC_ABSCISSE"] *coeffW);
+                    y = parseInt(p["LOC_ORDONNEE"] * coeffH);
+                    if (parseInt(x + windowWidth*0.05 - pointSize/2) < e.pageX && 
+                        parseInt(x + windowWidth*0.05 + pointSize/2) > e.pageX &&
+                        parseInt(y + windowHeight*0.1 - pointSize/2) < e.pageY &&
+                        parseInt(y + windowHeight*0.1 + pointSize/2) > e.pageY) {
 
                         touchedP.push([p, box, trolley]);
+                        lastX = x;
+                        lastY = y;
                         touched = true;
                     }
                 });
@@ -110,15 +128,15 @@ function setup(){
         });
 
         if(touched) {
-            $("#popup").show();
-            $("#popup").css("top", (y * coeffH) + "px");
-            $("#popup").css("left", (x * coeffW) + 80 + "px");
+            $("#popup").css("top", lastY + 40 + "px");
+            $("#popup").css("left", lastX + 80 + "px");
             $("#popup").html(
                 '<div class="card">' +
-                '    <div class="card-header">Point Produit (' + x +','+ y + ')</div>' +
-                '    <div class="card-body">' + genPointContent(touchedP) + '</div> ' +
+                '    <div class="card-header">Point Produit (' + (lastX/coeffW).toFixed(0) +','+ (lastY/coeffH).toFixed(0) + ')</div>' +
+                '    <div class="card-body" style="max-height: 200px;overflow-y:auto;">' + genPointContent(touchedP) + '</div> ' +
                 '</div>'
             );
+            $("#popup").show();
         }
     });
   }
@@ -130,22 +148,101 @@ function draw(){
     if (isGraphic) {
         $("#defaultCanvas0").show();
         if(!drawed) {
-            background(100);
-            translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
-    
             var maxSize = getMaxDistance();
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
-    
-            if(displayLocations) placeLocations();
-            if(displayLines) drawLiaisonsFromTrolley(); 
-            placeDepots();
-            drawProductsFromTrolley();
+            calcItineraireTrolley();
             drawed = true;
         }
+        background(100);
+        translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
+    
+        if(displayLocations) placeLocations();
+        if(displayLines) drawLiaisonsFromTrolley(); 
+        placeDepots();
+        drawProductsFromTrolley();
+
+        processMovingP();
     }
     else {
         $("#defaultCanvas0").hide();
+    }
+}
+
+/**
+ * Fonction permettant de gérer les différents cas associés au point bougeant
+ */
+
+function processMovingP() {
+    switch(movingPState) {
+        case "start" :
+            startPoint();
+        break;
+
+        case "move" :
+            movePoint();
+        break;
+
+        case "pause" :
+            pausePoint();
+        break;
+
+        case "error" :
+        case "end" :
+        default : 
+        break;
+    }
+}
+
+function startPoint() {
+    for(locId in allLocations) {
+        var loc = allLocations[locId];
+
+        if(loc["NAME"] == "depotStart") {
+            xP = loc["ABSCISSE"] * coeffW;
+            yP = loc["ORDONNEE"] * coeffH;
+            movingPState = "move";
+            lastVisitedP = 0;
+            return;
+        }
+        else {
+            movingPState = "error";
+        }
+    }
+}
+
+function pausePoint() {
+    ellipse(xP*coeffW, yP*coeffH, 8, 8);
+}
+
+function movePoint() {
+    if (typeof pointsOrder[lastVisitedP + 1] !== 'undefined') {
+        
+        var diffX = (pointsOrder[lastVisitedP + 1][0]) - (pointsOrder[lastVisitedP][0]);
+        var diffY = (pointsOrder[lastVisitedP + 1][1]) - (pointsOrder[lastVisitedP][1]);
+        var stopX = pointsOrder[lastVisitedP + 1][0] - xP; 
+        var stopY = pointsOrder[lastVisitedP + 1][1] - yP; 
+        
+        xP += diffX*speed/1000;
+        yP += diffY*speed/1000;
+        
+        movingHistoric.push([xP, yP]);
+        if(movingHistoric.length > historicSize) movingHistoric.shift();
+
+        fill(color(0));
+        movingHistoric.forEach(function(point) {
+            ellipse(point[0]*coeffW, point[1]*coeffH, 8, 8);
+        });
+
+        if (stopX < 1 && stopX > -1 && stopY < 1 && stopY > -1) {
+            lastVisitedP++;
+            xP = pointsOrder[lastVisitedP][0];
+            yP = pointsOrder[lastVisitedP][1];
+        }
+        
+    }
+    else {
+        movingPState = "end";
     }
 }
 
@@ -212,6 +309,23 @@ function drawLiaisonsFromTrolley() {
         });
         line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
         lastProduct = false;
+    });
+}
+
+function calcItineraireTrolley() {
+    var lastProduct = false;
+    var selectedTrolleyID = $("#trolleySelection" ).val();
+    var trolley = tabSolution[selectedTrolleyID];
+
+    pointsOrder = [];
+    pointsOrder.push([0,0]);
+
+    stroke(color(255,255,255));
+    trolley["BOXES"].forEach(function(box) {
+        box["PRODUCTS"].forEach(function(p){
+            pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
+        });
+        pointsOrder.push([0,0]);
     });
 }
 
@@ -306,6 +420,7 @@ function getGraphe(idInstance) {
     $("#graphReturnB").show();
     $("#toggleLocations").show();
     $("#toggleLines").show();
+    $("#togglePoint").show();
     $("#trolleySelection").show();
     $("#boxSelection").show();
     setTabSolution(idInstance);

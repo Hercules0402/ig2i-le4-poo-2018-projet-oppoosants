@@ -20,6 +20,7 @@ function getInstances() {
     $("#graphReturnB").hide();
     $("#toggleLocations").hide();
     $("#toggleLines").hide();
+    $("#togglePoint").hide();
     $("#mainNavbar").show();
     $("#trolleySelection").hide();
     $("#boxSelection").hide();

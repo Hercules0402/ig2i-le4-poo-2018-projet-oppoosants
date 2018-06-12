@@ -23,6 +23,12 @@ tr {
     left:25%;
 }
 
+#togglePoint {
+    position:absolute;
+    z-index:9999;
+    top:90%;
+    left:40%;
+}
 
 #popup {
     padding: 5px;
