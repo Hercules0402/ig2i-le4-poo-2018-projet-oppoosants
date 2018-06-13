@@ -3,11 +3,13 @@ package test;
 import algo.ClarkeAndWright;
 import algo.Recherche;
 import metier.Instance;
-import metier.Trolley;
 import util.Distances;
 import util.Reader;
 import util.Writer;
 
+/**
+ * Classe permettant de tester la classe ClarkeAndWright.
+ */
 public class TestClarkeAndWright {
     public static void main(String[] args) {
         String fileName = "instance_0606_136178_Z1.txt";//instance_0116_131940_Z2

@@ -5,6 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * Classe permettant de réaliser un copier-coller de fichier.
+ */
 public class CopyPaste {
     /**
      * Permet de copier un fichier dans un dossier

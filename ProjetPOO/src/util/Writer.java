@@ -22,6 +22,13 @@ public class Writer {
     private static File instanceFile;
     private static Instance inst;
 
+    /**
+     * Permet d'enregistrer la solution dans la base de données et/ou dans un 
+     * fichier txt.
+     * @param filename
+     * @param instance
+     * @param save 
+     */
     public static void save(String filename, Instance instance, boolean save){
         inst = instance;
         Long time = System.currentTimeMillis();
@@ -48,6 +55,9 @@ public class Writer {
         }
     }
 
+    /**
+     * Permet d'enregistrer la solution dans la base de données.
+     */
     public static void saveAll(){
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
         TrolleyDao trolleyManager = fabrique.getTrolleyDao();

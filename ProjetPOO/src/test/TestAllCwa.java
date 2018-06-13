@@ -3,17 +3,16 @@ package test;
 import algo.ClarkeAndWright;
 import algo.Recherche;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import metier.Instance;
-import metier.Trolley;
 import util.CopyPaste;
 import util.Distances;
 import util.Reader;
 import util.Writer;
 
+/**
+ * Classe permettant de passer au checker toutes les solutions calculées avec
+ * l'algo de Clarke And Wright.
+ */
 public class TestAllCwa {
 
     public static void main(String[] args) throws Exception {
