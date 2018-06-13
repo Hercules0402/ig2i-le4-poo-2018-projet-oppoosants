@@ -10,7 +10,7 @@ public class JpaTrolleyDao extends JpaDao<Trolley> implements TrolleyDao {
     private static JpaTrolleyDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaTrolleyDao() {
 		super(Trolley.class);

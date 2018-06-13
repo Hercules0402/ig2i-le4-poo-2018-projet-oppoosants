@@ -10,7 +10,7 @@ public class JpaBoxDao extends JpaDao<Box> implements BoxDao {
     private static JpaBoxDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaBoxDao() {
 		super(Box.class);

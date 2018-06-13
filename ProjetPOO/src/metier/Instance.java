@@ -1,7 +1,6 @@
 package metier;
 
 import algo.InterTrolleyInfos;
-import algo.IntraTrolleyInfos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -177,7 +176,7 @@ public class Instance implements Serializable{
     public void setVolumeMaxBox(int volumeMaxBox) {
         this.volumeMaxBox = volumeMaxBox;
     }
-    
+
     public void clear() {
 		for (Box b : this.boxes) {
 			b.clear();
@@ -186,51 +185,6 @@ public class Instance implements Serializable{
 			t.clear();
 		}*/
 		this.graph.clear();
-    }
-    
-    public boolean deplacementIntraTrolley() {
-		IntraTrolleyInfos intraTrolleyInfos = new IntraTrolleyInfos();
-        for (Trolley t : this.trolleys) {
-            IntraTrolleyInfos tmp = t.deplacementIntraTrolley();
-            if (intraTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
-                intraTrolleyInfos = tmp;
-            }
-        }
-        if (intraTrolleyInfos.getDiffCout() < 0) {
-            return intraTrolleyInfos.doDeplacementIntraTrolley();
-        }
-        return false;
-    }
-    
-    public boolean echangeIntraTrolley() {
-		IntraTrolleyInfos intraTrolleyInfos = new IntraTrolleyInfos();
-		for (Trolley t : this.trolleys) {
-			IntraTrolleyInfos tmp = t.echangeIntraTrolley();
-			if (intraTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
-				intraTrolleyInfos = tmp;
-			}
-		}
-		if (intraTrolleyInfos.getDiffCout() < 0) {
-			return intraTrolleyInfos.doEchangeIntraTrolley();
-		}
-		return false;
-    }
-    
-    public boolean deplacementInterTrolley() {
-		InterTrolleyInfos interTrolleyInfos = new InterTrolleyInfos();
-        for (Trolley t1 : this.trolleys) {
-            for (Trolley t2 : this.trolleys) {
-                if (t1 == t2) continue;
-                InterTrolleyInfos tmp = t1.deplacementInterTrolley(t2);
-                if (interTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
-                    interTrolleyInfos = tmp;
-                }
-            }            
-        }
-        if (interTrolleyInfos.getDiffCout() < 0) {
-            return interTrolleyInfos.doDeplacementInterTrolley();
-        }
-        return false;
     }
 
     public boolean echangeInterTrolley() {
