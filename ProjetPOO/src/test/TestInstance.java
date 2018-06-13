@@ -1,10 +1,6 @@
 package test;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import util.Reader;
 import algo.Recherche;
 import metier.Instance;
@@ -12,10 +8,13 @@ import util.CopyPaste;
 import util.Distances;
 import util.Writer;
 
+/**
+ * Classe permettant de passer au checker chaque instance.
+ */
 public class TestInstance {  
 
     public static void main(String[] args) throws Exception {
-        String base = "../instances/";//10
+        String base = "../instances/";
         String stockage = "./testInstance/";
 
         File baseDossier = new File(base);

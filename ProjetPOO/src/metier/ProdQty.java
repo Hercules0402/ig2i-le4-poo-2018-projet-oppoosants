@@ -17,6 +17,9 @@ import javax.persistence.ManyToOne;
 public class ProdQty implements Serializable, Comparable<ProdQty>{
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Correspond à l'id de la ligne dans la bdd.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -85,6 +88,7 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
         return true;
     } 
 
+    @Override
     public int compareTo(ProdQty otherPq) {
         if(otherPq == null) return -1;
 

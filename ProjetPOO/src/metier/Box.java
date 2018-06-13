@@ -1,6 +1,5 @@
 package metier;
 
-import algo.IntraTrolleyInfos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class Box implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -138,7 +137,6 @@ public class Box implements Serializable {
     }
 
     public void addProduct(ProdQty pq) {
-        //System.out.println("Produit " + pq.getProduct().getIdProduct() + " ajouté a la box " + this.getIdBox());
         addProduct(pq.getProduct(), pq.getQuantity());
     }
     
@@ -164,6 +162,12 @@ public class Box implements Serializable {
         return true;
     }
     
+    /**
+     * Fonction permettant d'ajouter un produit dans une box, et qui retourne 
+     * un booléen nécessaire à l'algorithme de ClarkeAndWright.
+     * @param pq
+     * @return boolean
+     */
     public boolean addProductClarkeAndWright(ProdQty pq) {
         Product p = pq.getProduct();
         int qt = pq.getQuantity();

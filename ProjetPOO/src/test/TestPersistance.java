@@ -25,8 +25,15 @@ import metier.ProdQty;
 import metier.Product;
 import metier.Trolley;
 
+/**
+ * Classe permettant de tester la persitance.
+ */
 public class TestPersistance {
 
+    /**
+     * Permet de tester la persitance sans DAO.
+     * @param em 
+     */
     public static void testAnnotations(EntityManager em) {
         //Location
         Instance inst = new Instance("test");
@@ -101,6 +108,9 @@ public class TestPersistance {
         em.persist(tro1);
     }
 
+    /**
+     * Permet de tester la persitance avec DAO. 
+     */
     public static void testDAOs() {
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
 

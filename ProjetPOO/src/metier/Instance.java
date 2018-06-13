@@ -1,7 +1,7 @@
 package metier;
 
 import algo.InterTrolleyInfos;
-import algo.IntraTrolleyInfos;
+import algo.RechercheLocale;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,9 @@ import javax.persistence.OneToOne;
 public class Instance implements Serializable{
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Correspond à l'id de la ligne dans la bdd.
+     */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -177,75 +180,51 @@ public class Instance implements Serializable{
     public void setVolumeMaxBox(int volumeMaxBox) {
         this.volumeMaxBox = volumeMaxBox;
     }
-    
+
     public void clear() {
 		for (Box b : this.boxes) {
 			b.clear();
 		}
-        /*for (Trolley t : this.trolleys) {
-			t.clear();
-		}*/
 		this.graph.clear();
     }
-    
-    public boolean deplacementIntraTrolley() {
-		IntraTrolleyInfos intraTrolleyInfos = new IntraTrolleyInfos();
-        for (Trolley t : this.trolleys) {
-            IntraTrolleyInfos tmp = t.deplacementIntraTrolley();
-            if (intraTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
-                intraTrolleyInfos = tmp;
-            }
-        }
-        if (intraTrolleyInfos.getDiffCout() < 0) {
-            return intraTrolleyInfos.doDeplacementIntraTrolley();
-        }
-        return false;
-    }
-    
-    public boolean echangeIntraTrolley() {
-		IntraTrolleyInfos intraTrolleyInfos = new IntraTrolleyInfos();
-		for (Trolley t : this.trolleys) {
-			IntraTrolleyInfos tmp = t.echangeIntraTrolley();
-			if (intraTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
-				intraTrolleyInfos = tmp;
-			}
-		}
-		if (intraTrolleyInfos.getDiffCout() < 0) {
-			return intraTrolleyInfos.doEchangeIntraTrolley();
-		}
-		return false;
-    }
-    
-    public boolean deplacementInterTrolley() {
-		InterTrolleyInfos interTrolleyInfos = new InterTrolleyInfos();
-        for (Trolley t1 : this.trolleys) {
-            for (Trolley t2 : this.trolleys) {
-                if (t1 == t2) continue;
-                InterTrolleyInfos tmp = t1.deplacementInterTrolley(t2);
-                if (interTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
-                    interTrolleyInfos = tmp;
-                }
-            }            
-        }
-        if (interTrolleyInfos.getDiffCout() < 0) {
-            return interTrolleyInfos.doDeplacementInterTrolley();
-        }
-        return false;
-    }
 
+    /**
+     * Permet d'échanger des boxes dans différents trolleys (en inter).
+     * @return boolean : indique si l'échange a été réalisé ou pas
+     */
     public boolean echangeInterTrolley() {
 		InterTrolleyInfos interTrolleyInfos = new InterTrolleyInfos();
+        // Parcours des trolleys pour obtenir les informations nécessaires à
+        // l'échange deux boxes de deux trolleys différents dont le coût de
+        // l'échange
 		for (Trolley t1 : this.trolleys) {
             for (Trolley t2 : this.trolleys) {
+                // Aucune utilé car revient à faire un échange intra et dans notre
+                // cas seul les mouvments de type inter sont utiles
                 if (t1 == t2) continue;
+                // Récupération des informations d'échange entre deux boxes de
+                // deux trolleys différents
                 InterTrolleyInfos tmp = t1.echangeInterTrolley(t2);
-                if (interTrolleyInfos.getDiffCout() < tmp.getDiffCout()) {
-                    interTrolleyInfos = tmp;
+                // On récupére à chaque fois le coût négatif le plus proche de zéro
+                // ce qui correspond à une distance totale minimale
+                if (tmp.getDiffCout() < interTrolleyInfos.getDiffCout()) {
+                    if(tmp.getDiffCout() < 0 && interTrolleyInfos.getDiffCout() < 0){
+                        continue;
+                    }
+                    else {
+                        interTrolleyInfos = new InterTrolleyInfos(tmp);
+                    }
                 }
             }			
 		}
+        // On réalise l'échange seulement si notre coût est négatif et s'il est
+        // plus grand que le coût précédent (aussi négatif)
 		if (interTrolleyInfos.getDiffCout() < 0) {
-			return interTrolleyInfos.doEchangeInterTrolley();
+            if (RechercheLocale.diffCout < interTrolleyInfos.getDiffCout()) {
+                RechercheLocale.diffCout = interTrolleyInfos.getDiffCout();
+                return interTrolleyInfos.doEchangeInterTrolley();
+            }
+            return false;
 		}
 		return false;
     }

@@ -1,9 +1,12 @@
 package algo;
 
 import metier.Trolley;
-
+/**
+ * Classe permettant de stocker les informations concernant mouvement d'un box
+ * entre deux trolleys. *
+ */
 public class InterTrolleyInfos {
-    
+
     private Trolley oldTrolley;
     private Trolley newTrolley;
 	private int oldPosition;
@@ -34,29 +37,17 @@ public class InterTrolleyInfos {
 		this.diffCout = intraTourneeInfos.diffCout;
 	}
 
-	public boolean doDeplacementInterTrolley() {
+	/**
+     * Permet de réaliser un échange de boxes inter-trolleys.
+     * @return boolean : indique si l'échange a été réalisé ou pas.
+     */
+    public boolean doEchangeInterTrolley() {
 		if (this.diffCout == Double.MAX_VALUE) {
 			return false;
 		}
 		if (this.newPosition == -1 || this.oldPosition == -1) {
 			return false;
 		}
-
-		if (this.oldTrolley == null || this.newTrolley == null) {
-			return false;
-		} else {
-			return this.oldTrolley.doDeplacementInterTrolley(this);
-		}
-	}
-
-	public boolean doEchangeInterTrolley() {
-		if (this.diffCout == Double.MAX_VALUE) {
-			return false;
-		}
-		if (this.newPosition == -1 || this.oldPosition == -1) {
-			return false;
-		}
-
 		if (this.oldTrolley == null || this.newTrolley == null) {
 			return false;
 		} else {
@@ -71,7 +62,7 @@ public class InterTrolleyInfos {
     public Trolley getNewTrolley() {
         return newTrolley;
     }
-    
+
 	public int getOldPosition() {
 		return oldPosition;
 	}
@@ -88,6 +79,5 @@ public class InterTrolleyInfos {
     public String toString() {
         return "IntraTrolleyInfos{" + "trolley t1=" + oldTrolley.getIdTrolley() + ", trolley t2=" + newTrolley.getIdTrolley() + ", oldPosition=" + oldPosition + ", newPosition=" + newPosition + ", diffCout=" + diffCout + '}';
     }
-    
-    
+
 }

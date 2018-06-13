@@ -16,15 +16,20 @@ import metier.Trolley;
 public class Recherche {
     private static Instance instance;
 
+    /**
+     * Permet de créer une solution basique.
+     * @param inst
+     * @return Instance
+     */
     public static Instance run(Instance inst){
         Recherche.instance = inst;
-        
+
         List<Order> orderList = new ArrayList<>(instance.getOrders());
         List<Product> productList = new ArrayList<>(instance.getProducts());
         int nbColisMax = instance.getNbBoxesTrolley();
         int weightMaxBox = instance.getWeightMaxBox();
         int volumeMaxBox = instance.getVolumeMaxBox();
-        
+
         int idTrolley = 1, idBox = 1, qt;
         Product p = null;
         ArrayList<Trolley> solution = new ArrayList();
@@ -77,7 +82,7 @@ public class Recherche {
         instance.setTrolleys(solution);
         List<Box> boxes = new ArrayList<>();
         for(Trolley t : solution) boxes.addAll(t.getBoxes());
-        instance.setBoxes(boxes);    
+        instance.setBoxes(boxes);
         return instance;
     }
 }

@@ -25,6 +25,12 @@ public class Reader {
     private static Instance inst;
     private static File instanceFile;
 
+    /**
+     * Permet d'enregistrer les données dans la base de données et/ou stocker
+     * dans un objet de type Instance.
+     * @param filename
+     * @param save 
+     */
     public static Instance read(String filename, boolean save) {
          
         Long time = System.currentTimeMillis();
@@ -53,6 +59,9 @@ public class Reader {
         return inst;
     }
     
+    /**
+     * Permet d'enregistrer les données dans la base de données.
+     */
     public static void saveAll() {
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
 
@@ -100,6 +109,10 @@ public class Reader {
         return scan.nextLine();
     }
 
+    /**
+     * Permet de lire les données écrites dans un fichier instance.
+     * @throws FileNotFoundException 
+     */
     public static void readAll() throws FileNotFoundException {
         Scanner scan = new Scanner(Reader.instanceFile);
         

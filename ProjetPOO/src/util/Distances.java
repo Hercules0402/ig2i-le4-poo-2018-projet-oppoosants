@@ -7,7 +7,6 @@ import java.util.List;
 import metier.Box;
 import metier.Location;
 import metier.ProdQty;
-import metier.Product;
 import metier.Trolley;
 
 /**

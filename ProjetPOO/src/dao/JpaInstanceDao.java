@@ -14,7 +14,7 @@ public class JpaInstanceDao extends JpaDao<Instance> implements InstanceDao {
 	private static JpaInstanceDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaInstanceDao() {
 		super(Instance.class);

@@ -2,9 +2,12 @@ package util;
 
 import metier.Instance;
 
+/**
+ * Classe permettant de déterminer la meilleure solution entre deux solutions.
+ */
 public class BestSolution {
     /**
-     * Permet de déterminer la meilleure solution entre deux solutions
+     * Permet de déterminer la meilleure solution entre deux solutions.
      * @param inst1
      * @param inst2
      * @return Instance

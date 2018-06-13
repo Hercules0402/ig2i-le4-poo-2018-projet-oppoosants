@@ -10,7 +10,7 @@ public class JpaGraphDao extends JpaDao<Graph> implements GraphDao {
     private static JpaGraphDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaGraphDao() {
 		super(Graph.class);
