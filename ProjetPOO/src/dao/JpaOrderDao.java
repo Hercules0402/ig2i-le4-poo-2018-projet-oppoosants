@@ -10,7 +10,7 @@ public class JpaOrderDao extends JpaDao<Order> implements OrderDao {
     private static JpaOrderDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaOrderDao() {
 		super(Order.class);

@@ -10,7 +10,7 @@ public class JpaArcDao extends JpaDao<Arc> implements ArcDao {
     private static JpaArcDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaArcDao() {
 		super(Arc.class);

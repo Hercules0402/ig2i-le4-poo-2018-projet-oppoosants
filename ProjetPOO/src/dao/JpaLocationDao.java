@@ -13,7 +13,7 @@ public class JpaLocationDao extends JpaDao<Location> implements LocationDao {
     private static JpaLocationDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaLocationDao() {
 		super(Location.class);
