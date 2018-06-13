@@ -8,7 +8,6 @@ function testConnexion() {
         data: { requestType: "testConnexion" },
         success : function(result, statut){ 
             result = JSON.parse(result);
-            //console.log(result);
         }
     });
 }
@@ -33,7 +32,6 @@ function getInstances() {
         data: { requestType: "getInstancesSol" },
         success : function(result, statut){ 
             result = JSON.parse(result);
-            //console.log(result);
             var content = '<br/><br/><br/><div class="row"><div align="center" class="col-md-12"><h1>Menu des solutions</h1>';
 
             content += '<table id="table_instances" class="display">' +
@@ -222,7 +220,6 @@ function setTabSolution(idInstance) {
             data: { requestType: "getTabSol", idInstance: idInstance },
             success : function(result, statut){ 
                 result = JSON.parse(result);
-                //console.log(result);
                 tabSolution = result["content"];
                 idCurrentInstance = idInstance;
             },

@@ -1,7 +1,3 @@
-var firstDraw = true;
-var colors = ['#ff9900','#00cc00','#0066cc','#ff00ff','#ffff00','#00ffcc'];//Orange,Vert,Bleu,Fushia,Jaune,Cyan
-var selection = [];
-
 /**
  * Fonction permettant de récupérer la liste des locations de l'entrepôt.
  */
@@ -22,6 +18,44 @@ function setAllLocations() {
     });
 }
 
+/**
+ * Fonction qui génère un tableau de couleurs différentes pour l'affichage des points.
+ */
+function generateTabColors(length) {
+    var colors = [];
+
+    var r = 0, g = 0, b = 0;
+    var rPassed = false, gPassed = false;
+
+    var inc = parseInt((255*3) / length);
+    for(i = 0; i < length; i++) {
+        if(r < 256 && !rPassed) {
+            r += inc;
+        }
+        else if (g < 256 && !gPassed) {
+            g += inc;
+        }
+        else {
+            b += inc;
+        }
+
+        if(r > 255) {
+            g += r - 255;
+            r = 0;
+            rPassed = true;
+        }
+
+        if(g > 255) {
+            b += g - 255;
+            g = 0;
+            gPassed = true;
+        }
+        
+        colors.push(color(r, g, b));
+    }
+
+    return colors;
+}
 /**
  * Définit le contenu de la tooltip à afficher en fonction du type de point selectionné.
  * @param {*} point 
@@ -116,8 +150,10 @@ function resetGraphAndPoint() {
 function setup(){
     createCanvas(windowWidth, windowHeight, WEBGL);
     $("#defaultCanvas0").hide();
+    //initialise le canvas mais ne l'affiche pas si on est pas sur le graphe mais sur l'affichage tableau
 
     $("#defaultCanvas0").mousemove(function(e) {
+        //si on bouge sur le canvas, on regarde si le curseur est sur un point : si oui, on affiche le popup d'information
         var x, y, lastX, lastY, point, typeOfPoint;
         var touchedP = [];
         var touched = false;
@@ -154,48 +190,56 @@ function setup(){
             $("#popup").show();
         }
     });
+
+    $(window).resize(function() {
+        createCanvas(windowWidth, windowHeight, WEBGL);
+        if(!isGraphic) $("#defaultCanvas0").hide();
+        else processGraphe();
+    });
   }
 
 /**
- * Permet de d'afficher les produits et les location sur le graph, puis dessine les tournées proposées par la solution.
+ * Fonction exécutée en boucle après lancement de la page web
+ * Permet de d'afficher les produits et les location sur le graph,
+ * puis dessine les tournées proposées par la solution et déplace le point mouvant s'il est activé.
  */
 function draw(){
+    //si on est sur le graphe
     if (isGraphic) {
-        $("#defaultCanvas0").show();
-
-        if(!drawed) {
-            var maxSize = getMaxDistance();
-            coeffW = windowWidth/maxSize*0.9;
-            coeffH = windowHeight/maxSize*0.8;
-            calcItineraireTrolley();
-            drawed = true;
-        }
-
-        background(100);
-        translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
-    
-        var selectedTrolleyID = $("#trolleySelection" ).val();
-
-        if(displayLocations) placeLocations();
-        placeDepots();
-        if (selectedTrolleyID == tabSolution.length) {
-            //Affichage de tous les trolleys
-            if(displayLines) drawLiaisonsFromInstance();
-            drawProductsFromInstance();
-        } else {
-            if(displayLines) drawLiaisonsFromTrolley(selectedTrolleyID);
-            drawProductsFromTrolley(selectedTrolleyID);
-        }
-
-        processMovingP();
+        processGraphe();
     }
     else {
         $("#defaultCanvas0").hide();
     }
 }
 
+function processGraphe() {
+    $("#defaultCanvas0").show();
+
+    var maxSize = getMaxDistance();
+    var selectedTrolleyID = $("#trolleySelection" ).val();
+    
+    coeffW = windowWidth/maxSize*0.9;
+    coeffH = windowHeight/maxSize*0.8;
+    calcItineraireTrolley();
+    background(100);
+    translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
+
+    if(displayLocations) placeLocations(); 
+    placeDepots();
+    if (selectedTrolleyID == tabSolution.length) {
+        //Affichage de tous les trolleys
+        if(displayLines) drawLiaisonsFromInstance();
+        drawProductsFromInstance();
+    } else {
+        if(displayLines) drawLiaisonsFromTrolley(selectedTrolleyID);
+        drawProductsFromTrolley(selectedTrolleyID);
+    }
+
+    processMovingP();
+}
 /**
- * Fonction permettant de gérer les différents cas associés au point bougeant
+ * Fonction permettant de gérer les différents cas associés au point bougeant.
  */
 
 function processMovingP() {
@@ -219,6 +263,10 @@ function processMovingP() {
     }
 }
 
+/**
+ * Fonction qui initialise le point et le met en marche.
+ */
+
 function startPoint() {
     for(locId in allLocations) {
         var loc = allLocations[locId];
@@ -236,9 +284,19 @@ function startPoint() {
     }
 }
 
+
+/**
+ * Fonction qui met en pause le point.
+ */
+
 function pausePoint() {
     ellipse(xP*coeffW, yP*coeffH, 8, 8);
 }
+
+
+/**
+ * Fonction permettant de gérer le déplacement du point en fonction de la vitesse demandée et aussi de la taille de sa trace à laisser sur le graphe.
+ */
 
 function movePoint() {
     if (typeof pointsOrder[lastVisitedP + 1] !== 'undefined') {
@@ -255,8 +313,11 @@ function movePoint() {
         if(movingHistoric.length > historicSize) movingHistoric.shift();
 
         fill(color(0));
+
+        var sizeMH = 0;
         movingHistoric.forEach(function(point) {
-            ellipse(point[0]*coeffW, point[1]*coeffH, 8, 8);
+            ellipse(point[0]*coeffW, point[1]*coeffH, sizeMH/4, sizeMH/4);
+            sizeMH++;
         });
 
         if (stopX < 1 && stopX > -1 && stopY < 1 && stopY > -1) {
@@ -303,7 +364,9 @@ function drawProductsFromTrolley(selectedTrolleyID) {
     //Récupère les boxes correspondantes au trolley sélectionné
     var boxes = tabSolution[selectedTrolleyID].BOXES;
     boxes.sort(function(a, b) { return a.IDBOX - b.IDBOX});
-    
+
+    colors = generateTabColors(boxes.length);
+
     //Lecture des produits pour chacunes des boxes (une couleur est générée pour chaque box)
     for (var j = 0; j < boxes.length; j++){
         
@@ -353,7 +416,8 @@ function drawProductsFromInstance() {
     var ord = 0;
     var checkboxValue;
     var color;
-    
+    var colors = generateTabColors(tabSolution.length);
+
     for (var f = 0; f < tabSolution.length; f++){
         //Récupère les trolleys correspondantes à l'instance sélectionnée
 
@@ -407,7 +471,8 @@ function drawProductsFromInstance() {
 function drawLiaisonsFromTrolley(selectedTrolleyID) {
     var lastProduct = false;
     var boxes = tabSolution[selectedTrolleyID].BOXES;
-    
+    var colors = generateTabColors(boxes.length);
+
     for (var j = 0; j < boxes.length; j++){
         if(jQuery.inArray(j + 1,selection) == -1){
             continue;
@@ -424,9 +489,8 @@ function drawLiaisonsFromTrolley(selectedTrolleyID) {
             }
             lastProduct = p;
         });
-        line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
-        lastProduct = false;
     }
+    line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
 }
 
 /**
@@ -436,6 +500,7 @@ function drawLiaisonsFromTrolley(selectedTrolleyID) {
  */
 function drawLiaisonsFromInstance() {
     var lastProduct = false;var trolley;
+    colors = generateTabColors(tabSolution.length);
 
     for (var j = 0; j < tabSolution.length; j++){
         if(jQuery.inArray(j + 1,selection) == -1){
@@ -454,11 +519,16 @@ function drawLiaisonsFromInstance() {
                 }
                 lastProduct = p;
             });
-            line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
-            lastProduct = false;
         });
+        line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
+        lastProduct = false;
     }
 }
+
+
+/**
+ * Fonction permettant de calculer l'itinéraire que parcourera le chariot lorsque affiché sur le graphe sous forme de point.
+ */
 
 function calcItineraireTrolley() {
     var lastProduct = false;
@@ -475,8 +545,8 @@ function calcItineraireTrolley() {
             box["PRODUCTS"].forEach(function(p){
                 pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
             });
-            pointsOrder.push([0,0]);
         });
+        pointsOrder.push([0,0]);
     }
     else {
         var trolley = tabSolution[selectedTrolleyID];
@@ -486,9 +556,9 @@ function calcItineraireTrolley() {
             trolley["BOXES"].forEach(function(box) {
                 box["PRODUCTS"].forEach(function(p){
                     pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
-                });
-                pointsOrder.push([0,0]);
+                });    
             });
+            pointsOrder.push([0,0]);
         });      
     }
 }
@@ -507,7 +577,6 @@ function getRandomInt(max) {
  * @param {*} coeffH 
  */
 function placeLocations() {
-    //var colorInc = 0;
     stroke(0);
 
     for(locId in allLocations) {
@@ -572,7 +641,7 @@ function setupTrolleySelection(idInstance) {
     //Option d'affichage de tous les trolleys
     $('#trolleySelection').append($('<option>', {
         value: size,
-        text: 'Instance '+idInstance+"/All Trolleys"
+        text: 'Instance '+ idInstance +"/All Trolleys"
     }));
 }
 
@@ -581,6 +650,7 @@ function setupTrolleySelection(idInstance) {
  * @param {*} idInstance 
  */
 function getGraphe(idInstance) {
+    if (idInstance != idCurrentInstance) firstDraw = true;
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
