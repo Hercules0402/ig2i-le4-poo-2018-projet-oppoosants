@@ -515,7 +515,6 @@ function getRandomInt(max) {
  * @param {*} coeffH 
  */
 function placeLocations() {
-    //var colorInc = 0;
     stroke(0);
 
     for(locId in allLocations) {
@@ -523,11 +522,6 @@ function placeLocations() {
 
         if(loc["NAME"] != "depotStart" && loc["NAME"] != "depotEnd") {
             fill(color(255,255,255));
-                    
-            //console.log(colorInc + " " + (255/allLocations.length));
-            //fill(color(colorInc, colorInc, colorInc));
-            //colorInc += (255/allLocations.length);
-            
             ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,pointSize,pointSize);
         }
     }
