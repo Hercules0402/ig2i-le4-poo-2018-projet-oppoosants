@@ -212,6 +212,9 @@ public class ClarkeAndWright {
     public Instance run() {
         this.initialiserCWA();
         this.fusion();
+        List<Box> boxes = new ArrayList<>();
+        for(Trolley t : trolleys) boxes.addAll(t.getBoxes());
+        this.instance.setBoxes(boxes);
         return this.getNewInstance();
     }    
 }

@@ -32,10 +32,6 @@ public class TestAllCwa {
                         Instance inst = Reader.read(stockage + instance.getName(), false);
                         inst = Recherche.run(inst);
                         
-                        for(Trolley t : inst.getTrolleys()){
-                            inst.getBoxes().addAll(t.getBoxes());
-                        }
-
                         ClarkeAndWright cwa = new ClarkeAndWright(inst);
                         inst = cwa.run();
                         

@@ -237,8 +237,9 @@ public class Instance implements Serializable{
 		InterTrolleyInfos interTrolleyInfos = new InterTrolleyInfos();
 		for (Trolley t1 : this.trolleys) {
             for (Trolley t2 : this.trolleys) {
+                if (t1 == t2) continue;
                 InterTrolleyInfos tmp = t1.echangeInterTrolley(t2);
-                if (interTrolleyInfos.getDiffCout() > tmp.getDiffCout()) {
+                if (interTrolleyInfos.getDiffCout() < tmp.getDiffCout()) {
                     interTrolleyInfos = tmp;
                 }
             }			

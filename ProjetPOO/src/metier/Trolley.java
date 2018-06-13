@@ -539,32 +539,74 @@ public class Trolley implements Serializable {
 			next1 = prodQtysQuinquies.get(0).getProduct().getLoc();
 		}
 		if (posBox2 < t.boxes.size() - 1) {
-			List<ProdQty> prodQtysSixies = this.boxes.get(posBox2 + 1).getProdQtys();
+			List<ProdQty> prodQtysSixies = t.boxes.get(posBox2 + 1).getProdQtys();
 			next2 = prodQtysSixies.get(0).getProduct().getLoc();
 		}
 
 		double previousDistance = 0;
 
-		if (posBox1 == (posBox2 - 1) || (posBox1 + 1) == posBox2
-				|| posBox2 == (posBox1 - 1) || (posBox2 + 1) == posBox1) {
+        if (!prec1.equals(next1) || !prec2.equals(next2)) {
+			double previousDistanceBox1 = 0;
+            double previousDistanceBox2 = 0;
 
-			if (!prec1.equals(next1) || !prec2.equals(next2)) {
-				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(l2_start)
-						+ l2_end.getDistanceTo(next2);
-			}
+            if (prec1.getDistanceTo(l1_start) == Double.MAX_VALUE) {
+                previousDistanceBox1 = l1_start.getDistanceTo(prec1);
+            }
+            else {
+                previousDistanceBox1 = prec1.getDistanceTo(l1_start);
+            }
+            if (l1_end.getDistanceTo(next1) == Double.MAX_VALUE) {
+                previousDistanceBox1 += next1.getDistanceTo(l1_end);
+            }
+            else {
+                previousDistanceBox1 += l1_end.getDistanceTo(next1);
+            }
 
-			return prec1.getDistanceTo(l2_start) + l2_end.getDistanceTo(l1_start)
-					+ l1_end.getDistanceTo(next2) - previousDistance;
-		} else {
+            if (prec2.getDistanceTo(l2_start) == Double.MAX_VALUE) {
+                previousDistanceBox2 = l2_start.getDistanceTo(prec2);
+            }
+            else {
+                previousDistanceBox2 = prec2.getDistanceTo(l2_start);
+            }
+            if (l2_end.getDistanceTo(next2) == Double.MAX_VALUE) {
+                previousDistanceBox2 += next2.getDistanceTo(l2_end);
+            }
+            else {
+                previousDistanceBox2 += l2_end.getDistanceTo(next2);
+            }
 
-			if (!prec1.equals(next1) || !prec2.equals(next2)) {
-				previousDistance = prec1.getDistanceTo(l1_start) + l1_end.getDistanceTo(next1)
-						+ prec2.getDistanceTo(l2_start) + l2_end.getDistanceTo(next2);
-			}
+            previousDistance = previousDistanceBox1 + previousDistanceBox2;
+        }
 
-			return prec1.getDistanceTo(l2_start) + l2_end.getDistanceTo(next1)
-					+ prec2.getDistanceTo(l1_start) + l1_end.getDistanceTo(next2) - previousDistance;
-		}
+        double newDistanceBox1 = 0;
+        double newDistanceBox2 = 0;
+
+        if (prec1.getDistanceTo(l2_start) == Double.MAX_VALUE) {
+            newDistanceBox1 = l2_start.getDistanceTo(prec1);
+        }
+        else {
+            newDistanceBox1 = prec1.getDistanceTo(l2_start);
+        }
+        if (l2_end.getDistanceTo(next1) == Double.MAX_VALUE) {
+            newDistanceBox1 += next1.getDistanceTo(l2_end);
+        }
+        else {
+            newDistanceBox1 += l2_end.getDistanceTo(next1);
+        }
+        if (prec2.getDistanceTo(l1_start) == Double.MAX_VALUE) {
+            newDistanceBox2 = l1_start.getDistanceTo(prec2);
+        }
+        else {
+            newDistanceBox2 = prec2.getDistanceTo(l1_start);
+        }
+        if (l1_end.getDistanceTo(next2) == Double.MAX_VALUE) {
+            newDistanceBox2 += next2.getDistanceTo(l1_end);
+        }
+        else {
+            newDistanceBox2 += l1_end.getDistanceTo(next2);
+        }
+
+		return (newDistanceBox1 + newDistanceBox2) - previousDistance;
 	}
     
     /**
@@ -616,11 +658,16 @@ public class Trolley implements Serializable {
 	public boolean doEchangeInterTrolley(InterTrolleyInfos interTrolleyInfos) {
 		Box b1 = this.boxes.get(interTrolleyInfos.getOldPosition());
 		Box b2 = interTrolleyInfos.getNewTrolley().boxes.get(interTrolleyInfos.getNewPosition());
-
-		if (this.addBoxByPos(b1, interTrolleyInfos.getNewPosition())
+        
+        interTrolleyInfos.getNewTrolley().boxes.remove(b2);
+        this.boxes.remove(b1);
+        
+		if (interTrolleyInfos.getNewTrolley().addBoxByPos(b1, interTrolleyInfos.getNewPosition())
 				&& this.addBoxByPos(b2,interTrolleyInfos.getOldPosition())) {
 			return true;
 		} else {
+            interTrolleyInfos.getNewTrolley().boxes.add(interTrolleyInfos.getNewPosition(),b2);
+            this.boxes.add(interTrolleyInfos.getOldPosition(), b1);
 			return false;
 		}
 	}

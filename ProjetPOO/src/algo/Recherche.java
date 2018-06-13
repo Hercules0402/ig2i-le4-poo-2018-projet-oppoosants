@@ -75,6 +75,9 @@ public class Recherche {
 
         solution.add(trolley);
         instance.setTrolleys(solution);
+        List<Box> boxes = new ArrayList<>();
+        for(Trolley t : solution) boxes.addAll(t.getBoxes());
+        instance.setBoxes(boxes);    
         return instance;
     }
 }

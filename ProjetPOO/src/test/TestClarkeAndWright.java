@@ -19,10 +19,6 @@ public class TestClarkeAndWright {
         System.out.println(Distances.formatDistance(distance));
         Writer.save(fileName, inst, false);
         
-        for(Trolley t : inst.getTrolleys()){
-            inst.getBoxes().addAll(t.getBoxes());
-        }
-        
         ClarkeAndWright cwa = new ClarkeAndWright(inst);
         inst = cwa.run();
         
