@@ -24,7 +24,7 @@ public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
@@ -54,7 +54,7 @@ public class Order implements Serializable {
     }
 
     /**
-     * Constructeur par id et produits de la commande Order
+     * Constructeur par id et produits de la commande Order.
      * @param id
      * @param m
      * @param nbProducts

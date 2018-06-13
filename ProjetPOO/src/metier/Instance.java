@@ -21,6 +21,9 @@ import javax.persistence.OneToOne;
 public class Instance implements Serializable{
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Correspond à l'id de la ligne dans la bdd.
+     */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -181,9 +184,6 @@ public class Instance implements Serializable{
 		for (Box b : this.boxes) {
 			b.clear();
 		}
-        /*for (Trolley t : this.trolleys) {
-			t.clear();
-		}*/
 		this.graph.clear();
     }
 
