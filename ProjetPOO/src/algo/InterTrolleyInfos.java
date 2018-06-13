@@ -48,7 +48,6 @@ public class InterTrolleyInfos {
 		if (this.newPosition == -1 || this.oldPosition == -1) {
 			return false;
 		}
-
 		if (this.oldTrolley == null || this.newTrolley == null) {
 			return false;
 		} else {

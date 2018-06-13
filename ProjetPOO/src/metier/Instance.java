@@ -1,6 +1,7 @@
 package metier;
 
 import algo.InterTrolleyInfos;
+import algo.RechercheLocale;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -193,13 +194,22 @@ public class Instance implements Serializable{
             for (Trolley t2 : this.trolleys) {
                 if (t1 == t2) continue;
                 InterTrolleyInfos tmp = t1.echangeInterTrolley(t2);
-                if (interTrolleyInfos.getDiffCout() < tmp.getDiffCout()) {
-                    interTrolleyInfos = tmp;
+                if (tmp.getDiffCout() < interTrolleyInfos.getDiffCout()) {
+                    if(tmp.getDiffCout() < 0 && interTrolleyInfos.getDiffCout() < 0){
+                        continue;
+                    }
+                    else {
+                        interTrolleyInfos = new InterTrolleyInfos(tmp);
+                    }
                 }
             }			
 		}
 		if (interTrolleyInfos.getDiffCout() < 0) {
-			return interTrolleyInfos.doEchangeInterTrolley();
+            if (RechercheLocale.diffCout < interTrolleyInfos.getDiffCout()) {
+                RechercheLocale.diffCout = interTrolleyInfos.getDiffCout();
+                return interTrolleyInfos.doEchangeInterTrolley();
+            }
+            return false;
 		}
 		return false;
     }

@@ -166,14 +166,17 @@ public class Trolley implements Serializable {
 		InterTrolleyInfos interInfos = new InterTrolleyInfos();
 		int nbBoxes1 = this.boxes.size();
         int nbBoxes2 = t.boxes.size();
-		for (int l1 = 0; l1 < nbBoxes1; l1++) {
-			for (int l2 = 0; l2 < nbBoxes2; l2++) {
-				//if (l1 != l2) {
-				InterTrolleyInfos interInfosNew = this.evaluerEchangeInter(l1,l2,t);
+		for (int b1 = 0; b1 < nbBoxes1; b1++) {
+			for (int b2 = 0; b2 < nbBoxes2; b2++) {
+				InterTrolleyInfos interInfosNew = this.evaluerEchangeInter(b1,b2,t);                
 				if (interInfosNew.getDiffCout() < interInfos.getDiffCout()) {
-					interInfos = new InterTrolleyInfos(interInfosNew);
-				}
-				//}
+                    if(interInfosNew.getDiffCout() < 0 && interInfos.getDiffCout() < 0){
+                        continue;
+                    }
+                    else {
+                        interInfos = new InterTrolleyInfos(interInfosNew);
+                    }                    
+                }               
 			}
 		}
 		return interInfos;
@@ -222,11 +225,11 @@ public class Trolley implements Serializable {
 
 		if (posBox1 > 0) {
 			List<ProdQty> prodQtysBisTer = this.boxes.get(posBox1 - 1).getProdQtys();
-			prec1 = prodQtysBisTer.get(prodQtysBisTer.size() -1).getProduct().getLoc();
+			prec1 = prodQtysBisTer.get(prodQtysBisTer.size() - 1).getProduct().getLoc();
 		}
 		if (posBox2 > 0) {
-			List<ProdQty> prodQtysQuater = t.boxes.get(posBox2 - 1).getProdQtys();
-			prec2 = prodQtysQuater.get(prodQtysQuater.size() -1).getProduct().getLoc();
+			List<ProdQty> prodQtysQuater = t.boxes.get(posBox2 -  1).getProdQtys();
+			prec2 = prodQtysQuater.get(prodQtysQuater.size() - 1).getProduct().getLoc();
 		}
 
 		if (posBox1 < this.boxes.size() - 1) {
