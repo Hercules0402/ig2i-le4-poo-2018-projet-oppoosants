@@ -112,7 +112,9 @@ public class GATourneeV2 {
             }       
             
             int tot = boxes.size();
-            for(int j=0; j<60; j++){  //On réalise 60 déplacement aléatoires entre deux boites
+            //On calcule le nombre d'échanges que l'on va faire proportionnellement à la quantité de colis (ex: 4 pour une instance de 20)
+            float nbSwitch = (float) tot/5; 
+            for(int j=0; j<(int) nbSwitch; j++){  //On réalise les échanges aléatoires entre deux boites
                 int p1 = new Random().nextInt(tot - 1) + 1;
                 int p2 = new Random().nextInt(tot - 1) + 1;
                 while(p1 == p2) //Si p1 et p2 sont les mêmes, on retire p2 jusqu'a ce qu'ils ne le soient plus
@@ -120,7 +122,9 @@ public class GATourneeV2 {
                 nTrolleys = swapBoxes(nTrolleys, p1, p2);
             }
            
-            for(int j=0; j<60; j++){ //On réalise 60 tentatives de déplacement d'une boite aléatoire vers une autre tournée
+            //On calcule le nombre de déplacements que l'on va faire proportionnellement à la quantité de colis (ex: 5 pour une instance de 20)
+            float nbMove = (float) tot/4;
+            for(int j=0; j<(int) nbMove; j++){ //On réalise les tentatives de déplacements d'une boite aléatoire vers une autre tournée
                 int val = new Random().nextInt(nTrolleys.size()); //On sélectionne une tournée au hasard
                 if(nTrolleys.get(val).getBoxes().size() == nTrolleys.get(val).getNbColisMax()){ //Si elle est complete
                     int rand  = new Random().nextInt(nTrolleys.get(val).getBoxes().size()); //On sélectionne un colis de cette tournée au hasard
@@ -147,81 +151,45 @@ public class GATourneeV2 {
             results.put(i, r); //On met les résultats dans la Map
             i++;
         }
-        results = sortByComparator(results);
-    }
-    
-    static class MyComparator implements Comparator<Entry<Integer, Integer>> {
-        public int compare(Entry<Integer, Integer> o1, Entry<Integer, Integer> o2) {
-            return o1.getValue().compareTo(o2.getValue());
-        }
-    }
-    
-    public static Map<Integer, Integer> sortByComparator(Map<Integer, Integer> unsortMap) {
-        List<Entry<Integer, Integer>> list = new LinkedList<Entry<Integer, Integer>>(unsortMap.entrySet());
-
-        Collections.sort(list, new MyComparator());
-
-        Map<Integer, Integer> sortedMap = new LinkedHashMap<Integer, Integer>();
-        for (Entry<Integer, Integer> entry : list) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
-        return sortedMap;
+        results = sortByComparator(results); //On trie la map en fonction des valeurs (résultats)
     }
     
     /**
      * Permet de sélectionner les deux meilleurs génomes de la population.
      */
     public static void selection(){
+        //On recrée une nouvelle liste de population et map de résultats
         List<ArrayList<Trolley>> newPopList = new ArrayList<ArrayList<Trolley>>();
         HashMap newResults = new HashMap<Integer,Integer>();
         int i=0;
-        for (Map.Entry<Integer,Integer> e : results.entrySet()) {
+        for (Map.Entry<Integer,Integer> e : results.entrySet()) { //Pour chaque genome de la map resultat
+            //On ajoute les 20 meilleurs à la nouvelle map
             if(i>=20) break;
-            if(i==0) tempBest = popList.get(e.getKey());
+            if(i==0) tempBest = popList.get(e.getKey()); //On stocke le meilleur dans une variable à part pour pouvoir l'afficher facilement
             newPopList.add(popList.get(e.getKey()));
             newResults.put(i, e.getValue());
             i++;
         }
+        //On remplace la liste et la map par les nouvelles crées (contenant uniquement les 20 meilleurs)
         results = newResults;
         popList = new ArrayList<ArrayList<Trolley>>(newPopList);
-    }
-    
-    public static int getLinearRandomNumber(int maxSize){
-        int randomMultiplier = maxSize * (maxSize + 1) / 2;
-        Random r=new Random();
-        int randomInt = r.nextInt(randomMultiplier);
-
-        int linearRandomNumber = 0;
-        for(int i=maxSize; randomInt >= 0; i--){
-            randomInt -= i;
-            linearRandomNumber++;
-        }
-
-        return linearRandomNumber-1;
-    }
-    
-    public static int getExponentialRandomNumber(int maxSize){
-        Random r = new Random();
-        double d = Math.log(1-r.nextDouble())/(-maxSize);
-        int res = (int) Math.round(d*maxSize);
-        return res;
     }
     
     /**
      * Permet d'effectuer des croissements entre les 2 meilleurs genomes.
      */
     public static void crossover(){
-        //Pour creer 8 nouveaux genomes, on fait appel 4 fois à la fonction CrossOver
+        //Pour creer 20 nouveaux genomes, on fait appel 10 fois à la fonction CrossOver
         //qui va retourner 2 mélanges des 2 génomes passés en paramètres, qu'on ajoute à la liste de population
         for(int i=0; i<10; i++) {
-            int r1 = getExponentialRandomNumber(20);
+            //On choisi les deux genomes qu'on va croisser au hasard parmis les 20 meilleurs (avec coefficient exponentiel)
+            int r1 = getExponentialRandomNumber(20); 
             int r2 = getExponentialRandomNumber(20);
             while(r1 == r2) 
                 r2 = getExponentialRandomNumber(20);
-            //System.out.println("Crossover entre la " + r1 + " et la " + r2);
 
-            ArrayList<Trolley> p1 = popList.get(r1); //On récupere le premier genome (meilleur)
-            ArrayList<Trolley> p2 = popList.get(r2); //On récupere le deuxieme genome (2nd meilleur)
+            ArrayList<Trolley> p1 = popList.get(r1); //On récupere le premier genome choisi
+            ArrayList<Trolley> p2 = popList.get(r2); //On récupere le deuxieme genome choisi
             
             //On va convertir notre liste de colis en une liste d'entiers étant les id des colis
             //pour pouvoir utiliser la fonction d'OrderedCrossover (OX).
@@ -301,8 +269,8 @@ public class GATourneeV2 {
      */
     public static void mutation(){
         int tot = boxes.size();
-        for(int i=2; i<40; i++){ //Sur les genomes 2 à 10 (tous sauf les 2 meilleurs que l'on garde tel quels)
-            for(int j=0; j<20; j++){ //On réalise 1 déplacement aléatoires entre deux boites
+        for(int i=20; i<40; i++){ //Sur les genomes 20 à 40 
+            for(int j=0; j<1; j++){ //On réalise 1 déplacement aléatoires entre deux boites
                 int p1 = new Random().nextInt(tot - 1) + 1;
                 int p2 = new Random().nextInt(tot - 1) + 1;
                 while(p1 == p2) //Si p1 et p2 sont les mêmes, on retire p2 jusqu'a ce qu'ils ne le soient plus
@@ -310,7 +278,7 @@ public class GATourneeV2 {
                 swapBoxes(popList.get(i), p1, p2);
             }
             
-            for(int j=0; j<30; j++){ //On réalise 2 tentatives de déplacement d'une boite aléatoire vers une autre tournée
+            for(int j=0; j<2; j++){ //On réalise 2 tentatives de déplacement d'une boite aléatoire vers une autre tournée
                 int val = new Random().nextInt(popList.get(i).size()); //On sélectionne une tournée au hasard
                 if(popList.get(i).get(val).getBoxes().size() == popList.get(i).get(val).getNbColisMax()){ //Si elle est complete
                     int rand  = new Random().nextInt(popList.get(i).get(val).getBoxes().size()); //On sélectionne un colis de cette tournée au hasard
@@ -324,7 +292,64 @@ public class GATourneeV2 {
         }
     }
     
-    //FONCTIONS SWAPBOXES ET MOVEBOX (POUR GENERATION ET MUTATION) 
+    //FONCTIONS GETLINEAR, GETEXPONENTIAL, SORTBYCOMPARATOR, SWAPBOXES ET MOVEBOX (POUR GENERATION ET MUTATION) 
+    
+    /**
+     * Returne un nombre aléatoire suivant une distribution lineaire.
+     * @param maxSize Nombre maximal
+     * @return Nombre aléatoire
+     */
+    public static int getLinearRandomNumber(int maxSize){
+        int randomMultiplier = maxSize * (maxSize + 1) / 2;
+        Random r = new Random();
+        int randomInt = r.nextInt(randomMultiplier);
+
+        int linearRandomNumber = 0;
+        for(int i=maxSize; randomInt >= 0; i--){
+            randomInt -= i;
+            linearRandomNumber++;
+        }
+
+        return linearRandomNumber-1;
+    }
+    
+    /**
+     * Returne un nombre aléatoire suivant une distribution exponentielle.
+     * @param maxSize Nombre maximal
+     * @return Nombre aléatoire
+     */
+    public static int getExponentialRandomNumber(int maxSize){
+        Random r = new Random();
+        double d = Math.log(1-r.nextDouble())/(-maxSize);
+        int res = (int) Math.round(d*maxSize);
+        return res;
+    }
+    
+    /**
+     * Classe comparateur permettant de trier une entrée en fonction de sa valeur.
+     */
+    static class MyComparator implements Comparator<Entry<Integer, Integer>> {
+        public int compare(Entry<Integer, Integer> o1, Entry<Integer, Integer> o2) {
+            return o1.getValue().compareTo(o2.getValue());
+        }
+    }
+    
+    /**
+     * Permet de trier les genomes de la map résultat par leur score.
+     * @param unsortMap Map non triée
+     * @return Map triée
+     */
+    public static Map<Integer, Integer> sortByComparator(Map<Integer, Integer> unsortMap) {
+        List<Entry<Integer, Integer>> list = new LinkedList<Entry<Integer, Integer>>(unsortMap.entrySet());
+
+        Collections.sort(list, new MyComparator());
+
+        Map<Integer, Integer> sortedMap = new LinkedHashMap<Integer, Integer>();
+        for (Entry<Integer, Integer> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
+    }
     
     /**
      * Permet d'intervertir deux colis au sein d'une solution.
@@ -488,7 +513,7 @@ public class GATourneeV2 {
      */
     public static void main(String[] args) {
         /*Reader*/
-        String fileName = "instance_0606_136178_Z1.txt";
+        String fileName = "instance_0215_132916_Z2.txt";
         Instance inst = Reader.read(fileName, false); 
         inst = Recherche.run(inst);
         

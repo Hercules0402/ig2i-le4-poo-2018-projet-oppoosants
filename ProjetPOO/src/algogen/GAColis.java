@@ -334,21 +334,26 @@ public class GAColis {
     
     //FONCTION DE TEST
     
+    /**
+     * Permet de tester qu'une solution est valide.
+     * En vérifiant que son poid et son volume n'exedent pas le poid ou volume maximum.
+     * @param list Liste de colis
+     */
     public static void check(List<Box> list){
         boolean errors = false;
         for(Box b : list){
             int W = instance.getWeightMaxBox();
             int V = instance.getVolumeMaxBox();
             int loadW = 0, loadV = 0;
-            for(ProdQty pq : b.getProdQtys()){
+            for(ProdQty pq : b.getProdQtys()){ //Pour chaque produit, on incrémente le volume et le poid actuel
                 loadW += pq.getProduct().getWeight() * pq.getQuantity();
                 loadV += pq.getProduct().getVolume() * pq.getQuantity();
             }
-            if(loadW > W) {
+            if(loadW > W) { //Si son poid dépasse le poid maximum, on affiche une erreur
                 System.out.println("[CHECK] Erreur de poids du colis " + b.getIdBox() + "(" + loadW + " > " + W + ")");
-                errors = true;
+                errors = true; 
             }
-            if(loadV > V) {
+            if(loadV > V) { //Si son volume dépasse le volume maximum, on affiche une erreur
                 System.out.println("[CHECK] Erreur de volume du colis " + b.getIdBox() + "(" + loadV + " > " + V + ")");
                 errors = true;
             }
