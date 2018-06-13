@@ -1,5 +1,6 @@
 var firstDraw = true;
 var colors = ['#ff9900','#00cc00','#0066cc','#ff00ff','#ffff00','#00ffcc'];//Orange,Vert,Bleu,Fushia,Jaune,Cyan
+var selection = [];
 
 /**
  * Fonction permettant de récupérer la liste des locations de l'entrepôt.
@@ -93,6 +94,7 @@ function togglePoint() {
  */
 function resetGraph() {
     redraw();
+    readSelectedInputs();
     isGraphic = false;
     drawed = false;
     getGraphe(idCurrentInstance);
@@ -101,8 +103,10 @@ function resetGraph() {
 function resetGraphAndPoint() {
     movingPState = "end";
     displayPoint = false;
+    isCbmDisplayed = false;
+    $('#boxSelection').empty();
     $('#togglePointC').prop('checked', false);
-
+    
     resetGraph();
 }
 
@@ -164,7 +168,6 @@ function draw(){
             coeffW = windowWidth/maxSize*0.9;
             coeffH = windowHeight/maxSize*0.8;
             calcItineraireTrolley();
-
             drawed = true;
         }
 
@@ -173,7 +176,7 @@ function draw(){
     
         var selectedTrolleyID = $("#trolleySelection" ).val();
 
-        if(displayLocations) placeLocations(); 
+        if(displayLocations) placeLocations();
         placeDepots();
         if (selectedTrolleyID == tabSolution.length) {
             //Affichage de tous les trolleys
@@ -268,33 +271,65 @@ function movePoint() {
     }
 }
 
+function readSelectedInputs() {
+    var value, tab, id;
+    var selectedTrolleyID = $("#trolleySelection" ).val();
+    if (selectedTrolleyID == tabSolution.length) {
+        tab = tabSolution;
+    } 
+    else {
+        tab = tabSolution[selectedTrolleyID].BOXES;
+    }
+        
+    selection.length = 0;
+    for (var f = 1; f <= tab.length; f++){
+        value = $("#checkbox"+f).prop('checked');
+        id = $("#checkbox"+f).attr('id');
+        if (value)
+            selection.push(f);
+    }
+}
+
 /**
  * Fonction permettant de dessiner les produits d'un trolley, avec une couleur identique s'il est issu du même box.
  * @param {*} coeffW 
  * @param {*} coeffH 
  */
 function drawProductsFromTrolley(selectedTrolleyID) {
-    
     stroke(0);
     var abs = 0;
     var ord = 0;
     var color;
     //Récupère les boxes correspondantes au trolley sélectionné
     var boxes = tabSolution[selectedTrolleyID].BOXES;
-    $('#boxSelection').empty();
-
+    boxes.sort(function(a, b) { return a.IDBOX - b.IDBOX});
+    
     //Lecture des produits pour chacunes des boxes (une couleur est générée pour chaque box)
     for (var j = 0; j < boxes.length; j++){
-
+        
         var box = boxes[j].PRODUCTS;
+        var checkboxValue;
         color = colors[j];
+        if(jQuery.inArray(j+1,selection)==-1) {
+            checkboxValue = false;
+        }
+        else {
+            checkboxValue = true;
+        }
             
-        $('#boxSelection').append($('<span>', {
-            class: 'badge badge-primary',
-            text: 'Box ID: '+boxes[j].IDBOX+' (Order: '+boxes[j].ORDER_ID+')',
-            style: 'background-color:'+color+';'
-        }));
-            
+        if(!isCbmDisplayed) {
+            $('#boxSelection').append($('<span>', {
+                class: 'badge badge-primary',
+                text: 'Box ID: '+boxes[j].IDBOX+' (Order: '+boxes[j].ORDER_ID+')',
+                style: 'background-color:'+color+';'
+            }));
+            $('#boxSelection').append($('<input>', {
+                type:"checkbox",
+                id: "checkbox"+ (j + 1),
+                value: checkboxValue
+            }));
+            $('#checkbox'+ (j+1)).change(function () {readSelectedInputs();});
+        }
         //Positionnement des produits avec leur coordonnées et couleur respectives
         for (var k = 0; k < box.length; k++){
             abs = parseInt(box[k].LOC_ABSCISSE);
@@ -303,6 +338,7 @@ function drawProductsFromTrolley(selectedTrolleyID) {
             ellipse(abs*coeffW, ord*coeffH,pointSize,pointSize);
         }
     }
+    if(!isCbmDisplayed) isCbmDisplayed = true;
 }
 
 /**
@@ -313,21 +349,38 @@ function drawProductsFromTrolley(selectedTrolleyID) {
 function drawProductsFromInstance() {
     
     stroke(0);
-    $('#boxSelection').empty();
     var abs = 0;
     var ord = 0;
+    var checkboxValue;
     var color;
     
     for (var f = 0; f < tabSolution.length; f++){
         //Récupère les trolleys correspondantes à l'instance sélectionnée
+
+        if(jQuery.inArray(f + 1,selection)==-1) {
+            checkboxValue = false;
+        }
+        else {
+            checkboxValue = true;
+        }
+
         var boxes = tabSolution[f].BOXES;
+        boxes.sort(function(a, b) { return a.IDBOX - b.IDBOX});
         color = colors[f];
 
-        $('#boxSelection').append($('<span>', {
-            class: 'badge badge-primary',
-            text: 'Trolley ID: '+tabSolution[f].IDTROLLEY,
-            style: 'background-color:'+color+';'
-        }));
+        if(!isCbmDisplayed) {
+            $('#boxSelection').append($('<span>', {
+                class: 'badge badge-primary',
+                text: 'Trolley ID: '+tabSolution[f].IDTROLLEY,
+                style: 'background-color:'+color+';'
+            }));
+            $('#boxSelection').append($('<input>', {
+                type:"checkbox",
+                id: "checkbox"+ (f + 1),
+                value: checkboxValue
+            }));
+            $('#checkbox'+tabSolution[f].IDTROLLEY).change(function () {readSelectedInputs();});
+        }
 
         //Lecture des produits pour chacunes des trolleys (une couleur est générée pour chaque trolley)
         for (var j = 0; j < boxes.length; j++){
@@ -343,6 +396,7 @@ function drawProductsFromInstance() {
             }
         }
     }
+    if(!isCbmDisplayed) isCbmDisplayed = true;
 }
 
 /**
@@ -353,7 +407,12 @@ function drawProductsFromInstance() {
 function drawLiaisonsFromTrolley(selectedTrolleyID) {
     var lastProduct = false;
     var boxes = tabSolution[selectedTrolleyID].BOXES;
+    
     for (var j = 0; j < boxes.length; j++){
+        if(jQuery.inArray(j + 1,selection) == -1){
+            continue;
+        }
+        
         box = boxes[j];
         stroke(color(colors[j]));
         box["PRODUCTS"].forEach(function(p){
@@ -379,6 +438,10 @@ function drawLiaisonsFromInstance() {
     var lastProduct = false;var trolley;
 
     for (var j = 0; j < tabSolution.length; j++){
+        if(jQuery.inArray(j + 1,selection) == -1){
+            continue;
+        }
+
         trolley = tabSolution[j];
         stroke(color(colors[j]));
         trolley["BOXES"].forEach(function(box) {
@@ -452,11 +515,6 @@ function placeLocations() {
 
         if(loc["NAME"] != "depotStart" && loc["NAME"] != "depotEnd") {
             fill(color(255,255,255));
-                    
-            //console.log(colorInc + " " + (255/allLocations.length));
-            //fill(color(colorInc, colorInc, colorInc));
-            //colorInc += (255/allLocations.length);
-            
             ellipse(parseInt(loc["ABSCISSE"])*coeffW, parseInt(loc["ORDONNEE"])*coeffH,pointSize,pointSize);
         }
     }

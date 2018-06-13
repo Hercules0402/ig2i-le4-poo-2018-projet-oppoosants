@@ -1,5 +1,6 @@
 var isGraphic = false;
 var drawed = false;
+var isCbmDisplayed = false;
 var displayLocations = false;
 var displayLines = false;
 var displayPoint = false;
