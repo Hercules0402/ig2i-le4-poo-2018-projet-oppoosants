@@ -114,48 +114,17 @@ public class Trolley implements Serializable {
         return true;
     } 
 
+    /**
+     * Permet d'ajouter une box à un trolley pour la méthode de Clarke And Wright
+     * @param b
+     * @return boolean
+     */
     public boolean addBoxClarkeAndWright(Box b){
         if (b == null) return false;
         if(this.nbColisMax < this.boxes.size() + 1) return false;
         this.boxes.add(b);
         return true;
     }
-
-    /**
-	 * Permet de calculer le coût delta représentant l'insertion d'une box b à
-	 * la position pos.
-	 * @param b
-	 * @param pos
-	 * @return double
-	 */
-	public double calculerDeltaCout(Box b, int pos) {
-		if (pos < 0 || pos > this.boxes.size()) {
-			return Double.MAX_VALUE;
-		}
-
-		Location prec = this.ninstance.getGraph().getDepartingDepot();
-		if (pos > 0) {
-            List<ProdQty> prodQtys = this.boxes.get(pos - 1).getProdQtys();
-			prec = prodQtys.get(prodQtys.size() - 1).getProduct().getLoc();
-		}
-
-		Location next = this.ninstance.getGraph().getDepartingDepot();
-		if (pos < this.boxes.size()) {
-            List<ProdQty> prodQtysBis = this.boxes.get(pos).getProdQtys();
-			next = prodQtysBis.get(0).getProduct().getLoc();
-		}
-
-        List<ProdQty> prodQtysTer = b.getProdQtys();
-        Location actu_start = prodQtysTer.get(prodQtysTer.size() - 1).getProduct().getLoc();
-        Location actu_end = prodQtysTer.get(prodQtysTer.size() - 1).getProduct().getLoc();
-
-		double previousDistance = 0;
-		if (!prec.equals(next)) {
-            previousDistance = prec.getDistanceTo(next);
-		}
-
-		return prec.getDistanceTo(actu_start) + actu_end.getDistanceTo(next) - previousDistance;
-	}
 
     /**
 	 * Retourne les infos sur l'échange inter d'une box.
@@ -166,9 +135,12 @@ public class Trolley implements Serializable {
 		InterTrolleyInfos interInfos = new InterTrolleyInfos();
 		int nbBoxes1 = this.boxes.size();
         int nbBoxes2 = t.boxes.size();
+        // Parcours des boxes pour calculer le coût de leur échange
 		for (int b1 = 0; b1 < nbBoxes1; b1++) {
 			for (int b2 = 0; b2 < nbBoxes2; b2++) {
-				InterTrolleyInfos interInfosNew = this.evaluerEchangeInter(b1,b2,t);                
+				InterTrolleyInfos interInfosNew = this.evaluerEchangeInter(b1,b2,t); 
+                // On retourne ici toujours l'échange dontle coût négatif est
+                //le plus proche de zéro
 				if (interInfosNew.getDiffCout() < interInfos.getDiffCout()) {
                     if(interInfosNew.getDiffCout() < 0 && interInfos.getDiffCout() < 0){
                         continue;
@@ -202,7 +174,8 @@ public class Trolley implements Serializable {
 	 * @return double
 	 */
 	public double calculerDeltaCoutEchangeInter(int posBox1, int posBox2, Trolley t) {
-		if (posBox1 < 0 || posBox1 > this.boxes.size()) {
+		// Si les positions sont en-dehors de l'ensemble alors aucun calcul possible
+        if (posBox1 < 0 || posBox1 > this.boxes.size()) {
 			return Double.MAX_VALUE;
 		}
 
@@ -210,11 +183,15 @@ public class Trolley implements Serializable {
 			return Double.MAX_VALUE;
 		}
 
+        // Récupération des locations des boxes précédant et suivant les boxes
+        // à échanger avec comme intialisation le dépôt
 		Location prec1 = this.ninstance.getGraph().getDepartingDepot();
 		Location prec2 = t.ninstance.getGraph().getDepartingDepot();
 		Location next1 = this.ninstance.getGraph().getDepartingDepot();
 		Location next2 = t.ninstance.getGraph().getDepartingDepot();
 		
+        // Récupération des locations répresentant les extrémités des boxes à
+        // échanger
         List<ProdQty> prodQtys = this.boxes.get(posBox1).getProdQtys();
         List<ProdQty> prodQtysBis = t.boxes.get(posBox2).getProdQtys();
 		
@@ -223,6 +200,8 @@ public class Trolley implements Serializable {
         Location l2_start = prodQtysBis.get(0).getProduct().getLoc();
 		Location l2_end = prodQtysBis.get(prodQtysBis.size() - 1).getProduct().getLoc();
 
+        // On fixe les nouvelles locations des boxes précédant et suivant les boxes
+        // à échanger
 		if (posBox1 > 0) {
 			List<ProdQty> prodQtysBisTer = this.boxes.get(posBox1 - 1).getProdQtys();
 			prec1 = prodQtysBisTer.get(prodQtysBisTer.size() - 1).getProduct().getLoc();
@@ -241,6 +220,7 @@ public class Trolley implements Serializable {
 			next2 = prodQtysSixies.get(0).getProduct().getLoc();
 		}
 
+        // Calcul de l'ancienne distance
 		double previousDistance = 0;
 
         if (!prec1.equals(next1) || !prec2.equals(next2)) {
@@ -276,6 +256,7 @@ public class Trolley implements Serializable {
             previousDistance = previousDistanceBox1 + previousDistanceBox2;
         }
 
+        // Calcul de la nouvelle distance
         double newDistanceBox1 = 0;
         double newDistanceBox2 = 0;
 
@@ -304,6 +285,7 @@ public class Trolley implements Serializable {
             newDistanceBox2 += l1_end.getDistanceTo(next2);
         }
 
+        // le coût de l'échange correspond à la nouvelle distance moins l'ancienne
 		return (newDistanceBox1 + newDistanceBox2) - previousDistance;
 	}
 
@@ -314,22 +296,33 @@ public class Trolley implements Serializable {
 	 * @return boolean
 	 */
 	public boolean doEchangeInterTrolley(InterTrolleyInfos interTrolleyInfos) {
+        // Récupération des boxes dans leur trolley associé
 		Box b1 = this.boxes.get(interTrolleyInfos.getOldPosition());
 		Box b2 = interTrolleyInfos.getNewTrolley().boxes.get(interTrolleyInfos.getNewPosition());
         
+        // Suppression des boxes dans leur trolley associé
         interTrolleyInfos.getNewTrolley().boxes.remove(b2);
         this.boxes.remove(b1);
         
+        // AJout des boxes dans leur nouveau trolley
 		if (interTrolleyInfos.getNewTrolley().addBoxByPos(b1, interTrolleyInfos.getNewPosition())
 				&& this.addBoxByPos(b2,interTrolleyInfos.getOldPosition())) {
 			return true;
 		} else {
+            // Echec de l'ajout des boxes dans leur nouveau trolley donc on les
+            // remets dans leur ancien trolley
             interTrolleyInfos.getNewTrolley().boxes.add(interTrolleyInfos.getNewPosition(),b2);
             this.boxes.add(interTrolleyInfos.getOldPosition(), b1);
 			return false;
 		}
 	}
 
+    /**
+     * Ajout d'une box à une position donnée.
+     * @param b
+     * @param pos
+     * @return 
+     */
     private boolean addBoxByPos(Box b, int pos) {
         if (b == null) {
 			return false;

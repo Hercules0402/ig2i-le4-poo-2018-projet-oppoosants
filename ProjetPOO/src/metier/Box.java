@@ -163,7 +163,8 @@ public class Box implements Serializable {
     }
     
     /**
-     * Fonction permettant d'ajouter un produit dans une box, et qui retourne un booléen nécessaire à l'algorithme de ClarkeAndWright.
+     * Fonction permettant d'ajouter un produit dans une box, et qui retourne 
+     * un booléen nécessaire à l'algorithme de ClarkeAndWright.
      * @param pq
      * @return boolean
      */

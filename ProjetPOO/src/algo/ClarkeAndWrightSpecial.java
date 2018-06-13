@@ -13,10 +13,7 @@ import metier.Box;
 import metier.Instance;
 import metier.Order;
 import metier.ProdQty;
-import metier.Product;
-import util.Distances;
 import util.Reader;
-import util.Writer;
 
 /**
  * Classe ClarkeAndWright.
@@ -25,8 +22,8 @@ import util.Writer;
 public class ClarkeAndWrightSpecial {
 
     /**
-     * Classe interne permettant de stocker l'ensemble de paire de tournées avec 
-     * le gain de celles-ci
+     * Classe interne permettant de stocker l'ensemble de paire de boxes avec 
+     * le gain de celles-ci.
      */
     class Economie{
         Box b1, b2;
@@ -96,7 +93,7 @@ public class ClarkeAndWrightSpecial {
 
     /**
      * Permet de créer une box pour chaque ProductQty, calculer le gain de 
-     * celle-ci, d'ajouter la paire de tournées dans notre tableau d'économie et
+     * celle-ci, d'ajouter la paire de boxes dans notre tableau d'économie et
      * trié dans l'ordre défini le gain notre tableau d'économie.
      */
     private void initialiserCWA(){

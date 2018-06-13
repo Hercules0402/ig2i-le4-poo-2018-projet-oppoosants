@@ -19,8 +19,8 @@ import metier.Instance;
 public class ClarkeAndWright {
 
     /**
-     * Classe interne permettant de stocker l'ensemble de paire de tournées avec 
-     * le gain de celles-ci
+     * Classe interne permettant de stocker l'ensemble de paire de trolleys avec 
+     * le gain de celles-ci.
      */
     class Economie{
         Trolley t1, t2;
@@ -92,8 +92,8 @@ public class ClarkeAndWright {
     }
 
     /**
-     * Permet de créer une tournée pour chaque box, calculer le gain de 
-     * celle-ci, d'ajouter la paire de tournées dans notre tableau d'économie et
+     * Permet de créer un trolley pour chaque box, calculer le gain de 
+     * celle-ci, d'ajouter la paire de trolleys dans notre tableau d'économie et
      * trié dans l'ordre défini le gain notre tableau d'économie.
      */
     private void initialiserCWA(){
@@ -127,7 +127,7 @@ public class ClarkeAndWright {
     }
 
     /**
-     * Permet de fusionner les différentes tournées tel que le gain de la fusion
+     * Permet de fusionner les différentes trolleys tel que le gain de la fusion
      * soit le plus grand possible.
      */
     private void fusion(){
@@ -154,7 +154,7 @@ public class ClarkeAndWright {
             ensBoxes.clear();
             // Suppression de t2 après la fusion avec t1
             t2.setBoxes(null);
-            // AJout de t1 à l'ensemble des tournées fusionnées
+            // AJout de t1 à l'ensemble des trolleys fusionnées
             this.trolleys.add(t1);
         }
         this.nettoyerTrolley();
@@ -162,7 +162,7 @@ public class ClarkeAndWright {
     }
 
     /**
-     * Permet de supprimer toutes les tournées nulles de notre liste de tournées.
+     * Permet de supprimer toutes les trolleys nulles de notre liste de trolleys.
      */
     private void nettoyerTrolley(){
         Iterator<Trolley> it = this.trolleys.iterator();
