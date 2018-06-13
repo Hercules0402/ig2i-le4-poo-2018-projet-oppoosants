@@ -24,7 +24,7 @@ public class Trolley implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -96,13 +96,10 @@ public class Trolley implements Serializable {
     }
 
     public boolean addBox(Box p) {
-        //System.out.println("Ajout coli " + p.getIdBox() + " dans " + this.getIdTrolley());
         if(this.nbColisMax < boxes.size() + 1) {
-            //System.out.println("Pas reussi");
             return false;
         }
         boxes.add(p);
-        //System.out.println("Reussi");
         return true;
     }
 

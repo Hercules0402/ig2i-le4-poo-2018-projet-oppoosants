@@ -22,7 +22,7 @@ public class Graph implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
