@@ -10,6 +10,7 @@ import java.util.Random;
 public class OX {
     /**
      * Permet de croisser deux génomes en deux points aléatoires.
+     * Méthode inspirée par la classe OrderedCrossoverFunction de jmona par Jeffrey Finkelstein
      * @param p1 Prenier genome
      * @param p2 Second genome
      * @return Map contenant 2 genomes issus d'un croissement des deux fournis

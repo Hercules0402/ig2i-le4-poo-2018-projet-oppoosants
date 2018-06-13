@@ -8,10 +8,10 @@ import util.CopyPaste;
 import util.Distances;
 import util.Writer;
 
-public class TestAllBF {
+public class TestAllGAReset {
 
     /**
-     * Permet de tester la fonction BFGA pour toutes les instances les unes après les autres.
+     * Permet de tester la fonction GATourneeReset pour toutes les instances les unes après les autres.
      * @param args
      * @throws Exception 
      */
@@ -30,7 +30,7 @@ public class TestAllBF {
                     if (copie) {
                         Instance inst = Reader.read(stockage + instance.getName(), false);
                         inst = Recherche.run(inst);
-                        inst.setTrolleys(BFGA.run(inst));
+                        inst.setTrolleys(GATourneeReset.run(inst));
                         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));
                         Writer.save(stockage + instance.getName(), inst, false);

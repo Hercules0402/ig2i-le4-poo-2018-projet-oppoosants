@@ -5,9 +5,9 @@ import metier.Instance;
 import metier.Trolley;
 import util.Distances;
 
-public class BFGA {
+public class GATourneeReset {
     /**
-     * Permet de lancer un certain nombre de fois (bruteforce) l'algorithme GATournee.
+     * Permet de lancer un certain nombre de fois l'algorithme GATournee avec des resets.
      * En fonction de la complexité de la tournée, pour ne pas mettre plus d'1min par instance.
      * @param inst Instance
      * @return Liste de tournées (solution)
@@ -38,7 +38,7 @@ public class BFGA {
         for(int i=0; i<rep; i++){ //Pour chaque essai
             ArrayList<Trolley> tournees = GATournee.runx(inst, val); //On lance l'algorithme GATournee
             int r = Distances.calcDistance(tournees, inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot()); //On calcule le cout du resultat
-            System.out.println("RES : " + r);
+            System.out.println("Remise à zéro GATournée. Meilleur genome : " + r);
             if(r == bestResult) //Si le résultat actuel est encore le meilleur
                 maxBest--; //On décremente maxBest
             if(maxBest <= 1) break; //Quand il passe en dessous de la limite fixée, on arrête
@@ -48,6 +48,7 @@ public class BFGA {
                 bestTournee = tournees;
             }
         }
+        System.out.println("Meilleur genome total : " + bestResult);
         System.out.println("BFGA EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
         return bestTournee;
     }
