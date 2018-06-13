@@ -1,5 +1,3 @@
-var firstDraw = true;
-
 /**
  * Fonction permettant de récupérer la liste des locations de l'entrepôt.
  */
@@ -20,6 +18,9 @@ function setAllLocations() {
     });
 }
 
+/**
+ * Fonction qui génère un tableau de couleurs différentes pour l'affichage des points.
+ */
 function generateTabColors(length) {
     var colors = [];
 
@@ -146,8 +147,10 @@ function resetGraphAndPoint() {
 function setup(){
     createCanvas(windowWidth, windowHeight, WEBGL);
     $("#defaultCanvas0").hide();
+    //initialise le canvas mais ne l'affiche pas si on est pas sur le graphe mais sur l'affichage tableau
 
     $("#defaultCanvas0").mousemove(function(e) {
+        //si on bouge sur le canvas, on regarde si le curseur est sur un point : si oui, on affiche le popup d'information
         var x, y, lastX, lastY, point, typeOfPoint;
         var touchedP = [];
         var touched = false;
@@ -184,49 +187,56 @@ function setup(){
             $("#popup").show();
         }
     });
+
+    $(window).resize(function() {
+        createCanvas(windowWidth, windowHeight, WEBGL);
+        if(!isGraphic) $("#defaultCanvas0").hide();
+        else processGraphe();
+    });
   }
 
 /**
- * Permet de d'afficher les produits et les location sur le graph, puis dessine les tournées proposées par la solution.
+ * Fonction exécutée en boucle après lancement de la page web
+ * Permet de d'afficher les produits et les location sur le graph,
+ * puis dessine les tournées proposées par la solution et déplace le point mouvant s'il est activé.
  */
 function draw(){
+    //si on est sur le graphe
     if (isGraphic) {
-        $("#defaultCanvas0").show();
-
-        if(!drawed) {
-            var maxSize = getMaxDistance();
-            coeffW = windowWidth/maxSize*0.9;
-            coeffH = windowHeight/maxSize*0.8;
-            calcItineraireTrolley();
-
-            drawed = true;
-        }
-
-        background(100);
-        translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
-    
-        var selectedTrolleyID = $("#trolleySelection" ).val();
-
-        if(displayLocations) placeLocations(); 
-        placeDepots();
-        if (selectedTrolleyID == tabSolution.length) {
-            //Affichage de tous les trolleys
-            if(displayLines) drawLiaisonsFromInstance();
-            drawProductsFromInstance();
-        } else {
-            if(displayLines) drawLiaisonsFromTrolley(selectedTrolleyID);
-            drawProductsFromTrolley(selectedTrolleyID);
-        }
-
-        processMovingP();
+        processGraphe();
     }
     else {
         $("#defaultCanvas0").hide();
     }
 }
 
+function processGraphe() {
+    $("#defaultCanvas0").show();
+
+    var maxSize = getMaxDistance();
+    var selectedTrolleyID = $("#trolleySelection" ).val();
+    
+    coeffW = windowWidth/maxSize*0.9;
+    coeffH = windowHeight/maxSize*0.8;
+    calcItineraireTrolley();
+    background(100);
+    translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
+
+    if(displayLocations) placeLocations(); 
+    placeDepots();
+    if (selectedTrolleyID == tabSolution.length) {
+        //Affichage de tous les trolleys
+        if(displayLines) drawLiaisonsFromInstance();
+        drawProductsFromInstance();
+    } else {
+        if(displayLines) drawLiaisonsFromTrolley(selectedTrolleyID);
+        drawProductsFromTrolley(selectedTrolleyID);
+    }
+
+    processMovingP();
+}
 /**
- * Fonction permettant de gérer les différents cas associés au point bougeant
+ * Fonction permettant de gérer les différents cas associés au point bougeant.
  */
 
 function processMovingP() {
@@ -250,6 +260,10 @@ function processMovingP() {
     }
 }
 
+/**
+ * Fonction qui initialise le point et le met en marche.
+ */
+
 function startPoint() {
     for(locId in allLocations) {
         var loc = allLocations[locId];
@@ -267,9 +281,19 @@ function startPoint() {
     }
 }
 
+
+/**
+ * Fonction qui met en pause le point.
+ */
+
 function pausePoint() {
     ellipse(xP*coeffW, yP*coeffH, 8, 8);
 }
+
+
+/**
+ * Fonction permettant de gérer le déplacement du point en fonction de la vitesse demandée et aussi de la taille de sa trace à laisser sur le graphe.
+ */
 
 function movePoint() {
     if (typeof pointsOrder[lastVisitedP + 1] !== 'undefined') {
@@ -286,8 +310,11 @@ function movePoint() {
         if(movingHistoric.length > historicSize) movingHistoric.shift();
 
         fill(color(0));
+
+        var sizeMH = 0;
         movingHistoric.forEach(function(point) {
-            ellipse(point[0]*coeffW, point[1]*coeffH, 8, 8);
+            ellipse(point[0]*coeffW, point[1]*coeffH, sizeMH/4, sizeMH/4);
+            sizeMH++;
         });
 
         if (stopX < 1 && stopX > -1 && stopY < 1 && stopY > -1) {
@@ -404,9 +431,8 @@ function drawLiaisonsFromTrolley(selectedTrolleyID) {
             }
             lastProduct = p;
         });
-        line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
-        lastProduct = false;
     }
+    line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
 }
 
 /**
@@ -431,11 +457,16 @@ function drawLiaisonsFromInstance() {
                 }
                 lastProduct = p;
             });
-            line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
-            lastProduct = false;
         });
+        line(0, 0, parseInt(lastProduct["LOC_ABSCISSE"])*coeffW, parseInt(lastProduct["LOC_ORDONNEE"])*coeffH);
+        lastProduct = false;
     }
 }
+
+
+/**
+ * Fonction permettant de calculer l'itinéraire que parcourera le chariot lorsque affiché sur le graphe sous forme de point.
+ */
 
 function calcItineraireTrolley() {
     var lastProduct = false;
@@ -452,8 +483,8 @@ function calcItineraireTrolley() {
             box["PRODUCTS"].forEach(function(p){
                 pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
             });
-            pointsOrder.push([0,0]);
         });
+        pointsOrder.push([0,0]);
     }
     else {
         var trolley = tabSolution[selectedTrolleyID];
@@ -463,9 +494,9 @@ function calcItineraireTrolley() {
             trolley["BOXES"].forEach(function(box) {
                 box["PRODUCTS"].forEach(function(p){
                     pointsOrder.push([parseInt(p["LOC_ABSCISSE"]), parseInt(p["LOC_ORDONNEE"])]);
-                });
-                pointsOrder.push([0,0]);
+                });    
             });
+            pointsOrder.push([0,0]);
         });      
     }
 }

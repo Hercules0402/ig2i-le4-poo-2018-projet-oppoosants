@@ -1,3 +1,5 @@
+//Variables globales nécéssaires au bon fonctionnement du code
+
 var isGraphic = false;
 var drawed = false;
 var displayLocations = false;
@@ -13,5 +15,7 @@ var lastVisitedP = 0;
 var pointsOrder = [];
 var lastCircle;
 var movingHistoric = [];
-var historicSize = 10;
+var historicSize = 40;
 var speed = 100;
+var firstDraw = true;
+

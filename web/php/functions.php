@@ -161,7 +161,7 @@
         JOIN BOX_PRODQTY ON BOX_PRODQTY.prodQtys_ID = PRODQTY.ID 
         JOIN BOX ON BOX.ID = BOX_PRODQTY.Box_ID 
 		JOIN LOCATION ON LOCATION.ID = PRODUCT.LOC 
-        WHERE BOX.ID = ' . $idBox . ' AND PRODUCT.NINSTANCE = ' . $idInstance);
+        WHERE BOX.ID = ' . $idBox . ' AND PRODUCT.NINSTANCE = ' . $idInstance . ' ORDER BY loc_id');
 
         // On affiche chaque entrée une à une
         while ($donnees = $reponse->fetch()) {
