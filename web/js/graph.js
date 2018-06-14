@@ -153,48 +153,17 @@ function setup(){
     //initialise le canvas mais ne l'affiche pas si on est pas sur le graphe mais sur l'affichage tableau
 
     $("#defaultCanvas0").mousemove(function(e) {
-        //si on bouge sur le canvas, on regarde si le curseur est sur un point : si oui, on affiche le popup d'information
-        var x, y, lastX, lastY, point, typeOfPoint;
-        var touchedP = [];
-        var touched = false;
-        $("#popup").hide();
-
-        tabSolution.forEach(function(trolley) {
-            trolley["BOXES"].forEach(function(box) {
-                box["PRODUCTS"].forEach(function(p) {
-                    x = parseInt(p["LOC_ABSCISSE"] *coeffW);
-                    y = parseInt(p["LOC_ORDONNEE"] * coeffH);
-                    if (parseInt(x + windowWidth*0.05 - pointSize/2) < e.pageX && 
-                        parseInt(x + windowWidth*0.05 + pointSize/2) > e.pageX &&
-                        parseInt(y + windowHeight*0.1 - pointSize/2) < e.pageY &&
-                        parseInt(y + windowHeight*0.1 + pointSize/2) > e.pageY) {
-
-                        touchedP.push([p, box, trolley]);
-                        lastX = x;
-                        lastY = y;
-                        touched = true;
-                    }
-                });
-            });
-        });
-
-        if(touched) {
-            $("#popup").css("top", lastY + 40 + "px");
-            $("#popup").css("left", lastX + 70 + "px");
-            $("#popup").html(
-                '<div class="card">' +
-                '    <div class="card-header">Point Produit (' + (lastX/coeffW).toFixed(0) +','+ (lastY/coeffH).toFixed(0) + ')</div>' +
-                '    <div class="card-body" style="max-height: 200px;overflow-y:auto;">' + genPointContent(touchedP) + '</div> ' +
-                '</div>'
-            );
-            $("#popup").show();
-        }
+        triggerPopup(e);
     });
 
     $(window).resize(function() {
         createCanvas(windowWidth, windowHeight, WEBGL);
         if(!isGraphic) $("#defaultCanvas0").hide();
-        else processGraphe();
+        else {
+            $("#defaultCanvas0").mousemove(function(e) {
+                triggerPopup(e);
+            });
+        }
     });
   }
 
@@ -210,6 +179,45 @@ function draw(){
     }
     else {
         $("#defaultCanvas0").hide();
+    }
+}
+
+function triggerPopup(e) {
+    //si on bouge sur le canvas, on regarde si le curseur est sur un point : si oui, on affiche le popup d'information
+    var x, y, lastX, lastY, point, typeOfPoint;
+    var touchedP = [];
+    var touched = false;
+    $("#popup").hide();
+
+    tabSolution.forEach(function(trolley) {
+        trolley["BOXES"].forEach(function(box) {
+            box["PRODUCTS"].forEach(function(p) {
+                x = parseInt(p["LOC_ABSCISSE"] *coeffW);
+                y = parseInt(p["LOC_ORDONNEE"] * coeffH);
+                if (parseInt(x + windowWidth*0.05 - pointSize/2) < e.pageX && 
+                    parseInt(x + windowWidth*0.05 + pointSize/2) > e.pageX &&
+                    parseInt(y + windowHeight*0.1 - pointSize/2) < e.pageY &&
+                    parseInt(y + windowHeight*0.1 + pointSize/2) > e.pageY) {
+
+                    touchedP.push([p, box, trolley]);
+                    lastX = x;
+                    lastY = y;
+                    touched = true;
+                }
+            });
+        });
+    });
+
+    if(touched) {
+        $("#popup").css("top", lastY + 40 + "px");
+        $("#popup").css("left", lastX + 75 + "px");
+        $("#popup").html(
+            '<div class="card">' +
+            '    <div class="card-header">Point Produit (' + (lastX/coeffW).toFixed(0) +','+ (lastY/coeffH).toFixed(0) + ')</div>' +
+            '    <div class="card-body" style="max-height: 200px;overflow-y:auto;">' + genPointContent(touchedP) + '</div> ' +
+            '</div>'
+        );
+        $("#popup").show();
     }
 }
 
