@@ -22,7 +22,7 @@ import util.Writer;
  * @author Lucas
  */
 public class GATournee {
-    private static int CB_CYCLES = 500; //Nombre de générations
+    private static int CB_CYCLES = 5000; //Nombre de générations
     private final static int LOG_LEVEL = 0; //Niveau de logs: 0: None, 1: Cycles, 2: All
     
     private static Instance instance;
