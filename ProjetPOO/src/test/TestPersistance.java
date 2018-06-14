@@ -31,8 +31,8 @@ import metier.Trolley;
 public class TestPersistance {
 
     /**
-     * Permet de tester la persitance sans DAO.
-     * @param em 
+     * Permet de tester les annotations des classes, sans DAO.
+     * @param em EntityManager
      */
     public static void testAnnotations(EntityManager em) {
         //Location
@@ -109,7 +109,7 @@ public class TestPersistance {
     }
 
     /**
-     * Permet de tester la persitance avec DAO. 
+     * Permet de tester les DAO. 
      */
     public static void testDAOs() {
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);

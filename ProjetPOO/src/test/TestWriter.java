@@ -17,7 +17,6 @@ import util.Writer;
 public class TestWriter {
 
     public static void main(String[] args) throws Exception {
-        /* Instance */
         Instance inst = new Instance("instance_0116_131940_Z2");
 
         /* Location */

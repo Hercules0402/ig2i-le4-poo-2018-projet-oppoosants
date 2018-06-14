@@ -33,17 +33,10 @@ public class Distances {
                 }
             }
             Collections.sort(locations);
-         
-            /*System.out.println(locations.get(0) + " - " + locations.get(0).getId() + " " + locations.get(0).getIdLocation());
-            System.out.println("- - - -");
-            for (Map.Entry<Location, Integer> a : dep.getDistances().entrySet()){
-                System.out.println(a.getKey() + " - " + a.getKey().getId() + " : " + a.getKey().getIdLocation());
-            }*/
             
             d += dep.getDistances().get(locations.get(0)); //Distance entre le depart et la premiere loc
             for (int i=1; i<locations.size(); i++) {
                 d += locations.get(i-1).getDistances().get(locations.get(i)); //Distance entre loc n et n+1
-                //System.out.println(locations.get(i-1).getDistances().get(locations.get(i)));
             }
             d += locations.get(locations.size() - 1).getDistances().get(arr); //Distance entre la derniere loc et l'arrivee
         }

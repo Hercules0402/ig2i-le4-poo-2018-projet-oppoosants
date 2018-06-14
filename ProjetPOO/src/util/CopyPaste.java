@@ -10,10 +10,10 @@ import java.nio.file.StandardCopyOption;
  */
 public class CopyPaste {
     /**
-     * Permet de copier un fichier dans un dossier
-     * @param source
-     * @param destination
-     * @return boolean
+     * Permet de copier un fichier dans un dossier.
+     * @param source Chemin du fichier à copier
+     * @param destination Chemin du fichier qui sera créé
+     * @return boolean Effectué correctement
      */
     public static boolean copyPaste(Path source, Path destination) {
         try {

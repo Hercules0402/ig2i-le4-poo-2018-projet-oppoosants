@@ -26,10 +26,10 @@ public class Reader {
     private static File instanceFile;
 
     /**
-     * Permet d'enregistrer les données dans la base de données et/ou stocker
-     * dans un objet de type Instance.
-     * @param filename
-     * @param save 
+     * Permet d'enregistrer les données dans un objet de type Instance 
+     * et possiblement en base de données.
+     * @param filename Nom du fichier à lire
+     * @param save Boolean pour enregistrer ou non en base
      */
     public static Instance read(String filename, boolean save) {
          
@@ -67,40 +67,12 @@ public class Reader {
 
         InstanceDao instanceManager = fabrique.getInstanceDao();
         instanceManager.create(inst);
-
-        /*System.out.println("[DEBUG] Enregistrement locations");
-        LocationDao locationManager = fabrique.getLocationDao();
-        for(Location l: inst.getLocations()) {
-            locationManager.create(l);
-        }
-
-        System.out.println("[DEBUG] Enregistrement produits");
-        ProductDao productManager = fabrique.getProductDao();
-        for(Product p: inst.getProducts()) {
-            productManager.create(p);
-        }
-
-        System.out.println("[DEBUG] Enregistrement arcs");
-        ArcDao arcManager = fabrique.getArcDao();
-        for(Arc a: inst.getArcs()) {
-            arcManager.create(a);
-        }
-
-        System.out.println("[DEBUG] Enregistrement prodQty");
-        OrderDao orderManager = fabrique.getOrderDao();
-        for(Order o: inst.getOrders()) {
-             orderManager.create(o);
-        }
-
-        System.out.println("[DEBUG] Enregistrement graph");
-        GraphDao graphManager = fabrique.getGraphDao();        
-        graphManager.create(inst.getGraph());*/
     }
 
     /**
      * Permet de récupérer les différentes lignes.
-     * @param scan Scanner
-     * @return String
+     * @param scan Scanner 
+     * @return String Ligne lue
      */
     private static String readNextString(Scanner scan) {
         while (scan.hasNext("//.*")) {
@@ -178,6 +150,10 @@ public class Reader {
         inst.setGraph(g);
     }
 
+    /**
+     * Permet de créer les produits à partir d'une liste de strings contenant les détails des produits.
+     * @param s_products Liste de string 
+     */
     public static void createProducts(List<String> s_products){
         List<Product> list = new ArrayList();
         for(String s : s_products){
@@ -189,6 +165,10 @@ public class Reader {
         inst.setProducts(list);
     }
 
+    /**
+     * Permet de créer les commandes à partir d'une liste de strings contenant les détails des commandes.
+     * @param s_orders Liste de string 
+     */
     public static void createOrders(List<String> s_orders){
         List<Order> list = new ArrayList();
         for(String s : s_orders){
@@ -208,6 +188,10 @@ public class Reader {
         inst.setOrders(list);
     }
 
+    /**
+     * Permet de créer les arcs à partir d'une liste de strings contenant les détails des arcs.
+     * @param s_arcs Liste de string 
+     */
     public static void createArcs(List<String> s_arcs, boolean isShortestPath){
         List<Arc> list = new ArrayList();
         for(String s : s_arcs){
@@ -223,11 +207,15 @@ public class Reader {
             list.add(a);
         }
         if(isShortestPath)
-            inst.setDistances(list);
+            inst.setDistances(null);
         else
             inst.setArcs(list);
     }
 
+    /**
+     * Permet de créer les locations à partir d'une liste de strings contenant les détails des locations.
+     * @param s_locations Liste de string 
+     */
     public static void createLocations(List<String> s_locations){
         List<Location> list = new ArrayList();
         for(String s : s_locations){
