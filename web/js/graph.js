@@ -633,13 +633,14 @@ function getMaxDistance() {
 */
 function setupTrolleySelection(idInstance) {
     $('#trolleySelection').empty();
+    
     var size = tabSolution.length;
 
     $('#trolleySelection').append($('<option>', {
         value: size,
         text: 'Instance '+ idInstance +"/All Trolleys"
     }));
-    
+
     for (var i = 0; i < size; i++){
         $('#trolleySelection').append($('<option>', {
             value: i,
@@ -667,6 +668,8 @@ function getGraphe(idInstance) {
     isGraphic = true;
     if (firstDraw) {
         setupTrolleySelection(idInstance);//doit être appellée qu'à l'initialisation du graph
+        $('#boxSelection').empty();
         firstDraw = false;
+        isCbmDisplayed = false;
     }
 }
