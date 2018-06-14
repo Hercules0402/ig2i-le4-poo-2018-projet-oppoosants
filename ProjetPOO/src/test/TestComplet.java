@@ -14,7 +14,7 @@ import util.Writer;
 public class TestComplet {
 
     public static void main(String[] args) throws Exception {
-        String fileName = "instance_40000.txt";
+        String fileName = "instance_0606_136175_Z1.txt";
 
         /*Reader*/
         Instance inst = Reader.read(fileName, true); 
