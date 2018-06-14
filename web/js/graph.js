@@ -305,9 +305,15 @@ function movePoint() {
         var diffY = (pointsOrder[lastVisitedP + 1][1]) - (pointsOrder[lastVisitedP][1]);
         var stopX = pointsOrder[lastVisitedP + 1][0] - xP; 
         var stopY = pointsOrder[lastVisitedP + 1][1] - yP; 
-        
+
         xP += diffX*speed/1000;
         yP += diffY*speed/1000;
+        
+        if (stopX < 1 && stopX > -1 && stopY < 1 && stopY > -1) {
+            lastVisitedP++;
+            xP = pointsOrder[lastVisitedP][0];
+            yP = pointsOrder[lastVisitedP][1];
+        }
         
         movingHistoric.push([xP, yP]);
         if(movingHistoric.length > historicSize) movingHistoric.shift();
@@ -319,12 +325,6 @@ function movePoint() {
             ellipse(point[0]*coeffW, point[1]*coeffH, sizeMH/4, sizeMH/4);
             sizeMH++;
         });
-
-        if (stopX < 1 && stopX > -1 && stopY < 1 && stopY > -1) {
-            lastVisitedP++;
-            xP = pointsOrder[lastVisitedP][0];
-            yP = pointsOrder[lastVisitedP][1];
-        }
         
     }
     else {
