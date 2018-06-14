@@ -72,20 +72,20 @@ public class Trolley implements Serializable {
         return idTrolley;
     }
 
-    public void setIdTrolley(Integer idTrolley) {
-        this.idTrolley = idTrolley;
-    }
-
     public int getNbColisMax() {
         return nbColisMax;
     }
 
-    public void setNbColisMax(int nbColisMax) {
-        this.nbColisMax = nbColisMax;
-    }
-
     public List<Box> getBoxes() {
         return boxes;
+    }
+
+    public void setIdTrolley(Integer idTrolley) {
+        this.idTrolley = idTrolley;
+    }
+
+    public void setNbColisMax(int nbColisMax) {
+        this.nbColisMax = nbColisMax;
     }
 
     public void setBoxes(List<Box> boxes) {

@@ -98,6 +98,14 @@ public class Box implements Serializable {
         return order;
     }
 
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
     public void setIdBox(Integer idBox) {
         this.idBox = idBox;
     }
@@ -114,16 +122,8 @@ public class Box implements Serializable {
         this.volumeMax = volumeMax;
     }
 
-    public int getWeight() {
-        return weight;
-    }
-
     public void setWeight(int weight) {
         this.weight = weight;
-    }
-
-    public int getVolume() {
-        return volume;
     }
 
     public void setVolume(int volume) {

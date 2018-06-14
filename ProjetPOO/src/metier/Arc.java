@@ -87,6 +87,10 @@ public class Arc implements Serializable {
         return distance;
     }
 
+    public Integer getIdArc() {
+        return idArc;
+    }
+
     public boolean isIsShortest() {
         return isShortest;
     }
@@ -105,10 +109,6 @@ public class Arc implements Serializable {
 
     public void setIsShortest(boolean isShortest) {
         this.isShortest = isShortest;
-    }
-
-    public Integer getIdArc() {
-        return idArc;
     }
 
     @Override

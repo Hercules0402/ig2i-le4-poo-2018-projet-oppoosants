@@ -23,7 +23,7 @@ public class Writer {
     private static Instance inst;
 
     /**
-     * Permet d'enregistrer la solution dans un fichier text et possiblement
+     * Permet d'enregistrer la solution dans un fichier texte et possiblement
      * en base de données.
      * @param filename Nom du fichier à écrire
      * @param instance Instance
@@ -67,7 +67,7 @@ public class Writer {
     }
 
     /**
-     * Retourne sous forme de chaine de caractère la soluttion à écrire.
+     * Retourne sous forme de chaine de caractère la solution à écrire.
      * @param trolleys Liste de tournées
      * @return Ligne à écrire
      */

@@ -15,7 +15,7 @@ import metier.Trolley;
 public class Distances {
     
     /**
-     * Permet de calculer le cout/distance de la solution.
+     * Permet de calculer le coût/distance de la solution.
      * @param trolleys Solution contenant une liste de chariots contenants une liste de colis
      * @param dep Location du dépot de départ
      * @param arr Location du dépot d'arrivée
@@ -34,17 +34,17 @@ public class Distances {
             }
             Collections.sort(locations);
             
-            d += dep.getDistances().get(locations.get(0)); //Distance entre le depart et la premiere loc
+            d += dep.getDistances().get(locations.get(0)); //Distance entre le départ et la première loc
             for (int i=1; i<locations.size(); i++) {
                 d += locations.get(i-1).getDistances().get(locations.get(i)); //Distance entre loc n et n+1
             }
-            d += locations.get(locations.size() - 1).getDistances().get(arr); //Distance entre la derniere loc et l'arrivee
+            d += locations.get(locations.size() - 1).getDistances().get(arr); //Distance entre la dernière loc et l'arrivée
         }
         return d;
     }
     
     /**
-     * Formate une distance en cm en m avec un format semblable a celui du checker.
+     * Formate une distance en cm en m avec un format semblable à celui du checker.
      * @param dist Distance en cm
      * @return String distance formatée
      */

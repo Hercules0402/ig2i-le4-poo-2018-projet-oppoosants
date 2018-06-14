@@ -30,6 +30,7 @@ public class Reader {
      * et possiblement en base de données.
      * @param filename Nom du fichier à lire
      * @param save Boolean pour enregistrer ou non en base
+     * @return l'instance créée
      */
     public static Instance read(String filename, boolean save) {
          
@@ -191,6 +192,7 @@ public class Reader {
     /**
      * Permet de créer les arcs à partir d'une liste de strings contenant les détails des arcs.
      * @param s_arcs Liste de string 
+     * @param isShortestPath Boolean indiquant si l'arc est un plus court chemin ou non
      */
     public static void createArcs(List<String> s_arcs, boolean isShortestPath){
         List<Arc> list = new ArrayList();
@@ -201,7 +203,6 @@ public class Reader {
             
             Arc a = new Arc(start, end, Integer.parseInt(ss[2]), isShortestPath, inst);
             if(isShortestPath) {
-                //System.out.println("Ajout à " + start.getName() + " du chemin vers " + end.getName());
                 start.addDistance(end, Integer.parseInt(ss[2]));
             }
             list.add(a);

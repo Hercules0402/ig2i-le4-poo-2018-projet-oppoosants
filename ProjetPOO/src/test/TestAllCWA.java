@@ -17,7 +17,7 @@ public class TestAllCWA {
 
     public static void main(String[] args) throws Exception {
         String base = "../instances/";
-        String stockage = "./testCWA/";
+        String stockage = "./testCWA/"; // A créer
 
         File baseDossier = new File(base);
         File stockageDossier = new File(stockage);

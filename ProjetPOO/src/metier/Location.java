@@ -85,28 +85,28 @@ public class Location implements Serializable, Comparable<Location> {
         return abscisse;
     }
 
-    public void setAbscisse(Integer abscisse) {
-        this.abscisse = abscisse;
-    }
-
     public double getOrdonnee() {
         return ordonnee;
-    }
-
-    public void setOrdonnee(Integer ordonnee) {
-        this.ordonnee = ordonnee;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Map<Location, Integer> getDistances() {
         return distances;
+    }
+
+    public void setAbscisse(Integer abscisse) {
+        this.abscisse = abscisse;
+    }
+
+    public void setOrdonnee(Integer ordonnee) {
+        this.ordonnee = ordonnee;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -131,7 +131,7 @@ public class Location implements Serializable, Comparable<Location> {
     }
     
     /**
-     * Permet de récuperer la distance entre la location fournie de celle-ci
+     * Permet de récupérer la distance entre la location fournie de celle-ci
      * @param loc Location 
      * @return double Distance qui sépare les deux points
      */

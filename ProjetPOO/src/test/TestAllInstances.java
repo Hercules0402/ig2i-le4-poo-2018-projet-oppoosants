@@ -15,7 +15,7 @@ public class TestAllInstances {
 
     public static void main(String[] args) throws Exception {
         String base = "../instances/";
-        String stockage = "./testInstance/";
+        String stockage = "./testInstance/"; // A créer
 
         File baseDossier = new File(base);
         File stockageDossier = new File(stockage);
