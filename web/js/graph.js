@@ -686,7 +686,6 @@ function setupTrolleySelection(idInstance) {
  * @param {*} idInstance 
  */
 function getGraphe(idInstance) {
-    if (idInstance != idCurrentInstance) firstDraw = true;
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
@@ -697,10 +696,8 @@ function getGraphe(idInstance) {
     setTabSolution(idInstance);
     setAllLocations();
     isGraphic = true;
-    if (firstDraw) {
-        setupTrolleySelection(idInstance);//doit être appellée qu'à l'initialisation du graph
-        $('#boxSelection').empty();
-        firstDraw = false;
-        isCbmDisplayed = false;
-    }
+    setupTrolleySelection(idInstance);//doit être appellée qu'à l'initialisation du graph
+    $('#boxSelection').empty();
+    isCbmDisplayed = false;
+    idCurrentInstance = idInstance;
 }

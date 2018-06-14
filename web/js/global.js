@@ -9,7 +9,6 @@ var displayPoint = false;
 var pointSize = 7;
 var idCurrentInstance, tabSolution, allLocations, coeffW, coeffH;
 var selection = [];
-var firstDraw = true;
 
 //Point mouvant
 var xP, yP, lastStopX, lastStopY;
