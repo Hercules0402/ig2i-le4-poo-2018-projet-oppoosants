@@ -49,7 +49,7 @@ function getInstances() {
                 content += '<tr id="' + instance['ID'] + '">' +
                     '<td onclick="getTrolleysInInstance(' + instance['ID'] + ')">Instance n°' + instance['ID'] + '</td>' +
                     '<td onclick="getTrolleysInInstance(' + instance['ID'] + ')">' + instance['NOM'] + '</td>' +
-                    '<td><button class="btn btn-outline-dark btn-block" onclick="getGraphe('+ instance['ID'] +');">Afficher le graphe</button></td>' +
+                    '<td><button class="btn btn-outline-dark btn-block" onclick="getGraphe('+ instance['ID'] +',true);">Afficher le graphe</button></td>' +
                 '</tr>';
             }
 

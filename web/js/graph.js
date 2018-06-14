@@ -139,8 +139,7 @@ function resetGraph() {
     redraw();
     readSelectedInputs();
     isGraphic = false;
-    drawed = false;
-    getGraphe(idCurrentInstance);
+    getGraphe(idCurrentInstance, false);
 }
 
 function resetGraphAndPoint() {
@@ -149,7 +148,7 @@ function resetGraphAndPoint() {
     isCbmDisplayed = false;
     $('#boxSelection').empty();
     $('#togglePointC').prop('checked', false);
-    
+    noRefreshSelect = true;
     resetGraph();
 }
 
@@ -682,7 +681,8 @@ function setupTrolleySelection(idInstance) {
  * Fonction d'initalisation du graph associé à l'ID d'une instance.
  * @param {*} idInstance 
  */
-function getGraphe(idInstance) {
+function getGraphe(idInstance, refreshTrolleySelect) {
+    if(refreshTrolleySelect) noRefreshSelect = false;
     $("#webContent").html("");
     $("#graphReturnB").show();
     $("#toggleLocations").show();
@@ -693,7 +693,11 @@ function getGraphe(idInstance) {
     setTabSolution(idInstance);
     setAllLocations();
     isGraphic = true;
-    setupTrolleySelection(idInstance);//doit être appellée qu'à l'initialisation du graph
+    if (!noRefreshSelect) {
+        console.log('refresh');
+        setupTrolleySelection(idInstance);//doit être appellée qu'à l'initialisation du graph
+        noRefreshSelect = true;
+    }
     $('#boxSelection').empty();
     isCbmDisplayed = false;
     idCurrentInstance = idInstance;
