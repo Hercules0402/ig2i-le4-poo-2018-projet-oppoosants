@@ -18,7 +18,7 @@ public class JpaProductDao extends JpaDao<Product> implements ProductDao {
 
 	/**
 	 * Retourne une instance de JpaProductDao.
-	 * @return JpaProductDao
+	 * @return JpaProductDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaProductDao getInstance() {
 		if (instance == null) {

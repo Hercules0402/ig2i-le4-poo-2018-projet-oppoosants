@@ -18,7 +18,7 @@ public class JpaArcDao extends JpaDao<Arc> implements ArcDao {
 
 	/**
 	 * Retourne une instance de JpaArcDao.
-	 * @return JpaArcDao
+	 * @return JpaArcDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaArcDao getInstance() {
 		if (instance == null) {

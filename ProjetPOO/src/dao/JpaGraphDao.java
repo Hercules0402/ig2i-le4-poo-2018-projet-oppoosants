@@ -18,7 +18,7 @@ public class JpaGraphDao extends JpaDao<Graph> implements GraphDao {
 
 	/**
 	 * Retourne une instance de JpaGraphDao.
-	 * @return JpaGraphDao
+	 * @return JpaGraphDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaGraphDao getInstance() {
 		if (instance == null) {

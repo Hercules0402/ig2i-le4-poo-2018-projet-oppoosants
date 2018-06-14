@@ -21,7 +21,7 @@ public class JpaLocationDao extends JpaDao<Location> implements LocationDao {
 
 	/**
 	 * Retourne une instance de JpaLocationDao.
-	 * @return JpaLocationDao
+	 * @return JpaLocationDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaLocationDao getInstance() {
 		if (instance == null) {
