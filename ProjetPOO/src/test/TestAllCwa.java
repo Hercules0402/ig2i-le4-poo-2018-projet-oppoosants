@@ -2,6 +2,7 @@ package test;
 
 import algo.ClarkeAndWright;
 import algo.Recherche;
+import algo.RechercheLocale;
 import java.io.File;
 import metier.Instance;
 import util.CopyPaste;
@@ -29,11 +30,11 @@ public class TestAllCwa {
                     copie = CopyPaste.copyPaste(instance.toPath(), new File(stockage + instance.getName()).toPath());
                     if (copie) {
                         Instance inst = Reader.read(stockage + instance.getName(), false);
-                        inst = Recherche.run(inst);
+                        inst = Recherche.run(inst);                        
                         
                         ClarkeAndWright cwa = new ClarkeAndWright(inst);
                         inst = cwa.run();
-                        
+                                                
                         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
                         System.out.println(Distances.formatDistance(distance));
                         Writer.save(stockage + instance.getName(), inst, false);

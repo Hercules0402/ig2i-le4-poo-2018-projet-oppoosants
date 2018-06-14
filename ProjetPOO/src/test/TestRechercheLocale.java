@@ -15,6 +15,7 @@ public class TestRechercheLocale {
         String fileName = "instance_0606_136178_Z1.txt";
 
         Instance inst = Reader.read(fileName, false);
+        Instance copieInst = new Instance(inst);
 
         inst = Recherche.run(inst);
         int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
@@ -38,7 +39,7 @@ public class TestRechercheLocale {
         System.out.println("\n\nChecker de l'instance : " + fileName);
         checker.Checker.main(name);*/
 
-        RechercheLocale rL = new RechercheLocale(inst);
+        RechercheLocale rL = new RechercheLocale(inst, new ClarkeAndWright(Recherche.run(copieInst)).run());
         boolean stop = false;
         int iteration = 0;
         while (rL.echangeInterTrolley() && !stop) {
