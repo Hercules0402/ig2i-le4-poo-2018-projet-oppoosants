@@ -17,9 +17,11 @@ import util.Reader;
 
 /**
  * Classe ClarkeAndWright.
- * Elle implémente cet algo.
+ * Elle implémente cet algo en travaillant sur les boxes et les products.
+ * Pour l'instant, l'algo n'est pas encore optimisé car la création des paires
+ * de produits est encore trop longue. Il est toujours au stade expérimental.
  */
-public class ClarkeAndWrightSpecial {
+public class ClarkeAndWrightForBoxes {
 
     /**
      * Classe interne permettant de stocker l'ensemble de paire de boxes avec 
@@ -50,14 +52,14 @@ public class ClarkeAndWrightSpecial {
 
     // Constructeurs
 
-    public ClarkeAndWrightSpecial(){
+    public ClarkeAndWrightForBoxes(){
         this.depot = new Location();
         this.boxes = new HashSet<>();
         this.orders = new HashSet<>();
         this.economies = new ArrayList<>();
     }
 
-    public ClarkeAndWrightSpecial(Instance instance) {
+    public ClarkeAndWrightForBoxes(Instance instance) {
         this();
         this.depot = instance.getGraph().getDepartingDepot();
         this.orders = new HashSet<>(instance.getOrders());
@@ -98,7 +100,7 @@ public class ClarkeAndWrightSpecial {
      */
     private void initialiserCWA(){
         int count = 1;
-        // Création d'une boxe pour chaque chaque ProdQty
+        // Création d'une boxe pour chaque ProdQty
         for(Order o : this.orders){
             for(ProdQty pq : o.getProdQtys()) {                
                 Box b = new Box(count++, instance.getWeightMaxBox(), instance.getVolumeMaxBox(), o, 0, 0, instance);
@@ -117,7 +119,7 @@ public class ClarkeAndWrightSpecial {
                 this.economies.add(eco);
             }
         }
-        // Tri décroissant des ensembles de couples de trolleys par coût de fusion
+        // Tri décroissant des ensembles de couples de boxes par coût de fusion
         Collections.sort(this.economies,new Comparator<Economie>(){
             @Override
             public int compare(Economie o1, Economie o2) {
@@ -181,27 +183,12 @@ public class ClarkeAndWrightSpecial {
         int count = 1;
         for(Box b : this.boxes) {
             b.setIdBox(count++);
-            //this.rangeBoxes(t);
         }
     }
 
     /**
-     * Permet de trier par ordre croissant les boxes d'un trolley
-     * @param t 
-     */
-    /*private void rangeBoxes(Trolley t) {
-        Collections.sort(t.getBoxes(),new Comparator<Box>(){
-            @Override
-            public int compare(Box o1, Box o2) {
-                if(o1.getIdBox() == o2.getIdBox()) return 0;
-                return o1.getIdBox() < o2.getIdBox() ? -1 : 1;
-            }
-        });
-    }*/
-
-    /**
      * Permet de récupérer l'instance.
-     * @return Instance
+     * @return Instance : instance modifiée
      */
     public Instance getNewInstance() {
         this.instance.setBoxes(new ArrayList<>(boxes));
@@ -210,17 +197,17 @@ public class ClarkeAndWrightSpecial {
 
     /**
      * Permet de lancer l'algo.
+     * @return Instance : instance modifiée
      */
-    public void run() {
-        //System.out.println("1");
+    public Instance run() {
         this.initialiserCWA();
-        //System.out.println("2");
         this.fusion();
-        //System.out.println("3");
+        this.instance.setBoxes(new ArrayList<>(this.boxes));
+        return this.getNewInstance();
     }
 
     public static void main(String[] args) {
-        String fileName = "instance_0606_136178_Z1.txt";//instance_0116_131940_Z2
+        String fileName = "instance_0606_136178_Z1.txt";
 
         Instance inst = Reader.read(fileName, false);
         
@@ -229,22 +216,10 @@ public class ClarkeAndWrightSpecial {
             inst.getBoxes().addAll(t.getBoxes());
         }
         System.out.println("Nb init boxes : " + inst.getBoxes().size());
-        //int distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
-        //System.out.println(Distances.formatDistance(distance));
-        
-        /*for(Trolley t : inst.getTrolleys()){
-            inst.getBoxes().addAll(t.getBoxes());
-        }
-        
-        ClarkeAndWright cwa = new ClarkeAndWright(inst);
-        cwa.run();
-        inst = cwa.getNewInstance();*/
-        
-        ClarkeAndWrightSpecial cwas = new ClarkeAndWrightSpecial(inst);
-        cwas.run();
-        inst = cwas.getNewInstance();
-        System.out.println("Nb init boxes : " + inst.getBoxes().size());
-        
+                
+        ClarkeAndWrightForBoxes cwas = new ClarkeAndWrightForBoxes(inst);        
+        inst = cwas.run();
+        System.out.println("Nb init boxes : " + inst.getBoxes().size());        
         
         //distance = Distances.calcDistance(inst.getTrolleys(), inst.getGraph().getDepartingDepot(), inst.getGraph().getArrivalDepot());
         //System.out.println(Distances.formatDistance(distance));

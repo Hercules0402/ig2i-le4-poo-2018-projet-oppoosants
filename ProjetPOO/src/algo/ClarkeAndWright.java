@@ -14,7 +14,7 @@ import metier.Instance;
 
 /**
  * Classe ClarkeAndWright.
- * Elle implémente cet algo.
+ * Elle implémente cet algo en travaillant sur les trolleys et les boxes.
  */
 public class ClarkeAndWright {
 
@@ -198,7 +198,7 @@ public class ClarkeAndWright {
 
     /**
      * Permet de récupérer l'instance.
-     * @return Instance
+     * @return Instance : instance modifiée
      */
     private Instance getNewInstance() {
         this.instance.setTrolleys(new ArrayList<>(trolleys));
@@ -207,7 +207,7 @@ public class ClarkeAndWright {
 
     /**
      * Permet de lancer l'algo.
-     * @return 
+     * @return Instance : instance modifiée
      */
     public Instance run() {
         this.initialiserCWA();

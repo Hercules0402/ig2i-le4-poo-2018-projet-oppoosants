@@ -18,8 +18,8 @@ public class Recherche {
 
     /**
      * Permet de créer une solution basique.
-     * @param inst
-     * @return Instance
+     * @param inst : l'instance à utiliser
+     * @return Instance : l'instance modifiée
      */
     public static Instance run(Instance inst){
         Recherche.instance = inst;
@@ -67,7 +67,8 @@ public class Recherche {
                     box.addProduct(p, qt);
                 }
             }
-
+            // Si le trolley est plein, on l'ajoute à la liste des trolleys pleins
+            // et on créé un nouveau trolley qui est vide
             if (trolley.getBoxes().size() >= trolley.getNbColisMax()) {
                 solution.add(trolley);
                 idTrolley++;
@@ -77,7 +78,7 @@ public class Recherche {
             trolley.addBox(box);
             idBox++;
         }
-
+        // Ajout du dernier trolley généré
         solution.add(trolley);
         instance.setTrolleys(solution);
         List<Box> boxes = new ArrayList<>();

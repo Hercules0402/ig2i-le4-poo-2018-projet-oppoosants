@@ -2,8 +2,8 @@ package algo;
 
 import metier.Trolley;
 /**
- * Classe permettant de stocker les informations concernant mouvement d'un box
- * entre deux trolleys. *
+ * Classe permettant de stocker les informations concernant un mouvement d'une box
+ * entre deux trolleys.
  */
 public class InterTrolleyInfos {
 

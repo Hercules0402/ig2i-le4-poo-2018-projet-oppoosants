@@ -10,8 +10,7 @@ import util.Distances;
 import util.Reader;
 
 /**
- *
- * @author Sébastien CORNUEL
+ * Classe implémentant l'algorithme de Recherche locale.
  */
 public class RechercheLocale {
     private Instance instance; // Correspond à la solution initiale (C&W) sur laquelle on va travailler
@@ -66,10 +65,10 @@ public class RechercheLocale {
     }
     
     /**
-	 * Retourne les infos sur l'échange inter d'une box.
-     * @param t1
-     * @param t2
-	 * @return InterTrolleyInfos
+	 * Retourne les infos sur l'échange inter à réaliser de deux boxes entre deux trolleys.
+     * @param t1 : trolley t1
+     * @param t2 : trolley t2
+	 * @return InterTrolleyInfos : informations sur l'échange à réaliser
 	 */
     public InterTrolleyInfos echangeInterTrolley(Trolley t1, Trolley t2) {
 		InterTrolleyInfos interInfos = new InterTrolleyInfos();
@@ -90,11 +89,11 @@ public class RechercheLocale {
     
     /**
 	 * Retourne les données représentant l'évaluation de l'échange de 2 boxes de deux trolleys.
-	 * @param posBox1
-	 * @param posBox2
-     * @param t1
-     * @param t2
-	 * @return InterTrolleyInfos
+	 * @param posBox1 : position de la boxe 1 dans le trolley t1
+	 * @param posBox2 : position de la boxe 2 dans le trolley t2
+     * @param t1 : trolley t1
+     * @param t2 : trolley t2
+	 * @return InterTrolleyInfos : informations sur l'échange à réaliser
 	 */
 	private InterTrolleyInfos evaluerEchangeInter(int posBox1, int posBox2, Trolley t1, Trolley t2) {
 		double diffCout = this.calculerDeltaCoutEchangeInter(posBox1, posBox2, t1, t2);
@@ -102,12 +101,12 @@ public class RechercheLocale {
 	}
 
     /**
-	 * Permet de calculer le coût delta représentant l'échange de deux boxes.
-	 * @param posBox1
-	 * @param posBox2
-     * @param t1
-     * @param t2
-	 * @return double
+	 * Permet de calculer le coût delta représentant l'échange inter de deux boxes.
+	 * @param posBox1 : position de la boxe 1 dans le trolley t1
+	 * @param posBox2 : position de la boxe 2 dans le trolley t2
+     * @param t1 : trolley t1
+     * @param t2 : trolley t2
+	 * @return double : coût de l'échange inter à réaliser
 	 */
 	public double calculerDeltaCoutEchangeInter(int posBox1, int posBox2, Trolley t1, Trolley t2) {
 		// Si les positions sont en-dehors de l'ensemble alors aucun calcul possible
@@ -204,7 +203,7 @@ public class RechercheLocale {
    
     /**
      * Permet de récupérer l'instance.
-     * @return Instance
+     * @return Instance : instance modifiée
      */
     public Instance getNewInstance() {
         return BestSolution.getBestSolution(oldInstance, instance);
