@@ -7,10 +7,10 @@ import metier.Instance;
  */
 public class BestSolution {
     /**
-     * Permet de déterminer la meilleure solution entre deux solutions.
-     * @param inst1
-     * @param inst2
-     * @return Instance
+     * Permet de déterminer la meilleure solution entre deux instances.
+     * @param inst1 Instance 1
+     * @param inst2 Instance 2
+     * @return Meilleure instance
      */
     public static Instance getBestSolution(Instance inst1, Instance inst2) {
         int distanceInst1 = Distances.calcDistance(inst1.getTrolleys(), inst1.getGraph().getDepartingDepot(), inst1.getGraph().getArrivalDepot());

@@ -7,16 +7,17 @@ import util.Distances;
 import util.Writer;
 
 /**
- * Classe permettant de créer une solution 1.
- * Lit le fichier d'instances, génère une solution, et l'écrit dans un fichier texte.
+ * Classe de test complet.
+ * Classe permettant de tester la lecture, la persistance (si les booleans sont à true),
+ * la résolution de la solution, puis l'écriture et enfin que la solution passe bien le checker.
  */
-public class TestAll {
+public class TestComplet {
 
     public static void main(String[] args) throws Exception {
         String fileName = "instance_40000.txt";
 
         /*Reader*/
-        Instance inst = Reader.read(fileName, false); 
+        Instance inst = Reader.read(fileName, true); 
         /*for(Location l : r.getLocations()) {
             System.out.printf(l.getName() + " vers :");
             for (Map.Entry<Location, Integer> e : l.getDistances().entrySet()){
@@ -31,7 +32,7 @@ public class TestAll {
         System.out.println(Distances.formatDistance(distance));
         
         /*Writer*/
-        Writer.save(fileName, inst, false);
+        Writer.save(fileName, inst, true);
 
         /*Checker*/
         String[] name = {""};

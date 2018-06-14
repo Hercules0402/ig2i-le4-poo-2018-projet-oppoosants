@@ -36,8 +36,11 @@ public class Order implements Serializable {
     @Column
     private Integer idOrder;
 
+    /**
+     * Nombre maximal de colis pour préparer la commande.
+     */
     @Column
-    private Integer m;
+    private Integer m; 
 
     @Column
     private Integer nbProducts;
@@ -53,14 +56,6 @@ public class Order implements Serializable {
         prodQtys = new ArrayList();
     }
 
-    /**
-     * Constructeur par id et produits de la commande Order.
-     * @param id
-     * @param m
-     * @param nbProducts
-     * @param prodQtys
-     * @param ninstance
-     */
     public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
         this.idOrder = id;
         this.m = m;

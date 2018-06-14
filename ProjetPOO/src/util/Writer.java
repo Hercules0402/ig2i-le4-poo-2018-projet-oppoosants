@@ -23,11 +23,11 @@ public class Writer {
     private static Instance inst;
 
     /**
-     * Permet d'enregistrer la solution dans la base de données et/ou dans un 
-     * fichier txt.
-     * @param filename
-     * @param instance
-     * @param save 
+     * Permet d'enregistrer la solution dans un fichier text et possiblement
+     * en base de données.
+     * @param filename Nom du fichier à écrire
+     * @param instance Instance
+     * @param save Boolean pour enregistrer ou non en base
      */
     public static void save(String filename, Instance instance, boolean save){
         inst = instance;
@@ -68,7 +68,8 @@ public class Writer {
 
     /**
      * Retourne sous forme de chaine de caractère la soluttion à écrire.
-     * @return String
+     * @param trolleys Liste de tournées
+     * @return Ligne à écrire
      */
     private static String getContentSolution(List<Trolley> trolleys) {
         String solution = "//NbTournees\n" + trolleys.size();
@@ -101,10 +102,8 @@ public class Writer {
      * @throws java.lang.Exception
      */
     private static void writeSolutions() throws Exception {
-        /*
-        Création d'un writer sur l'instance de type File : instanceFile pour
-        écrire les données dans le fichier de solution.
-        */
+        //Création d'un writer sur l'instance de type File : instanceFile pour
+        //écrire les données dans le fichier de solution.
         PrintWriter pw = new PrintWriter(new FileWriter(instanceFile));
         if (pw != null) {
             // On écrit le contenu dans le fichier
