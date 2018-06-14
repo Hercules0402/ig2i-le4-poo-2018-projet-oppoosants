@@ -1,7 +1,5 @@
 package metier;
 
-import algo.InterTrolleyInfos;
-import algo.RechercheLocale;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +78,22 @@ public class Instance implements Serializable{
 		this();
 		this.nom = nom;
 	}
+
+    public Instance(Instance instance) {
+        this.id = instance.id;
+        this.nom = instance.nom;
+        this.graph = instance.graph;
+		this.arcs = new ArrayList<>(instance.arcs);
+        this.distances = new ArrayList<>(instance.distances);
+        this.boxes = new ArrayList<>(instance.boxes);
+		this.locations = new ArrayList<>(instance.locations);
+		this.orders = new ArrayList<>(instance.orders);
+		this.products = new ArrayList<>(instance.products);
+        this.trolleys = new ArrayList<>(instance.trolleys);
+        this.weightMaxBox = instance.weightMaxBox;
+        this.volumeMaxBox = instance.volumeMaxBox;
+        this.nbBoxesTrolley = instance.nbBoxesTrolley;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -186,47 +200,6 @@ public class Instance implements Serializable{
 			b.clear();
 		}
 		this.graph.clear();
-    }
-
-    /**
-     * Permet d'échanger des boxes dans différents trolleys (en inter).
-     * @return boolean : indique si l'échange a été réalisé ou pas
-     */
-    public boolean echangeInterTrolley() {
-		InterTrolleyInfos interTrolleyInfos = new InterTrolleyInfos();
-        // Parcours des trolleys pour obtenir les informations nécessaires à
-        // l'échange deux boxes de deux trolleys différents dont le coût de
-        // l'échange
-		for (Trolley t1 : this.trolleys) {
-            for (Trolley t2 : this.trolleys) {
-                // Aucune utilé car revient à faire un échange intra et dans notre
-                // cas seul les mouvments de type inter sont utiles
-                if (t1 == t2) continue;
-                // Récupération des informations d'échange entre deux boxes de
-                // deux trolleys différents
-                InterTrolleyInfos tmp = t1.echangeInterTrolley(t2);
-                // On récupére à chaque fois le coût négatif le plus proche de zéro
-                // ce qui correspond à une distance totale minimale
-                if (tmp.getDiffCout() < interTrolleyInfos.getDiffCout()) {
-                    if(tmp.getDiffCout() < 0 && interTrolleyInfos.getDiffCout() < 0){
-                        continue;
-                    }
-                    else {
-                        interTrolleyInfos = new InterTrolleyInfos(tmp);
-                    }
-                }
-            }			
-		}
-        // On réalise l'échange seulement si notre coût est négatif et s'il est
-        // plus grand que le coût précédent (aussi négatif)
-		if (interTrolleyInfos.getDiffCout() < 0) {
-            if (RechercheLocale.diffCout < interTrolleyInfos.getDiffCout()) {
-                RechercheLocale.diffCout = interTrolleyInfos.getDiffCout();
-                return interTrolleyInfos.doEchangeInterTrolley();
-            }
-            return false;
-		}
-		return false;
     }
 
     @Override
