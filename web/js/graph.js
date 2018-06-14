@@ -389,7 +389,8 @@ function drawProductsFromTrolley(selectedTrolleyID) {
             $('#boxSelection').append($('<input>', {
                 type:"checkbox",
                 id: "checkbox"+ (j + 1),
-                value: checkboxValue
+                value: checkboxValue,
+                "checked":"checked"
             }));
             $('#checkbox'+ (j+1)).change(function () {readSelectedInputs();});
         }
@@ -441,7 +442,8 @@ function drawProductsFromInstance() {
             $('#boxSelection').append($('<input>', {
                 type:"checkbox",
                 id: "checkbox"+ (f + 1),
-                value: checkboxValue
+                value: checkboxValue,
+                "checked":"checked"
             }));
             $('#checkbox'+tabSolution[f].IDTROLLEY).change(function () {readSelectedInputs();});
         }
@@ -632,6 +634,12 @@ function getMaxDistance() {
 function setupTrolleySelection(idInstance) {
     $('#trolleySelection').empty();
     var size = tabSolution.length;
+
+    $('#trolleySelection').append($('<option>', {
+        value: size,
+        text: 'Instance '+ idInstance +"/All Trolleys"
+    }));
+    
     for (var i = 0; i < size; i++){
         $('#trolleySelection').append($('<option>', {
             value: i,
@@ -639,10 +647,6 @@ function setupTrolleySelection(idInstance) {
         }));
     }
     //Option d'affichage de tous les trolleys
-    $('#trolleySelection').append($('<option>', {
-        value: size,
-        text: 'Instance '+ idInstance +"/All Trolleys"
-    }));
 }
 
 /**
