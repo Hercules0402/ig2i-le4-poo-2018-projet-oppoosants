@@ -180,7 +180,7 @@ function setup(){
 
         if(touched) {
             $("#popup").css("top", lastY + 40 + "px");
-            $("#popup").css("left", lastX + 80 + "px");
+            $("#popup").css("left", lastX + 70 + "px");
             $("#popup").html(
                 '<div class="card">' +
                 '    <div class="card-header">Point Produit (' + (lastX/coeffW).toFixed(0) +','+ (lastY/coeffH).toFixed(0) + ')</div>' +
