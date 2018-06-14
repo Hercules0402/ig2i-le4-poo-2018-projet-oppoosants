@@ -84,7 +84,7 @@ public class Instance implements Serializable{
         this.nom = instance.nom;
         this.graph = instance.graph;
 		this.arcs = new ArrayList<>(instance.arcs);
-        this.distances = new ArrayList<>(instance.distances);
+        this.distances = instance.distances;
         this.boxes = new ArrayList<>(instance.boxes);
 		this.locations = new ArrayList<>(instance.locations);
 		this.orders = new ArrayList<>(instance.orders);
