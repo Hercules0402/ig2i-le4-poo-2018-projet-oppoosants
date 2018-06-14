@@ -2,32 +2,11 @@ tr {
     cursor:pointer;
 }
 
-#graphReturnB {
+#menuButtons {
     position:absolute;
     z-index:9999;
     top:90%;
     left:3%;
-}
-
-#toggleLocations {
-    position:absolute;
-    z-index:9999;
-    top:90%;
-    left:10%;
-}
-
-#toggleLines {
-    position:absolute;
-    z-index:9999;
-    top:90%;
-    left:25%;
-}
-
-#togglePoint {
-    position:absolute;
-    z-index:9999;
-    top:90%;
-    left:40%;
 }
 
 #popup {

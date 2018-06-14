@@ -45,30 +45,42 @@
     -->
     <div id="popup"></div>
 
-    <button id="graphReturnB" class="btn btn-light btn-lg" onclick="getInstances();">Retour</button>
+    <div id="menuButtons" class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <button id="graphReturnB" class="btn btn-light btn-lg btn-block" onclick="getInstances();">Retour</button>
+        </div>
 
-    <div id="toggleLocations" class="form-check">
-      <button class="btn btn-light btn-lg" onclick="toggleLocations()">      
-        &nbsp;
-        <input type="checkbox" class="form-check-input" id="toggleLocationsC" disabled/>
-        Afficher locations
-      </button>
-    </div>
+        <div class="col-md-3">
+          <div id="toggleLocations" class="form-check">
+            <button class="btn btn-light btn-lg btn-block" onclick="toggleLocations()">      
+              &nbsp;
+              <input type="checkbox" class="form-check-input" id="toggleLocationsC" disabled/>
+              Afficher locations
+            </button>
+          </div>
+        </div>
 
-    <div id="toggleLines" class="form-check">
-      <button class="btn btn-light btn-lg" onclick="toggleLines()">      
-        &nbsp;
-        <input type="checkbox" class="form-check-input" id="toggleLinesC" disabled/>
-        Afficher liaisons
-      </button>
-    </div>
+        <div class="col-md-3">
+          <div id="toggleLines" class="form-check">
+            <button class="btn btn-light btn-lg btn-block" onclick="toggleLines()">      
+              &nbsp;
+              <input type="checkbox" class="form-check-input" id="toggleLinesC" disabled/>
+              Afficher liaisons
+            </button>
+          </div>         
+        </div>
+        <div class="col-md-3">
+          <div id="togglePoint" class="form-check">
+            <button class="btn btn-light btn-lg btn-block" onclick="togglePoint()">      
+              &nbsp;
+              <input type="checkbox" class="form-check-input" id="togglePointC" disabled/>
+              Simulation trolley
+            </button>
+          </div>
+        </div>
 
-    <div id="togglePoint" class="form-check">
-      <button class="btn btn-light btn-lg" onclick="togglePoint()">      
-        &nbsp;
-        <input type="checkbox" class="form-check-input" id="togglePointC" disabled/>
-        Simulation trolley
-      </button>
+      </div>
     </div>
   
     <script src="js/jquery-3.3.1.slim.min.js"></script>
