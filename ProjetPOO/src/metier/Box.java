@@ -130,16 +130,21 @@ public class Box implements Serializable {
         this.volume = volume;
     }
     
+    /**
+     * Permet de vider le colis.
+     */
     public void clear() {
         this.prodQtys.clear();
         this.volume = 0;
         this.weight = 0;
     }
-
-    public void addProduct(ProdQty pq) {
-        addProduct(pq.getProduct(), pq.getQuantity());
-    }
     
+    /**
+     * Permet d'ajouter un produit dans une certaine quantité dans le colis.
+     * Si le produit est déjà présent, on augmente juste sa quantité.
+     * @param p Produit
+     * @param qt Quantité
+     */
     public void addProduct(Product p, int qt) {
         this.weight += p.getWeight() * qt;
         this.volume += p.getVolume() * qt;
@@ -153,7 +158,21 @@ public class Box implements Serializable {
         ProdQty newPq = new ProdQty(p, qt);
         prodQtys.add(newPq);
     }
+    
+    /**
+     * Fonction permettant d'ajouter un produit, en passant un objet ProdQty
+     * directement, au lieu d'un produit et d'une quantité.
+     * @param pq ProdQty à ajouter
+     */
+    public void addProduct(ProdQty pq) {
+        addProduct(pq.getProduct(), pq.getQuantity());
+    }
 
+    /**
+     * Permet d'ajouter une liste de produits tout d'un coup.
+     * @param prodQtys Liste de ProdQty
+     * @return boolean ajouts effectués ou non
+     */
     public boolean addProducts(List<ProdQty> prodQtys){
         if (prodQtys == null) return false;
         for(ProdQty pq : this.prodQtys){
@@ -165,8 +184,8 @@ public class Box implements Serializable {
     /**
      * Fonction permettant d'ajouter un produit dans une box, et qui retourne 
      * un booléen nécessaire à l'algorithme de ClarkeAndWright.
-     * @param pq
-     * @return boolean
+     * @param pq ProdQty à ajouter
+     * @return boolean ajouté ou non
      */
     public boolean addProductClarkeAndWright(ProdQty pq) {
         Product p = pq.getProduct();

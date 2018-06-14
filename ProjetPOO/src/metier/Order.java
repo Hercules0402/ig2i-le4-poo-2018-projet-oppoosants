@@ -67,6 +67,10 @@ public class Order implements Serializable {
     public int getId() {
         return id;
     }
+    
+    public Integer getIdOrder() {
+        return idOrder;
+    }
 
     public List<ProdQty> getProdQtys() {
         return prodQtys;
@@ -74,10 +78,6 @@ public class Order implements Serializable {
 
     public void setProdQtys(List<ProdQty> prodQtys) {
         this.prodQtys = prodQtys;
-    }
-
-    public Integer getIdOrder() {
-        return idOrder;
     }
 
     @Override

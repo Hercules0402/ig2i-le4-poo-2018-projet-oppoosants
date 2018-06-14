@@ -115,6 +115,9 @@ public class Graph implements Serializable {
         return ninstance;
     }
     
+    /**
+     * Permet de vider le graph.
+     */
     public void clear() {
         this.arcs.clear();
         this.nbLocations = 0;

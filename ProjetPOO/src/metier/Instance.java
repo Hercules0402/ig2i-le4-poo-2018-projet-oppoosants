@@ -95,10 +95,6 @@ public class Instance implements Serializable{
         this.nbBoxesTrolley = instance.nbBoxesTrolley;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -195,6 +191,9 @@ public class Instance implements Serializable{
         this.volumeMaxBox = volumeMaxBox;
     }
 
+    /**
+     * Permet de vider l'instance.
+     */
     public void clear() {
 		for (Box b : this.boxes) {
 			b.clear();

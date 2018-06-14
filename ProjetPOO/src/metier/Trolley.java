@@ -88,6 +88,15 @@ public class Trolley implements Serializable {
         return boxes;
     }
 
+    public void setBoxes(List<Box> boxes) {
+        this.boxes = boxes;
+    }
+    
+    /**
+     * Permet d'ajouter un colis dans la tournée.
+     * @param p Colis à ajouter
+     * @return Boolean ajout effectué ou non
+     */
     public boolean addBox(Box p) {
         if(this.nbColisMax < boxes.size() + 1) {
             return false;
@@ -96,10 +105,11 @@ public class Trolley implements Serializable {
         return true;
     }
 
-    public void setBoxes(List<Box> boxes) {
-        this.boxes = boxes;
-    }
-
+    /**
+     * Permet d'ajouter des colis dans la tournée.
+     * @param boxes Liste de colis à ajouter
+     * @return Boolean ajouts effectués ou non
+     */
     public boolean addBoxes(List<Box> boxes){
         if (boxes == null) return false;
         for (Box b : boxes) {
@@ -109,9 +119,9 @@ public class Trolley implements Serializable {
     } 
 
     /**
-     * Permet d'ajouter une box à un trolley pour la méthode de Clarke And Wright
-     * @param b
-     * @return boolean
+     * Permet d'ajouter un colis à un tournée pour la méthode de Clarke And Wright
+     * @param b Colis à ajouter
+     * @return boolean ajout effectué ou non
      */
     public boolean addBoxClarkeAndWright(Box b){
         if (b == null) return false;
@@ -123,8 +133,8 @@ public class Trolley implements Serializable {
     /**
 	 * Méthode exécutant l'échange inter qui permet d’améliorer le plus la
 	 * solution courante.
-	 * @param interTrolleyInfos
-	 * @return boolean
+	 * @param interTrolleyInfos Informations sur les colis à échanger
+	 * @return boolean effectué ou non
 	 */
 	public boolean doEchangeInterTrolley(InterTrolleyInfos interTrolleyInfos) {
         // Récupération des boxes dans leur trolley associé
@@ -150,9 +160,9 @@ public class Trolley implements Serializable {
 
     /**
      * Ajout d'une box à une position donnée.
-     * @param b
-     * @param pos
-     * @return 
+     * @param b Box à ajouter
+     * @param pos Position
+     * @return Boolean effectué ou non
      */
     private boolean addBoxByPos(Box b, int pos) {
         if (b == null) {

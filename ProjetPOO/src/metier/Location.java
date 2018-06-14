@@ -109,6 +109,12 @@ public class Location implements Serializable, Comparable<Location> {
         return distances;
     }
 
+    /**
+     * Permet d'ajouter une location vers laquelle on peut aller.
+     * @param loc Location vers laquelle on peut se rendre
+     * @param distance Distance pour y aller
+     * @return boolean ajout effectué ou non
+     */
     public boolean addDistance(Location loc, Integer distance){
         if(!distances.containsKey(loc)){
             distances.put(loc, distance);
@@ -124,6 +130,11 @@ public class Location implements Serializable, Comparable<Location> {
         }
     }
     
+    /**
+     * Permet de récuperer la distance entre la location fournie de celle-ci
+     * @param loc Location 
+     * @return double Distance qui sépare les deux points
+     */
     public double getDistanceTo(Location loc) {
         if (this.getDistances().containsKey(loc)) {
             return this.getDistances().get(loc);

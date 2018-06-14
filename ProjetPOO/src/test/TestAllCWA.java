@@ -2,7 +2,6 @@ package test;
 
 import algo.ClarkeAndWright;
 import algo.Recherche;
-import algo.RechercheLocale;
 import java.io.File;
 import metier.Instance;
 import util.CopyPaste;
@@ -11,13 +10,13 @@ import util.Reader;
 import util.Writer;
 
 /**
- * Classe permettant de passer au checker toutes les solutions calculées avec
+ * Classe permettant de passer au checker toutes les instances calculées avec
  * l'algo de Clarke And Wright.
  */
 public class TestAllCWA {
 
     public static void main(String[] args) throws Exception {
-        String base = "../instances/";//10
+        String base = "../instances/";
         String stockage = "./testCWA/";
 
         File baseDossier = new File(base);
@@ -31,10 +30,10 @@ public class TestAllCWA {
                     if (copie) {
                         /* Création de l'instance */
                         Instance inst = Reader.read(stockage + instance.getName(), false);
-                        /* Lancement de l'algo. natif */
+                        /* Lancement de l'algo natif */
                         inst = Recherche.run(inst);                        
 
-                        /* Lancement de l'algo. natif */
+                        /* Lancement de l'algo C&W */
                         ClarkeAndWright cwa = new ClarkeAndWright(inst);
                         inst = cwa.run();
                                                 
@@ -42,7 +41,7 @@ public class TestAllCWA {
                         System.out.println(Distances.formatDistance(distance));
                         Writer.save(stockage + instance.getName(), inst, false);
 
-                        /* Test checkcer */
+                        /* Test checker */
                         String[] name = {""};
                         name[0] = stockage + instance.getName().substring(0, instance.getName().lastIndexOf("."));
                         System.out.println("\n\nChecker de l'instance : "+ instance.getName());
