@@ -18,4 +18,4 @@ var pointsOrder = [];
 var lastCircle;
 var movingHistoric = [];
 var historicSize = 40;
-var speed = 200;
+var speed = 40;

@@ -90,7 +90,6 @@ function toggleLocations(ref) {
         $(ref).html('Locations masquées');
     }
 
-    resetGraph();
     displayLocations = !displayLocations;
 }
 
@@ -109,7 +108,6 @@ function toggleLines(ref) {
         $(ref).html('Liaisons masquées');
     }
 
-    resetGraph();
     displayLines = !displayLines;
 }
 
@@ -130,7 +128,6 @@ function togglePoint(ref) {
         movingPState = "end";
     }
 
-    resetGraph();
     displayPoint = !displayPoint;
 }
 
