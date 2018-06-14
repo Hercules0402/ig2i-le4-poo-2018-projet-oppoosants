@@ -18,7 +18,7 @@ public class JpaOrderDao extends JpaDao<Order> implements OrderDao {
 
 	/**
 	 * Retourne une instance de JpaOrderDao.
-	 * @return JpaOrderDao
+	 * @return JpaOrderDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaOrderDao getInstance() {
 		if (instance == null) {

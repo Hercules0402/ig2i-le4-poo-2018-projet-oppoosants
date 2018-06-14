@@ -10,7 +10,7 @@ public interface InstanceDao extends Dao<Instance> {
 	/**
 	 * Permet de rechercher une instance par nom.
 	 * @param name
-	 * @return Instance
+	 * @return Instance : instance trouvée
 	 */
 	public Instance findByName(String name);
 

@@ -22,7 +22,7 @@ public class JpaInstanceDao extends JpaDao<Instance> implements InstanceDao {
 
 	/**
 	 * Retourne une instance de JpaInstanceDao.
-	 * @return JpaInstanceDao
+	 * @return JpaInstanceDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaInstanceDao getInstance() {
 		if (instance == null) {
