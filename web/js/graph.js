@@ -78,12 +78,16 @@ function genPointContent(points) {
 /**
  * Affiche ou cache les locations relatives au graph.
  */
-function toggleLocations() {
-    if(displayLocations) {
-        $('#toggleLocationsC').prop('checked', false);
+function toggleLocations(ref) {
+    if(!displayLocations) {
+        $(ref).addClass('btn-success');
+        $(ref).removeClass('btn-danger');
+        $(ref).html('Locations affichées');
     }
     else {
-        $('#toggleLocationsC').prop('checked', true);
+        $(ref).removeClass('btn-success');
+        $(ref).addClass('btn-danger');
+        $(ref).html('Locations masquées');
     }
 
     resetGraph();
@@ -93,12 +97,16 @@ function toggleLocations() {
 /**
  * Affiche ou cache les locations relatives au graph.
  */
-function toggleLines() {
-    if(displayLines) {
-        $('#toggleLinesC').prop('checked', false);
+function toggleLines(ref) {
+    if(!displayLines) {
+        $(ref).addClass('btn-success');
+        $(ref).removeClass('btn-danger');
+        $(ref).html('Liaisons affichées');
     }
     else {
-        $('#toggleLinesC').prop('checked', true);
+        $(ref).removeClass('btn-success');
+        $(ref).addClass('btn-danger');
+        $(ref).html('Liaisons masquées');
     }
 
     resetGraph();
@@ -108,13 +116,17 @@ function toggleLines() {
 /**
  * Affiche ou cache le point bougeant qui représente le trolley parcourant l'entrepôt.
  */
-function togglePoint() {
-    if(displayPoint) {
-        $('#togglePointC').prop('checked', true);
+function togglePoint(ref) {
+    if(!displayPoint) {
+        $(ref).addClass('btn-success');
+        $(ref).removeClass('btn-danger');
+        $(ref).html('Simulation trolley : on');
         startPoint();
     }
     else {
-        $('#togglePointC').prop('checked', false);
+        $(ref).removeClass('btn-success');
+        $(ref).addClass('btn-danger');
+        $(ref).html('Simulation trolley : off');
         movingPState = "end";
     }
 
@@ -401,7 +413,13 @@ function drawProductsFromTrolley(selectedTrolleyID) {
                 "checked":"checked"
             }));
             $('#checkbox'+ (j+1)).change(function () {readSelectedInputs();});
+            readSelectedInputs()
         }
+        
+        if(jQuery.inArray(j + 1,selection) == -1){
+            continue;
+        }
+
         //Positionnement des produits avec leur coordonnées et couleur respectives
         for (var k = 0; k < box.length; k++){
             abs = parseInt(box[k].LOC_ABSCISSE);
@@ -454,11 +472,16 @@ function drawProductsFromInstance() {
                 "checked":"checked"
             }));
             $('#checkbox'+tabSolution[f].IDTROLLEY).change(function () {readSelectedInputs();});
+            readSelectedInputs()
+        }
+
+        if(jQuery.inArray(f + 1,selection) == -1){
+            continue;
         }
 
         //Lecture des produits pour chacunes des trolleys (une couleur est générée pour chaque trolley)
         for (var j = 0; j < boxes.length; j++){
-
+            
             var box = boxes[j].PRODUCTS;
 
             //Positionnement des produits avec leur coordonnées et couleur respectives
