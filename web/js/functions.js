@@ -74,6 +74,8 @@ function getTrolleysInInstance(idInstance) {
     '    <tr>' +
     '        <th>Nom</th>' +
     '        <th>ID Trolley</th>' +
+    '        <th>Ratio Colis/Colis max' +
+    '        <th>Nb colis</th>' +
     '        <th>Nb colis max</th>' +
     '    </tr>' +
     '</thead><tbody>';
@@ -84,6 +86,8 @@ function getTrolleysInInstance(idInstance) {
         content += '<tr id="' + trolley['ID'] + '" onclick="getBoxesInTrolley('+ idInstance +',' + t + ')">' +
             '<td>Trolley n°' + trolley['ID'] + '</td>' +
             '<td>' + trolley['IDTROLLEY'] + '</td>' +
+            '<td>' + ((trolley['NBCOLIS'] / trolley['NBCOLISMAX'])*100).toFixed(2) + '%</td>' +
+            '<td>' + trolley['NBCOLIS'] + '</td>' +
             '<td>' + trolley['NBCOLISMAX'] + '</td>' +
         '</tr>';
     }
@@ -101,7 +105,7 @@ function getTrolleysInInstance(idInstance) {
  * @param {*} idTrolley 
  */
 function getProductsInBox(idInstance, idBox, idTrolley) {
-    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, idTrolley, idBox);
+    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, tabSolution[idTrolley]["ID"], tabSolution[idTrolley]["BOXES"][idBox]["ID"]);
 
     content += '<table id="table_products" class="display">' +
     '<thead>' +
@@ -143,7 +147,7 @@ function getProductsInBox(idInstance, idBox, idTrolley) {
  * @param {*} idTrolley 
  */
 function getBoxesInTrolley(idInstance, idTrolley) {
-    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, idTrolley);
+    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, tabSolution[idTrolley]["ID"]);
 
     content += '<table id="table_boxes" class="display">' +
     '<thead>' +

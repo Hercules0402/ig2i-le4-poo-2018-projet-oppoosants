@@ -238,7 +238,7 @@ function processGraphe() {
     coeffW = windowWidth/maxSize*0.9;
     coeffH = windowHeight/maxSize*0.8;
     calcItineraireTrolley();
-    background(100);
+    background(200);
     translate(-windowWidth*0.45, -windowHeight*0.4, 0); //décale le point 0,0 depuis le centre de la fenêtre près du coin en haut à gauche
 
     if(displayLocations) placeLocations(); 

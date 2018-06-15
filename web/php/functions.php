@@ -108,6 +108,11 @@
             $trolley["NBCOLISMAX"] = $donnees["NBCOLISMAX"];
             $trolley["NINSTANCE"] = $donnees["NINSTANCE"];
 
+            $reponseBis = $bdd->query('SELECT count(*) as NBCOLIS FROM BOX JOIN TROLLEY_BOX ON TROLLEY_BOX.boxes_ID = BOX.ID WHERE TROLLEY_BOX.Trolley_ID = ' . $trolley["ID"]); 
+            while ($donneesBis = $reponseBis->fetch()) {
+                $trolley["NBCOLIS"] = $donneesBis["NBCOLIS"];
+            }
+
             array_push($trolleys, $trolley);
             $trolley = array();
         }
