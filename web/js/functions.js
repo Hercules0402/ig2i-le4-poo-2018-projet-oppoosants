@@ -105,7 +105,7 @@ function getTrolleysInInstance(idInstance) {
  * @param {*} idTrolley 
  */
 function getProductsInBox(idInstance, idBox, idTrolley) {
-    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, tabSolution[idTrolley]["ID"], tabSolution[idTrolley]["BOXES"][idBox]["ID"]);
+    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, idTrolley, idBox);
 
     content += '<table id="table_products" class="display">' +
     '<thead>' +
@@ -147,7 +147,7 @@ function getProductsInBox(idInstance, idBox, idTrolley) {
  * @param {*} idTrolley 
  */
 function getBoxesInTrolley(idInstance, idTrolley) {
-    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, tabSolution[idTrolley]["ID"]);
+    var content = '<br/><div class="row"><div align="center" class="col-md-12">' + getArbo(idInstance, idTrolley);
 
     content += '<table id="table_boxes" class="display">' +
     '<thead>' +
