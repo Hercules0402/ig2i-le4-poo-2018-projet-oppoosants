@@ -5,11 +5,7 @@ import algo.Recherche;
 import metier.Instance;
 
 /**
-<<<<<<< HEAD
- * Classe permettant de tester la classe Recherche.
-=======
  * Classe permettant de tester la classe Recherche (algorithme naif).
->>>>>>> version-3.0
  */
 public class TestRecherche {
     public static void main(String[] args) throws Exception {    
