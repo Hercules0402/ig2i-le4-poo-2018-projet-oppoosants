@@ -1,79 +1,133 @@
 package metier;
 
-import java.util.HashMap;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
- * Classe définissant une commande.
+ * Classe définissant un commande.
  */
-public class Order {
-    
-    private Integer id;
-    private Integer m;
-    private Integer nbProducts;
-    private HashMap<Product, Integer> products;
+@Entity
+@Table(name = "ORD")
+public class Order implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    public Order(Integer id) {
-        this.id = id;
-        products = new HashMap();
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)	
+    private Integer id;
+
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idOrder;
+
+    @Column
+    private Integer m;
+
+    @Column
+    private Integer nbProducts;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<ProdQty> prodQtys;
+
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
+
+    public Order() {
+        prodQtys = new ArrayList();
     }
 
-    public Order(Integer id, Integer m, Integer nbProducts, HashMap products) {
-        this.id = id;
+    /**
+     * Constructeur par id et produits de la commande Order
+     * @param id
+     * @param m
+     * @param nbProducts
+     * @param prodQtys
+     * @param ninstance
+     */
+    public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
+        this.idOrder = id;
         this.m = m;
         this.nbProducts = nbProducts;
-        this.products = products;
+        this.prodQtys = new ArrayList<>(prodQtys);
+        this.ninstance = ninstance;
     }
 
     public int getId() {
         return id;
     }
 
-    public HashMap getProducts() {
-        return products;
+    public List<ProdQty> getProdQtys() {
+        return prodQtys;
     }
 
-    public void setProducts(HashMap products) {
-        this.products = products;
+    public void setProdQtys(List<ProdQty> prodQtys) {
+        this.prodQtys = prodQtys;
     }
-    
-    /**
-     * addProduct
-     * Ajoute un produit dans le hashmap. S'il est déjà présent, le nombre de produits du produit que l'on souhaitait ajouter est ajouté au nombre de produits déjà présent
-     * @param product le produit ajouté
-     * @param qt sa quantité
-     */
-    public void addProduct(Product product, int qt) {
-        if (!this.products.containsKey(product)) {
-            this.products.put(product, qt);
-        }
-        else {
-            int oldQt = (int) this.products.get(product);
-            this.products.put(product, oldQt + qt);
-        }
+
+    public Integer getIdOrder() {
+        return idOrder;
     }
-    
-    /**
-     * isItemInOrder
-     * @param product le produit à rechercher
-     * @return true si le produit est présent dans la commande, false sinon
-     */
-    public boolean isItemInOrder(Product product) {
-        return this.products.containsKey(product);
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.id);
+        hash = 37 * hash + Objects.hashCode(this.idOrder);
+        hash = 37 * hash + Objects.hashCode(this.m);
+        hash = 37 * hash + Objects.hashCode(this.nbProducts);
+        hash = 37 * hash + Objects.hashCode(this.ninstance);
+        return hash;
     }
-    
-    /**
-     * removeProduct
-     * Supprime un produit du hashmap
-     * @param product le produit à supprimer
-     */
-    public void removeProduct(Product product) {
-        if (this.products.containsKey(product)) {
-            this.products.remove(product);
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Order other = (Order) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.idOrder, other.idOrder)) {
+            return false;
+        }
+        if (!Objects.equals(this.m, other.m)) {
+            return false;
+        }
+        if (!Objects.equals(this.nbProducts, other.nbProducts)) {
+            return false;
+        }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "Order{" + "id=" + id+ ", m=" + m + ", nbProducts=" + nbProducts + ", products=" + products + '}';
+        return "Order{" + "idOrder=" + idOrder + ", m=" + m + ", nbProducts=" + nbProducts + ", prodQtys=" + prodQtys + '}';
     }
 }

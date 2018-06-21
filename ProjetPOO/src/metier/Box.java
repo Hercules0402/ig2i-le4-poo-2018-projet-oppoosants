@@ -1,65 +1,106 @@
 package metier;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Classe définissant un colis.
  */
-public class Box {
-    
-    private final Integer id;
-    private HashMap<Product, Integer> products;
+@Entity
+public class Box implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * id corespondant à l'id de la ligne dans le bdd.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Integer id;
+
+    /**
+     * Correspond à l'id dans le fichier instance.
+     */
+    @Column
+    private Integer idBox;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<ProdQty> prodQtys;
+
+    @Column
     private static int weightMax;
+
+    @Column
     private static int volumeMax;
+
+    @Column
     private int weight;
+
+    @Column
     private int volume;
+
+    @JoinColumn(referencedColumnName = "ID")
+    @ManyToOne
     private Order order;
 
-    public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume) {
-        this.id= id;
-        Box.volumeMax = volumeMax;
-        Box.weightMax = weightMax;
-        this.volume = volume;
-        this.weight = weight;
-        products = new HashMap();
-        this.order = order;
+    @JoinColumn(name = "NINSTANCE", referencedColumnName = "ID")
+	@ManyToOne
+	private Instance ninstance;
+
+    public Box() {
+        prodQtys = new ArrayList();
     }
 
-    public Box(Integer id, HashMap products, int weightMax, int volumeMax, Order order) {
-        this.id = id;
-        this.products = products;
+    public Box(Integer id, List<ProdQty> prodQtys, int weight, int volume, Order order, Instance ninstance) {
+        this.idBox = id;
+        this.prodQtys = prodQtys;
+        this.weight = weight;
+        this.volume = volume;
+        this.order = order;
+        this.ninstance = ninstance;
+    }
+
+    public Box(Integer id, int weightMax, int volumeMax, Order order, int weight, int volume, Instance ninstance) {
+        this.idBox = id;
         this.volumeMax = volumeMax;
         this.weightMax = weightMax;
+        this.volume = volume;
+        this.weight = weight;
+        prodQtys = new ArrayList();
         this.order = order;
+        this.ninstance = ninstance;
     }
 
     public int getId() {
         return id;
     }
 
-    public HashMap getProducts() {
-        return products;
+    public int getIdBox() {
+        return idBox;
+    }
+
+    public List<ProdQty> getProdQtys() {
+        return prodQtys;
     }
 
     public Order getOrder() {
         return order;
-    }    
-    
-    public void addProduct(Product p, int qt) {
-        if(products.containsKey(p)) {
-            int oldQt = products.get(p);
-            products.put(p, qt + oldQt);
-        }
-        else {
-            products.put(p, qt);
-        }
-        this.weight += p.getWeight() * qt;
-        this.volume += p.getVolume() * qt;
     }
-    
-    public void setProducts(HashMap products) {
-        this.products = products;
+
+    public void setProdQtys(List<ProdQty> prodQtys) {
+        this.prodQtys = prodQtys;
     }
 
     public void setWeightMax(int weightMax) {
@@ -86,10 +127,29 @@ public class Box {
         this.volume = volume;
     }
 
+    public void addProduct(Product p, int qt) {
+        this.weight += p.getWeight() * qt;
+        this.volume += p.getVolume() * qt;
+
+        for(ProdQty pq : prodQtys){
+            if(pq.getProduct().equals(p)){
+                pq.setQuantity(pq.getQuantity() + qt);
+                return;
+            }
+        }
+        ProdQty newPq = new ProdQty(p, qt);
+        prodQtys.add(newPq);
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 41 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.idBox);
+        hash = 71 * hash + this.weight;
+        hash = 71 * hash + this.volume;
+        hash = 71 * hash + Objects.hashCode(this.order);
+        hash = 71 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -105,7 +165,22 @@ public class Box {
             return false;
         }
         final Box other = (Box) obj;
+        if (this.weight != other.weight) {
+            return false;
+        }
+        if (this.volume != other.volume) {
+            return false;
+        }
         if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.idBox, other.idBox)) {
+            return false;
+        }
+        if (!Objects.equals(this.order, other.order)) {
+            return false;
+        }
+        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;
@@ -113,6 +188,6 @@ public class Box {
 
     @Override
     public String toString() {
-        return "Box{" + "id=" + id + ", products=" + products + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
+        return "Box{" + "id=" + idBox + ", prodQtys=" + prodQtys + ", weightMax=" + weightMax + ", volumeMax=" + volumeMax + ", weight= " + weight + ", volume= " + volume + '}';
     }
 }
