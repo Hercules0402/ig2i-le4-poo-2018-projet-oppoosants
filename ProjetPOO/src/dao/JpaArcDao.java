@@ -10,7 +10,7 @@ public class JpaArcDao extends JpaDao<Arc> implements ArcDao {
     private static JpaArcDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaArcDao() {
 		super(Arc.class);
@@ -18,7 +18,7 @@ public class JpaArcDao extends JpaDao<Arc> implements ArcDao {
 
 	/**
 	 * Retourne une instance de JpaArcDao.
-	 * @return JpaArcDao
+	 * @return JpaArcDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaArcDao getInstance() {
 		if (instance == null) {

@@ -18,7 +18,7 @@ public class Arc implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,6 +87,10 @@ public class Arc implements Serializable {
         return distance;
     }
 
+    public Integer getIdArc() {
+        return idArc;
+    }
+
     public boolean isIsShortest() {
         return isShortest;
     }
@@ -107,20 +111,14 @@ public class Arc implements Serializable {
         this.isShortest = isShortest;
     }
 
-    public Integer getIdArc() {
-        return idArc;
-    }
-
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
         hash = 97 * hash + Objects.hashCode(this.idArc);
         hash = 97 * hash + Objects.hashCode(this.locationStart);
         hash = 97 * hash + Objects.hashCode(this.locationEnd);
         hash = 97 * hash + Objects.hashCode(this.distance);
         hash = 97 * hash + (this.isShortest ? 1 : 0);
-        hash = 97 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -139,9 +137,6 @@ public class Arc implements Serializable {
         if (this.isShortest != other.isShortest) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idArc, other.idArc)) {
             return false;
         }
@@ -152,9 +147,6 @@ public class Arc implements Serializable {
             return false;
         }
         if (!Objects.equals(this.distance, other.distance)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

@@ -17,7 +17,6 @@ import util.Writer;
 public class TestWriter {
 
     public static void main(String[] args) throws Exception {
-        /* Instance */
         Instance inst = new Instance("instance_0116_131940_Z2");
 
         /* Location */
@@ -90,7 +89,9 @@ public class TestWriter {
         List<Trolley> trolleys = new ArrayList<>();
         trolleys.add(new Trolley(1, 2, boxes1, inst));
         trolleys.add(new Trolley(2, 2, boxes2, inst));
+        
+        inst.setTrolleys(trolleys);
 
-        Writer w = new Writer("instance_0116_131940_Z2.txt", trolleys, false);
+        Writer.save("instance_0116_131940_Z2.txt", inst, false);
     }
 }

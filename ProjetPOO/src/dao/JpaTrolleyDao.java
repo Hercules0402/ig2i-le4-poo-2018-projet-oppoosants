@@ -10,7 +10,7 @@ public class JpaTrolleyDao extends JpaDao<Trolley> implements TrolleyDao {
     private static JpaTrolleyDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaTrolleyDao() {
 		super(Trolley.class);
@@ -18,7 +18,7 @@ public class JpaTrolleyDao extends JpaDao<Trolley> implements TrolleyDao {
 
 	/**
 	 * Retourne une instance de JpaTrolleyDao.
-	 * @return JpaTrolleyDao
+	 * @return JpaTrolleyDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaTrolleyDao getInstance() {
 		if (instance == null) {

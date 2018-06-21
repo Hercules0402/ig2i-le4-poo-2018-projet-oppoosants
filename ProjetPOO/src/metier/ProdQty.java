@@ -1,7 +1,6 @@
 package metier;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +16,9 @@ import javax.persistence.ManyToOne;
 public class ProdQty implements Serializable, Comparable<ProdQty>{
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Correspond à l'id de la ligne dans la bdd.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -27,19 +29,7 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
 
     @Column
     private Integer quantity;
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
+    
     public ProdQty() {
         id = -1;
     }
@@ -56,10 +46,21 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
         this.quantity = quantity;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 79 * hash + Objects.hashCode(this.id);
         hash = 79 * hash + Objects.hashCode(this.product);
         hash = 79 * hash + Objects.hashCode(this.quantity);
         return hash;
@@ -77,9 +78,6 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
             return false;
         }
         final ProdQty other = (ProdQty) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.product, other.product)) {
             return false;
         }
@@ -89,6 +87,7 @@ public class ProdQty implements Serializable, Comparable<ProdQty>{
         return true;
     } 
 
+    @Override
     public int compareTo(ProdQty otherPq) {
         if(otherPq == null) return -1;
 

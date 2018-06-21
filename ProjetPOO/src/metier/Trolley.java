@@ -1,5 +1,6 @@
 package metier;
 
+import algo.InterTrolleyInfos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Trolley implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,17 +46,12 @@ public class Trolley implements Serializable {
 	private Instance ninstance;
 
     public Trolley() {
+        this.idTrolley = -1;
         this.boxes = new ArrayList<>();
     }
 
     public Trolley(Integer id, Integer nbColisMax, List<Box> boxes,Instance ninstance) {
         this.idTrolley = id;
-        this.nbColisMax = nbColisMax;
-        this.boxes = new ArrayList<>(boxes);
-        this.ninstance = ninstance;
-    }
-
-    public Trolley(Integer nbColisMax, List<Box> boxes,Instance ninstance) {
         this.nbColisMax = nbColisMax;
         this.boxes = new ArrayList<>(boxes);
         this.ninstance = ninstance;
@@ -72,34 +68,121 @@ public class Trolley implements Serializable {
         return id;
     }
 
-    public int getNbColisMax() {
-        return nbColisMax;
+    public Integer getIdTrolley() {
+        return idTrolley;
     }
 
-    public void setNbColisMax(int nbColisMax) {
-        this.nbColisMax = nbColisMax;
+    public int getNbColisMax() {
+        return nbColisMax;
     }
 
     public List<Box> getBoxes() {
         return boxes;
     }
 
+    public void setIdTrolley(Integer idTrolley) {
+        this.idTrolley = idTrolley;
+    }
+
+    public void setNbColisMax(int nbColisMax) {
+        this.nbColisMax = nbColisMax;
+    }
+
+    public void setBoxes(List<Box> boxes) {
+        this.boxes = boxes;
+    }
+    
+    /**
+     * Permet d'ajouter un colis dans la tournée.
+     * @param p Colis à ajouter
+     * @return Boolean ajout effectué ou non
+     */
     public boolean addBox(Box p) {
-        if(this.nbColisMax < boxes.size() + 1) return false;
+        if(this.nbColisMax < boxes.size() + 1) {
+            return false;
+        }
         boxes.add(p);
         return true;
     }
 
-    public Integer getIdTrolley() {
-        return idTrolley;
+    /**
+     * Permet d'ajouter des colis dans la tournée.
+     * @param boxes Liste de colis à ajouter
+     * @return Boolean ajouts effectués ou non
+     */
+    public boolean addBoxes(List<Box> boxes){
+        if (boxes == null) return false;
+        for (Box b : boxes) {
+            addBox(b);
+        }
+        return true;
+    } 
+
+    /**
+     * Permet d'ajouter un colis à un tournée pour la méthode de Clarke And Wright
+     * @param b Colis à ajouter
+     * @return boolean ajout effectué ou non
+     */
+    public boolean addBoxClarkeAndWright(Box b){
+        if (b == null) return false;
+        if(this.nbColisMax < this.boxes.size() + 1) return false;
+        this.boxes.add(b);
+        return true;
+    }
+
+    /**
+	 * Méthode exécutant l'échange inter qui permet d’améliorer le plus la
+	 * solution courante.
+	 * @param interTrolleyInfos Informations sur les colis à échanger
+	 * @return boolean effectué ou non
+	 */
+	public boolean doEchangeInterTrolley(InterTrolleyInfos interTrolleyInfos) {
+        // Récupération des boxes dans leur trolley associé
+		Box b1 = this.boxes.get(interTrolleyInfos.getOldPosition());
+		Box b2 = interTrolleyInfos.getNewTrolley().boxes.get(interTrolleyInfos.getNewPosition());
+        
+        // Suppression des boxes dans leur trolley associé
+        interTrolleyInfos.getNewTrolley().boxes.remove(b2);
+        this.boxes.remove(b1);
+        
+        // AJout des boxes dans leur nouveau trolley
+		if (interTrolleyInfos.getNewTrolley().addBoxByPos(b1, interTrolleyInfos.getNewPosition())
+				&& this.addBoxByPos(b2,interTrolleyInfos.getOldPosition())) {
+			return true;
+		} else {
+            // Echec de l'ajout des boxes dans leur nouveau trolley donc on les
+            // remets dans leur ancien trolley
+            interTrolleyInfos.getNewTrolley().boxes.add(interTrolleyInfos.getNewPosition(),b2);
+            this.boxes.add(interTrolleyInfos.getOldPosition(), b1);
+			return false;
+		}
+	}
+
+    /**
+     * Ajout d'une box à une position donnée.
+     * @param b Box à ajouter
+     * @param pos Position
+     * @return Boolean effectué ou non
+     */
+    private boolean addBoxByPos(Box b, int pos) {
+        if (b == null) {
+			return false;
+		}
+		if (pos < 0 || pos > this.boxes.size()) {
+			return false;
+		}
+		if ((this.boxes.size() + 1) > this.nbColisMax) {
+			return false;
+		}
+
+		this.boxes.add(pos, b);
+		return true;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.id);
         hash = 53 * hash + Objects.hashCode(this.idTrolley);
-        hash = 53 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -115,13 +198,7 @@ public class Trolley implements Serializable {
             return false;
         }
         final Trolley other = (Trolley) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idTrolley, other.idTrolley)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

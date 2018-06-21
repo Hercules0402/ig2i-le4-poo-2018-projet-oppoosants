@@ -4,10 +4,14 @@ import dao.DaoFactory;
 import dao.PersistenceType;
 import dao.TrolleyDao;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import metier.Box;
+import metier.Instance;
 import metier.ProdQty;
 import metier.Trolley;
 
@@ -15,29 +19,32 @@ import metier.Trolley;
  * Permet d'écrire des fichiers instances solutions.
  */
 public class Writer {
-    private File instanceFile;
-    private Integer nbTrolleys;
-    private List<Trolley> trolleys;
+    private static File instanceFile;
+    private static Instance inst;
 
     /**
-     * Constructeur par données.
-     * @param filename TODO
-     * @param trolleys TODO
-     * @param save Boolean Enregistrer ou non les données en base
-     * @throws java.lang.Exception 
+     * Permet d'enregistrer la solution dans un fichier texte et possiblement
+     * en base de données.
+     * @param filename Nom du fichier à écrire
+     * @param instance Instance
+     * @param save Boolean pour enregistrer ou non en base
      */
-    public Writer(String filename, List<Trolley> trolleys, boolean save) throws Exception {
+    public static void save(String filename, Instance instance, boolean save){
+        inst = instance;
         Long time = System.currentTimeMillis();
         if (filename == null) {
-            System.err.println("Une erreur a été rencontrée : Aucun nom de fichier fourni ...");
-            throw new Exception();
+            return;
         }
         filename = filename.substring(0, filename.lastIndexOf(".")) + "_sol"
                 + filename.substring(filename.lastIndexOf("."));
-        this.instanceFile = new File(filename);
-        this.nbTrolleys = trolleys.size();
-        this.trolleys = trolleys;
-        writeSolutions();
+        instanceFile = new File(filename);
+        try {
+            writeSolutions();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Reader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Writer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println("Fichier créé.");
         System.out.println("WRITER EXECUTION TIME: " + (System.currentTimeMillis() - time) + "ms");
 
@@ -48,20 +55,24 @@ public class Writer {
         }
     }
 
-    public void saveAll(){
+    /**
+     * Permet d'enregistrer la solution dans la base de données.
+     */
+    public static void saveAll(){
         DaoFactory fabrique = DaoFactory.getDaoFactory(PersistenceType.JPA);
         TrolleyDao trolleyManager = fabrique.getTrolleyDao();
-        for(Trolley t: trolleys){
+        for(Trolley t: inst.getTrolleys()){
             trolleyManager.create(t);
         }
     }
 
     /**
-     * Retourne sous forme de chaine de caractère la soluttion à écrire.
-     * @return String
+     * Retourne sous forme de chaine de caractère la solution à écrire.
+     * @param trolleys Liste de tournées
+     * @return Ligne à écrire
      */
-    private String getContentSolution() {
-        String solution = "//NbTournees\n" + nbTrolleys;
+    private static String getContentSolution(List<Trolley> trolleys) {
+        String solution = "//NbTournees\n" + trolleys.size();
         for (Trolley t : trolleys){
             solution += "\n//IdTournes NbColis\n" + t.getIdTrolley()+ " "
                     + t.getBoxes().size() + "\n//IdColis IdCommandeInColis"
@@ -90,29 +101,17 @@ public class Writer {
      * Permet d'écrire la solution dans le fichier.
      * @throws java.lang.Exception
      */
-    private void writeSolutions() throws Exception {
-        /*
-        Création d'un writer sur l'instance de type File : instanceFile pour
-        écrire les données dans le fichier de solution.
-        */
+    private static void writeSolutions() throws Exception {
+        //Création d'un writer sur l'instance de type File : instanceFile pour
+        //écrire les données dans le fichier de solution.
         PrintWriter pw = new PrintWriter(new FileWriter(instanceFile));
         if (pw != null) {
             // On écrit le contenu dans le fichier
-            pw.print(this.getContentSolution());
+            pw.print(getContentSolution(inst.getTrolleys()));
             pw.close();
         }
         else {
             throw new Exception();
         }
-    }
-
-    @Override
-    public String toString() {
-        String retour = "Writer{" 
-                + "\tinstanceFile=" + instanceFile + ",\n"
-                + "\tnbTournees=" + nbTrolleys + ",\n"
-                + "\ttournees=" + trolleys + ",\n"
-                + '}';
-        return retour;
     }
 }

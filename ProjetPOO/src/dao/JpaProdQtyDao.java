@@ -10,7 +10,7 @@ public class JpaProdQtyDao extends JpaDao<ProdQty> implements ProdQtyDao {
     private static JpaProdQtyDao instance;
 
 	/**
-	 * Constrcuteur par défault.
+	 * Constructeur par défault.
 	 */
 	private JpaProdQtyDao() {
 		super(ProdQty.class);
@@ -18,7 +18,7 @@ public class JpaProdQtyDao extends JpaDao<ProdQty> implements ProdQtyDao {
 
 	/**
 	 * Retourne une instance de JpaProdQtyDao.
-	 * @return JpaProdQtyDao
+	 * @return JpaProdQtyDao : une nouvelle instance ou une déjà existante
 	 */
 	public static JpaProdQtyDao getInstance() {
 		if (instance == null) {

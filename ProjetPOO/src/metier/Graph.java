@@ -22,7 +22,7 @@ public class Graph implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -114,18 +114,26 @@ public class Graph implements Serializable {
     public Instance getNinstance() {
         return ninstance;
     }
-
+    
+    /**
+     * Permet de vider le graph.
+     */
+    public void clear() {
+        this.arcs.clear();
+        this.nbLocations = 0;
+        this.nbProducts = 0;
+        this.nbVerticesIntersections = 0;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 79 * hash + Objects.hashCode(this.id);
         hash = 79 * hash + Objects.hashCode(this.idGraph);
         hash = 79 * hash + Objects.hashCode(this.departingDepot);
         hash = 79 * hash + Objects.hashCode(this.arrivalDepot);
         hash = 79 * hash + this.nbLocations;
         hash = 79 * hash + this.nbProducts;
         hash = 79 * hash + this.nbVerticesIntersections;
-        hash = 79 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -150,9 +158,6 @@ public class Graph implements Serializable {
         if (this.nbVerticesIntersections != other.nbVerticesIntersections) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idGraph, other.idGraph)) {
             return false;
         }
@@ -160,9 +165,6 @@ public class Graph implements Serializable {
             return false;
         }
         if (!Objects.equals(this.arrivalDepot, other.arrivalDepot)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

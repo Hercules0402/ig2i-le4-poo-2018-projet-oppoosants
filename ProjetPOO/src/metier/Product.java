@@ -18,7 +18,7 @@ public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,12 +85,10 @@ public class Product implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.id);
         hash = 67 * hash + Objects.hashCode(this.idProduct);
         hash = 67 * hash + Objects.hashCode(this.loc);
         hash = 67 * hash + Objects.hashCode(this.weight);
         hash = 67 * hash + Objects.hashCode(this.volume);
-        hash = 67 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -106,9 +104,6 @@ public class Product implements Serializable {
             return false;
         }
         final Product other = (Product) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idProduct, other.idProduct)) {
             return false;
         }
@@ -119,9 +114,6 @@ public class Product implements Serializable {
             return false;
         }
         if (!Objects.equals(this.volume, other.volume)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

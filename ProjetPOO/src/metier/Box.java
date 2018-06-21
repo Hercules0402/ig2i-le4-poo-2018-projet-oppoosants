@@ -2,7 +2,6 @@ package metier;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -23,7 +22,7 @@ public class Box implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,6 +98,18 @@ public class Box implements Serializable {
         return order;
     }
 
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setIdBox(Integer idBox) {
+        this.idBox = idBox;
+    }
+
     public void setProdQtys(List<ProdQty> prodQtys) {
         this.prodQtys = prodQtys;
     }
@@ -111,22 +122,29 @@ public class Box implements Serializable {
         this.volumeMax = volumeMax;
     }
 
-    public int getWeight() {
-        return weight;
-    }
-
     public void setWeight(int weight) {
         this.weight = weight;
-    }
-
-    public int getVolume() {
-        return volume;
     }
 
     public void setVolume(int volume) {
         this.volume = volume;
     }
-
+    
+    /**
+     * Permet de vider le colis.
+     */
+    public void clear() {
+        this.prodQtys.clear();
+        this.volume = 0;
+        this.weight = 0;
+    }
+    
+    /**
+     * Permet d'ajouter un produit dans une certaine quantité dans le colis.
+     * Si le produit est déjà présent, on augmente juste sa quantité.
+     * @param p Produit
+     * @param qt Quantité
+     */
     public void addProduct(Product p, int qt) {
         this.weight += p.getWeight() * qt;
         this.volume += p.getVolume() * qt;
@@ -140,16 +158,62 @@ public class Box implements Serializable {
         ProdQty newPq = new ProdQty(p, qt);
         prodQtys.add(newPq);
     }
+    
+    /**
+     * Fonction permettant d'ajouter un produit, en passant un objet ProdQty
+     * directement, au lieu d'un produit et d'une quantité.
+     * @param pq ProdQty à ajouter
+     */
+    public void addProduct(ProdQty pq) {
+        addProduct(pq.getProduct(), pq.getQuantity());
+    }
+
+    /**
+     * Permet d'ajouter une liste de produits tout d'un coup.
+     * @param prodQtys Liste de ProdQty
+     * @return boolean ajouts effectués ou non
+     */
+    public boolean addProducts(List<ProdQty> prodQtys){
+        if (prodQtys == null) return false;
+        for(ProdQty pq : this.prodQtys){
+            this.addProduct(pq);
+        }
+        return true;
+    }
+    
+    /**
+     * Fonction permettant d'ajouter un produit dans une box, et qui retourne 
+     * un booléen nécessaire à l'algorithme de ClarkeAndWright.
+     * @param pq ProdQty à ajouter
+     * @return boolean ajouté ou non
+     */
+    public boolean addProductClarkeAndWright(ProdQty pq) {
+        Product p = pq.getProduct();
+        int qt = pq.getQuantity();
+        
+        if (pq == null) return false;
+        
+        this.weight += p.getWeight() * qt;
+        this.volume += p.getVolume() * qt;
+        for(ProdQty prq : prodQtys){
+            if(prq.getProduct().equals(p)){
+                prq.setQuantity(prq.getQuantity() + qt);
+                return true;
+            }
+        }
+            
+        ProdQty newPq = new ProdQty(p, qt);
+        prodQtys.add(newPq);
+        return true;
+    }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.id);
         hash = 71 * hash + Objects.hashCode(this.idBox);
         hash = 71 * hash + this.weight;
         hash = 71 * hash + this.volume;
         hash = 71 * hash + Objects.hashCode(this.order);
-        hash = 71 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -171,16 +235,10 @@ public class Box implements Serializable {
         if (this.volume != other.volume) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idBox, other.idBox)) {
             return false;
         }
         if (!Objects.equals(this.order, other.order)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;

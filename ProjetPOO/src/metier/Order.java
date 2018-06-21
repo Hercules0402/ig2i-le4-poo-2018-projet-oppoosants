@@ -24,7 +24,7 @@ public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id corespondant à l'id de la ligne dans le bdd.
+     * Correspond à l'id de la ligne dans la bdd.
      */
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
@@ -36,8 +36,11 @@ public class Order implements Serializable {
     @Column
     private Integer idOrder;
 
+    /**
+     * Nombre maximal de colis pour préparer la commande.
+     */
     @Column
-    private Integer m;
+    private Integer m; 
 
     @Column
     private Integer nbProducts;
@@ -53,14 +56,6 @@ public class Order implements Serializable {
         prodQtys = new ArrayList();
     }
 
-    /**
-     * Constructeur par id et produits de la commande Order
-     * @param id
-     * @param m
-     * @param nbProducts
-     * @param prodQtys
-     * @param ninstance
-     */
     public Order(Integer id, Integer m, Integer nbProducts, ArrayList<ProdQty> prodQtys,Instance ninstance) {
         this.idOrder = id;
         this.m = m;
@@ -72,6 +67,10 @@ public class Order implements Serializable {
     public int getId() {
         return id;
     }
+    
+    public Integer getIdOrder() {
+        return idOrder;
+    }
 
     public List<ProdQty> getProdQtys() {
         return prodQtys;
@@ -81,18 +80,12 @@ public class Order implements Serializable {
         this.prodQtys = prodQtys;
     }
 
-    public Integer getIdOrder() {
-        return idOrder;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.id);
         hash = 37 * hash + Objects.hashCode(this.idOrder);
         hash = 37 * hash + Objects.hashCode(this.m);
         hash = 37 * hash + Objects.hashCode(this.nbProducts);
-        hash = 37 * hash + Objects.hashCode(this.ninstance);
         return hash;
     }
 
@@ -108,9 +101,6 @@ public class Order implements Serializable {
             return false;
         }
         final Order other = (Order) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
         if (!Objects.equals(this.idOrder, other.idOrder)) {
             return false;
         }
@@ -118,9 +108,6 @@ public class Order implements Serializable {
             return false;
         }
         if (!Objects.equals(this.nbProducts, other.nbProducts)) {
-            return false;
-        }
-        if (!Objects.equals(this.ninstance, other.ninstance)) {
             return false;
         }
         return true;
